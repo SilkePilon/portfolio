@@ -1,5 +1,4 @@
 // Core packages
-import { Analytics } from '@vercel/analytics/react';
 import { LazyMotion, domAnimation } from "framer-motion"
 
 // Utils
