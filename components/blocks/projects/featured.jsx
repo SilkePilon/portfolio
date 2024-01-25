@@ -28,6 +28,7 @@ export default function FeaturedProject({ content }, index) {
 	return (
 		<m.section 	
 			key={index}
+			onClick={() => { window.open(url, '_blank') }}
 			className={css.project} 
 			//framer-motion
 			ref={ref}
@@ -35,6 +36,7 @@ export default function FeaturedProject({ content }, index) {
 			initial={[ "rest", "hidden" ]}
 			whileHover="hover"
 			animate={controls} >
+			
 			
 			<div className={css.details}>
 				<div className={css.projectHeader}>
@@ -48,7 +50,7 @@ export default function FeaturedProject({ content }, index) {
 						<Badges list={stack} block="stack" fullContainer={false} color={false} />
 					</div>
 					<m.div variants={''} className={css.viewProject}>
-						<Icon icon={[ 'fad', 'arrow-right-to-bracket' ]} />
+						<Icon icon={[ 'fad', 'arrow-up-right-from-square' ]} />
 					</m.div>
 				</div>
 			</div>
