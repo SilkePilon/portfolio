@@ -35,6 +35,16 @@ module.exports = {
 				hostname: '**.medium.com',
 				pathname: '/**'
 			},
+			{
+				protocol: 'https',
+				hostname: 'mc-heads.net',
+				pathname: '/**'
+			},
+			{
+				protocol: 'https',
+				hostname: '**.nocookie.net',
+				pathname: '/**'
+			},
 		],
 	},
 }

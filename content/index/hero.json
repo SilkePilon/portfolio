@@ -1,6 +1,6 @@
 {
 	"intro": {
-		"start": "const Andrew = ( name, passion ) =>",
+		"start": "const Silke = ( name, passion ) =>",
 		"end": "Hello, my name is",
 		"speed": 60,
 		"deletionSpeed": 80,
@@ -11,21 +11,21 @@
 	},
 
 	"header": {
-		"name": "Andrew Nelson.",
+		"name": "Silke Pilon.",
 		"usp": "I design and build meaningful experiences."
 	},
 
-	"paragraph": "I am a digital polymath — a constantly evolving digital creator driven by a passion for lifelong learning and the desire to leave a lasting impact.",
+	"paragraph": "Hi there! I'm Silke Pilon, a student with a passion for open source. I've contributed to projects like MineFlayer, You.com, and much more using Python, JavaScript and even a bit of AI/machine learning.",
 
 	"buttons": {
 		"primary": {
 			"title": "Contact Me",
-			"url": "",
+			"url": "https://github.com/SilkePilon",
 			"leaveSite": false
 		},
 		"secondary": {
-			"title": "LinkedIn",
-			"url": "",
+			"title": "GitHub",
+			"url": "https://github.com/SilkePilon",
 			"leaveSite": "true"
 		}
 	}
