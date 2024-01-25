@@ -38,7 +38,6 @@ export default function MyApp({ Component, pageProps }) {
 			<Layout>
 				<Component {...pageProps} />
 				<SetGridGap />
-				<Analytics />
 			</Layout>
 		</LazyMotion>
 		</>
