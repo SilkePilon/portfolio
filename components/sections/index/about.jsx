@@ -30,29 +30,29 @@ export default function About() {
 				<SectionTitle
 					title="About Me"
 					preTitle="Synopsis"
-					subTitle="With a diverse skill set that includes UX design, UI design, full stack development, operational architecture, systems design, photography, and branding, I am a well-rounded digital professional."
+					subTitle="With a diverse skill set that includes Python, JavaScript, HTML, UI design, full stack development, operational architecture, systems design, photography, I am a well-rounded digital professional."
 				/>
 				<section className={about.content}>
 					<div className={about.image}>
-						<img src="/img/family-photo.jpg" alt="Nelson family photo"/>
+						<img src="/img/main.jpeg" alt="Nelson family photo"/>
 						{/* <Image src="/img/family-photo.jpg" width={600} height={800}/> */}
 					</div>
 					<div className={about.copy} >
 						<CopyBlock 
-							title="Softskills that pay the bills"
+							title="A bit about me"
 							containerClass={about.container}
 							iconClass={about.icon}
 							icon={[ 'fat', 'ear-listen' ]}
-							copy="In addition to my design and technical expertise—I also have strong leadership, time management, and multitasking skills—honed through my experience as a business owner / managing partner, husband, and father of two. Outside of work, I enjoy staying active through sports such as hockey and snowboarding. I am confident in my ability to bring passion and value to any project."
+							copy="I'm Silke Pilon, a student from the Netherlands with a passion for open source development. I've contributed to projects like MineFlayer and You.com using languages like Python and JavaScript, dabbling in AI and machine learning along the way."
 						/>
 						<BadgesBlock 
-							title="Reasearch and planning" 
+							title="When i'm not coding, I'm..." 
 							containerClass={about.container}
 							list={methods} 
 							fullContainer="fullContainer"
 							block="methods" 
-							icon="fingerprint"
-							copy="One of my favorite aspects of creating is planning the architecture of a project. From Design Systems to Brand Strategy—I enjoy working with the many touch points of user experience."
+							icon="planet-moon"
+							copy="When I'm not coding, you can often find me outdoors with my camera, exploring nature and capturing it through photography. I love the creative outlet and being immersed in beautiful scenery."
 							//invertedColor="invertedColor"
 							headerIcon={`${about.icon}`}
 						/>
@@ -64,10 +64,10 @@ export default function About() {
 }
 
 const methods 	= [
-	{ key: 'planet-moon', 		name: 'User Research', 		type: 'fad' },
-	{ key: 'qrcode', 			name: 'Digital Strategy', 	type: 'fad' },
-	{ key: 'window', 			name: 'Design Systems', 	type: 'fad' },
-	{ key: 'cubes', 			name: 'Product Strategy', 	type: 'far' },
-	{ key: 'layer-plus', 		name: 'Brand Strategy', 	type: 'fad' },
-	{ key: 'solar-system', 		name: 'Operations', 		type: 'fad' },
+	{ key: '', 	name: 'Photography', 		type: 'fad' },
+	{ key: '', 	name: 'Raspberry Pi', 	type: 'fad' },
+	{ key: '', 	name: 'ESP 32', 	type: 'fad' },
+	{ key: '', 	name: '3D Printing', 	type: 'far' },
+	{ key: '', 	name: 'VR & AR', 	type: 'fad' },
+	{ key: '', 	name: 'DJ', 		type: 'fad' },
 ]

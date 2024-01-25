@@ -45,6 +45,11 @@ module.exports = {
 				hostname: '**.nocookie.net',
 				pathname: '/**'
 			},
+			{
+				protocol: 'https',
+				hostname: '**.cdninstagram.com',
+				pathname: '/**'
+			},
 		],
 	},
 }

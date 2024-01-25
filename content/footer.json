@@ -32,19 +32,11 @@
 
 	"social": [
 		{
-			"url": "https://medium.com/@--andrewnelson",
+			"url": "https://medium.com/@silkepilon",
 			"icon": "medium"
 		},
 		{
-			"url": "https://dev.to/andrewnelson",
-			"icon": "dev"
-		},
-		{
-			"url": "https://www.linkedin.com/in/--andrewnelson/",
-			"icon": "linkedin"
-		},
-		{
-			"url": "https://github.com/atlamors",
+			"url": "https://github.com/silkepilon",
 			"icon": "github"
 		}
 	]
