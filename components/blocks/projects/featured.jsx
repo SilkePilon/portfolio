@@ -30,7 +30,7 @@ export default function FeaturedProject({ content }, index) {
 			key={index}
 			className={css.project} 
 			//framer-motion
-			ref={ref}
+			ref={url}
 			variants={container}
 			initial={[ "rest", "hidden" ]}
 			whileHover="hover"
