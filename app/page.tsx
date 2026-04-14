@@ -13,12 +13,14 @@ import { AboutSection } from "@/components/sections/about-section";
 import { ContactSection } from "@/components/sections/contact-section";
 import { MagneticButton } from "@/components/magnetic-button";
 import { LogoGrid } from "@/components/logo-grid";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useRef, useEffect, useState, useCallback } from "react";
 import { motion, useMotionValue, useSpring } from "motion/react";
 
 const TOTAL_SECTIONS = 5;
 
 export default function Home() {
+  const isMobile = useIsMobile();
   const viewportRef = useRef<HTMLDivElement>(null);
   const [currentSection, setCurrentSection] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -243,7 +245,7 @@ export default function Home() {
             onClick={() => scrollToSection(0)}
             className="flex items-center gap-2 transition-transform hover:scale-105"
           >
-            <LogoGrid />
+            {!isMobile && <LogoGrid currentSection={currentSection} />}
             <span className="font-sans text-xl font-semibold tracking-tight text-foreground">
               Silke Pilon
             </span>
@@ -278,7 +280,7 @@ export default function Home() {
             variant="secondary"
             onClick={() => scrollToSection(4)}
           >
-            Get Started
+            Get in touch
           </MagneticButton>
         </nav>
 
@@ -297,41 +299,37 @@ export default function Home() {
               <div className="max-w-3xl">
                 <div className="mb-4 inline-block animate-in fade-in slide-in-from-bottom-4 rounded-full border border-foreground/20 bg-foreground/15 px-4 py-1.5 backdrop-blur-md duration-700">
                   <p className="font-mono text-xs text-foreground/90">
-                    WebGL Powered Design
+                    Full Stack Developer
                   </p>
                 </div>
                 <h1 className="mb-6 animate-in fade-in slide-in-from-bottom-8 font-sans text-6xl font-light leading-[1.1] tracking-tight text-foreground duration-1000 md:text-7xl lg:text-8xl">
                   <span className="text-balance">
-                    Creative experiences
+                    Building the tools
                     <br />
-                    in fluid motion
+                    for tomorrow
                   </span>
                 </h1>
                 <p className="mb-8 max-w-xl animate-in fade-in slide-in-from-bottom-4 text-lg leading-relaxed text-foreground/90 duration-1000 delay-200 md:text-xl">
                   <span className="text-pretty">
-                    Transforming digital spaces with dynamic shader effects and
-                    real-time visual experiences that captivate and inspire.
+                    Full stack developer based in the Netherlands. I build open
+                    source tools real developers rely on and clean, fast
+                    websites for clients who care about the details.
                   </span>
                 </p>
                 <div className="flex animate-in fade-in slide-in-from-bottom-4 flex-col gap-4 duration-1000 delay-300 sm:flex-row sm:items-center">
                   <MagneticButton
                     size="lg"
                     variant="primary"
-                    onClick={() =>
-                      window.open(
-                        "https://v0.app/templates/R3n0gnvYFbO",
-                        "_blank",
-                      )
-                    }
+                    onClick={() => scrollToSection(4)}
                   >
-                    Open in v0
+                    Get in touch
                   </MagneticButton>
                   <MagneticButton
                     size="lg"
                     variant="secondary"
-                    onClick={() => scrollToSection(2)}
+                    onClick={() => scrollToSection(1)}
                   >
-                    View Demo
+                    View My Work
                   </MagneticButton>
                 </div>
               </div>

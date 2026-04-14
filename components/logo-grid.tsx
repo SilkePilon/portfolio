@@ -404,37 +404,113 @@ const LOGO_STATES: Frames[] = [
   initializingFrames,
 ];
 
-export function LogoGrid() {
+// Static single-frame patterns for each section. Format: [col, row] (x, y).
+const SECTION_FRAMES: Record<number, number[][]> = {
+  // Work — rising bar chart (taller bars to the right)
+  1: [
+    [0, 4],
+    [1, 3],
+    [1, 4],
+    [2, 2],
+    [2, 3],
+    [2, 4],
+    [3, 1],
+    [3, 2],
+    [3, 3],
+    [3, 4],
+    [4, 0],
+    [4, 1],
+    [4, 2],
+    [4, 3],
+    [4, 4],
+  ],
+  // Services — plus/cross shape (settings icon)
+  2: [
+    [2, 0],
+    [1, 1],
+    [2, 1],
+    [3, 1],
+    [0, 2],
+    [1, 2],
+    [2, 2],
+    [3, 2],
+    [4, 2],
+    [1, 3],
+    [2, 3],
+    [3, 3],
+    [2, 4],
+  ],
+  // About — person (head + shoulders + legs)
+  3: [
+    [2, 0],
+    [2, 1],
+    [0, 2],
+    [1, 2],
+    [2, 2],
+    [3, 2],
+    [4, 2],
+    [2, 3],
+    [1, 4],
+    [3, 4],
+  ],
+  // Contact — envelope (frame + V flap)
+  4: [
+    [0, 0],
+    [1, 0],
+    [2, 0],
+    [3, 0],
+    [4, 0],
+    [0, 1],
+    [2, 1],
+    [4, 1],
+    [0, 2],
+    [4, 2],
+    [0, 3],
+    [4, 3],
+    [0, 4],
+    [1, 4],
+    [2, 4],
+    [3, 4],
+    [4, 4],
+  ],
+};
+
+export function LogoGrid({ currentSection = 0 }: { currentSection?: number }) {
   const [idx, setIdx] = useState(0);
 
   useEffect(() => {
+    if (currentSection !== 0) return;
+    setIdx(0);
     const id = setInterval(
       () => setIdx((i) => (i + 1) % LOGO_STATES.length),
       3000,
     );
     return () => clearInterval(id);
-  }, []);
+  }, [currentSection]);
+
+  const frames: Frames =
+    currentSection === 0
+      ? LOGO_STATES[idx]
+      : [SECTION_FRAMES[currentSection] ?? []];
 
   return (
-    <div className="flex h-10 w-10 items-center justify-center rounded-md bg-foreground/15 p-1.5 backdrop-blur-md transition-all duration-300 hover:scale-110 hover:bg-foreground/25">
-      <MotionGrid
-        gridSize={[5, 5]}
-        frames={LOGO_STATES[idx]}
-        duration={200}
-        className="h-full w-full gap-0.5"
-      >
-        <MotionGridCells
-          className="rounded-[2px]"
-          activeProps={{
-            className: "bg-foreground",
-            transition: { duration: 0.3, ease: "easeInOut" },
-          }}
-          inactiveProps={{
-            className: "bg-foreground/20",
-            transition: { duration: 0.3, ease: "easeInOut" },
-          }}
-        />
-      </MotionGrid>
-    </div>
+    <MotionGrid
+      gridSize={[5, 5]}
+      frames={frames}
+      duration={200}
+      className="h-8 w-8 gap-0.5"
+    >
+      <MotionGridCells
+        className="rounded-[2px] bg-foreground"
+        activeProps={{
+          animate: { opacity: 1 },
+          transition: { duration: 0.35, ease: "easeInOut" },
+        }}
+        inactiveProps={{
+          animate: { opacity: 0.15 },
+          transition: { duration: 0.35, ease: "easeInOut" },
+        }}
+      />
+    </MotionGrid>
   );
 }
