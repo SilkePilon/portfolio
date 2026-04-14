@@ -34,6 +34,8 @@ export default function Home() {
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
   const touchStartRawX = useRef(0);
+  const wheelAccum = useRef(0);
+  const currentSectionRef = useRef(0);
 
   useEffect(() => {
     const checkShaderReady = () => {
@@ -75,6 +77,7 @@ export default function Home() {
       const clamped = Math.max(0, Math.min(TOTAL_SECTIONS - 1, index));
       rawX.set(-clamped * getWidth());
       setCurrentSection(clamped);
+      currentSectionRef.current = clamped;
     },
     [rawX, getWidth],
   );
@@ -86,27 +89,37 @@ export default function Home() {
 
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
-      const width = getWidth();
       const delta =
         Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      const width = getWidth();
+
+      // Move content proportionally so scroll feels physical
       const next = Math.max(
         -(TOTAL_SECTIONS - 1) * width,
         Math.min(0, rawX.get() - delta),
       );
       rawX.set(next);
-      setCurrentSection(
-        Math.max(0, Math.min(TOTAL_SECTIONS - 1, Math.round(-next / width))),
-      );
 
+      // Update highlighted section indicator while dragging
+      const nearestWhileDragging = Math.max(
+        0,
+        Math.min(TOTAL_SECTIONS - 1, Math.round(-next / width)),
+      );
+      setCurrentSection(nearestWhileDragging);
+
+      // Snap quickly (80ms) after scrolling stops, commit if past 25% into next
       clearTimeout(snapTimeoutRef.current);
       snapTimeoutRef.current = setTimeout(() => {
-        const nearest = Math.max(
-          0,
-          Math.min(TOTAL_SECTIONS - 1, Math.round(-rawX.get() / width)),
-        );
-        rawX.set(-nearest * width);
-        setCurrentSection(nearest);
-      }, 180);
+        const progress = -rawX.get() / width;
+        const base = Math.floor(progress);
+        const frac = progress - base;
+        const target = frac > 0.25 ? base + 1 : base;
+        const clamped = Math.max(0, Math.min(TOTAL_SECTIONS - 1, target));
+        rawX.set(-clamped * width);
+        setCurrentSection(clamped);
+        currentSectionRef.current = clamped;
+        wheelAccum.current = 0;
+      }, 80);
     };
 
     el.addEventListener("wheel", onWheel, { passive: false });
@@ -142,14 +155,25 @@ export default function Home() {
       }
     };
 
-    const onTouchEnd = () => {
+    const onTouchEnd = (e: TouchEvent) => {
+      const dx =
+        (e.changedTouches[0]?.clientX ?? touchStartX.current) -
+        touchStartX.current;
+      const SWIPE_THRESHOLD = 50;
       const width = getWidth();
-      const nearest = Math.max(
-        0,
-        Math.min(TOTAL_SECTIONS - 1, Math.round(-rawX.get() / width)),
-      );
-      rawX.set(-nearest * width);
-      setCurrentSection(nearest);
+      if (Math.abs(dx) > SWIPE_THRESHOLD) {
+        const direction = dx < 0 ? 1 : -1;
+        const next = Math.max(
+          0,
+          Math.min(TOTAL_SECTIONS - 1, currentSectionRef.current + direction),
+        );
+        rawX.set(-next * width);
+        setCurrentSection(next);
+        currentSectionRef.current = next;
+      } else {
+        // snap back to current
+        rawX.set(-currentSectionRef.current * width);
+      }
     };
 
     el.addEventListener("touchstart", onTouchStart, { passive: true });
@@ -174,37 +198,41 @@ export default function Home() {
   return (
     <CursorProvider global>
       <main className="relative h-screen w-full overflow-hidden bg-background">
-        <Cursor style={{ transform: "translate(0, 0)" }}>
-          <svg
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+        {!isMobile && (
+          <Cursor style={{ transform: "translate(0, 0)" }}>
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M20.5056 10.7754C21.1225 10.5355 21.431 10.4155 21.5176 10.2459C21.5926 10.099 21.5903 9.92446 21.5115 9.77954C21.4205 9.61226 21.109 9.50044 20.486 9.2768L4.59629 3.5728C4.0866 3.38983 3.83175 3.29835 3.66514 3.35605C3.52029 3.40621 3.40645 3.52004 3.35629 3.6649C3.29859 3.8315 3.39008 4.08635 3.57304 4.59605L9.277 20.4858C9.50064 21.1088 9.61246 21.4203 9.77973 21.5113C9.92465 21.5901 10.0991 21.5924 10.2461 21.5174C10.4157 21.4308 10.5356 21.1223 10.7756 20.5054L13.3724 13.8278C13.4194 13.707 13.4429 13.6466 13.4792 13.5957C13.5114 13.5506 13.5508 13.5112 13.5959 13.479C13.6468 13.4427 13.7072 13.4192 13.828 13.3722L20.5056 10.7754Z"
+                fill="white"
+                stroke="white"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </Cursor>
+        )}
+        {!isMobile && (
+          <CursorFollow
+            side="bottom"
+            sideOffset={4}
+            align="end"
+            alignOffset={20}
+            transition={{ stiffness: 400, damping: 30, bounce: 0 }}
           >
-            <path
-              d="M20.5056 10.7754C21.1225 10.5355 21.431 10.4155 21.5176 10.2459C21.5926 10.099 21.5903 9.92446 21.5115 9.77954C21.4205 9.61226 21.109 9.50044 20.486 9.2768L4.59629 3.5728C4.0866 3.38983 3.83175 3.29835 3.66514 3.35605C3.52029 3.40621 3.40645 3.52004 3.35629 3.6649C3.29859 3.8315 3.39008 4.08635 3.57304 4.59605L9.277 20.4858C9.50064 21.1088 9.61246 21.4203 9.77973 21.5113C9.92465 21.5901 10.0991 21.5924 10.2461 21.5174C10.4157 21.4308 10.5356 21.1223 10.7756 20.5054L13.3724 13.8278C13.4194 13.707 13.4429 13.6466 13.4792 13.5957C13.5114 13.5506 13.5508 13.5112 13.5959 13.479C13.6468 13.4427 13.7072 13.4192 13.828 13.3722L20.5056 10.7754Z"
-              fill="white"
-              stroke="white"
-              strokeWidth="4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </Cursor>
-        <CursorFollow
-          side="bottom"
-          sideOffset={4}
-          align="end"
-          alignOffset={20}
-          transition={{ stiffness: 400, damping: 30, bounce: 0 }}
-        >
-          <div className="rounded-full border border-foreground/10 bg-foreground/5 px-3 py-1 backdrop-blur-xl">
-            <span className="font-mono text-xs text-foreground">
-              {SECTION_NAMES[currentSection]}
-            </span>
-          </div>
-        </CursorFollow>
+            <div className="rounded-full border border-foreground/10 bg-foreground/5 px-3 py-1 backdrop-blur-xl">
+              <span className="font-mono text-xs text-foreground">
+                {SECTION_NAMES[currentSection]}
+              </span>
+            </div>
+          </CursorFollow>
+        )}
         <GrainOverlay />
 
         <div
@@ -306,7 +334,7 @@ export default function Home() {
                   <span className="text-balance">
                     Building the tools
                     <br />
-                    for tomorrow
+                    for tomorrow.
                   </span>
                 </h1>
                 <p className="mb-8 max-w-xl animate-in fade-in slide-in-from-bottom-4 text-lg leading-relaxed text-foreground/90 duration-1000 delay-200 md:text-xl">
