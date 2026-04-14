@@ -44,7 +44,7 @@ export function AboutSection({
               style={{ transitionDelay: "200ms" }}
             >
               <p className="max-w-md text-sm leading-relaxed text-foreground/90 md:text-lg">
-                I&apos;m Silke — a full stack developer based in the
+                I&apos;m Silke, a full stack developer based in the
                 Netherlands. I work across the entire stack, from polished React
                 interfaces to Node.js backends and Linux servers.
               </p>

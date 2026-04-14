@@ -29,27 +29,27 @@ export function ServicesSection() {
         <div className="grid gap-8 md:grid-cols-2 md:gap-x-16 md:gap-y-12 lg:gap-x-24">
           {[
             {
-              title: "Web Development",
+              title: "Full Stack Development",
               description:
-                "Building fast, modern web applications from concept to deployment using React, Next.js, and Node.js",
+                "End-to-end web applications built with React, Next.js, Node.js, and TypeScript. From polished UI to reliable backend APIs.",
               direction: "top",
             },
             {
-              title: "3D Drone Mapping",
+              title: "Infrastructure & DevOps",
               description:
-                "Capturing and processing aerial data into detailed 3D maps and models for surveying and visualization",
+                "Linux server setup, Docker deployments, CI/CD pipelines, and self-hosted solutions that run without hand-holding.",
               direction: "right",
-            },
-            {
-              title: "Photography",
-              description:
-                "Professional photography for events, products, and creative projects with an eye for detail",
-              direction: "left",
             },
             {
               title: "Open Source",
               description:
-                "Contributing to and maintaining open source tools that help developers build better software",
+                "Maintaining public packages and contributing to tools like n8n that thousands of developers depend on every day.",
+              direction: "left",
+            },
+            {
+              title: "API & Integrations",
+              description:
+                "Connecting services through clean REST and webhook integrations, from third-party APIs to custom automation workflows.",
               direction: "bottom",
             },
           ].map((service, i) => (

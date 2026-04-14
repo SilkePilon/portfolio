@@ -8,9 +8,9 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Silke Pilon — Full Stack Developer",
+  title: "Silke Pilon | Full Stack Developer",
   description:
-    "Full stack developer based in the Netherlands. I build polished React interfaces, Node.js backends, and Linux servers. Open source contributor and drone pilot.",
+    "Full stack developer based in the Netherlands. I build polished React interfaces, Node.js backends, and Linux servers. Open source contributor.",
   authors: [{ name: "Silke Pilon" }],
   keywords: [
     "full stack developer",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     "Netherlands",
   ],
   openGraph: {
-    title: "Silke Pilon — Full Stack Developer",
+    title: "Silke Pilon | Full Stack Developer",
     description:
       "Full stack developer based in the Netherlands. I build polished React interfaces, Node.js backends, and Linux servers.",
     type: "website",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "Silke Pilon — Full Stack Developer",
+    title: "Silke Pilon | Full Stack Developer",
     description:
       "Full stack developer based in the Netherlands. I build polished React interfaces, Node.js backends, and Linux servers.",
   },
