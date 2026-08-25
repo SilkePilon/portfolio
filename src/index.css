@@ -47,7 +47,8 @@
   }
   .theme-light {
     --rule: rgba(0, 0, 0, 0.15);
-    --corner: rgba(0, 0, 0, 0.5);
+    --corner: #0e0e0e;
+    --tone-fg: #0e0e0e;
     color: var(--color-black);
   }
   html {
