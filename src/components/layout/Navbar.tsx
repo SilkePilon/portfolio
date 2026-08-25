@@ -20,15 +20,10 @@ export function Navbar() {
     setOpen(false)
   }, [pathname])
 
-  const overlay = pathname === '/'
-
   return (
     <>
       <nav
-        className={cn(
-          'theme-dark z-20 w-full border-b border-rule bg-black px-2.5 text-white tablet:px-5',
-          overlay ? 'absolute left-0 top-0' : 'relative',
-        )}
+        className="theme-dark sticky top-0 z-30 w-full border-b border-rule bg-black px-2.5 text-white tablet:px-5"
         aria-label="Main"
       >
         <div className="relative mx-auto flex w-full max-w-[1600px] items-center border-x border-rule">
@@ -55,7 +50,7 @@ export function Navbar() {
               </li>
             ))}
           </ul>
-          <div className="hidden w-[290px] border-l border-rule desktop:block">
+          <div className="hidden w-1/4 shrink-0 border-l border-rule desktop:block">
             <ArrowButton href={site.bookCall.href}>{site.bookCall.label}</ArrowButton>
           </div>
         </div>

@@ -5,7 +5,7 @@ import { Corners } from '@/components/ui/Corners'
 import { FitText } from '@/components/ui/FitText'
 import { LogoMark } from '@/components/ui/Icons'
 import { RichSpan } from '@/components/ui/RichText'
-import { Container, Section } from '@/components/ui/Section'
+import { Container, GridLines, Section } from '@/components/ui/Section'
 import { home } from '@/content/home'
 
 const { badge, image, intro, name } = home.hero
@@ -40,6 +40,7 @@ export function Hero() {
           className="size-full object-cover object-center"
         />
       </Appear>
+      <GridLines className="z-[1]" />
 
       <Container grid={false} className="z-[1] flex flex-col items-start justify-end">
         <div className={`${row} overflow-clip`}>
