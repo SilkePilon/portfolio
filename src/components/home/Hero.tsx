@@ -85,10 +85,10 @@ export function Hero() {
               duration={1.5}
               delay={heroDelay(2)}
               trigger="mount"
-              className="relative flex h-min flex-1 items-center justify-center gap-2.5 border-y border-rule bg-black/20 p-5"
+              className="relative flex h-min flex-1 items-center justify-center gap-2.5 border-y border-rule bg-[#0003] px-5 py-[17px]"
             >
               <Corners />
-              <img src="/images/resend-icon-white.svg" alt="Resend" width={28} height={28} className="size-7 shrink-0" />
+              <img src="/images/resend-icon-white.svg" alt="Resend" width={24} height={24} className="size-6 shrink-0" />
               <span className="flex-1 whitespace-nowrap text-mono text-[11px]">{badge}</span>
             </Appear>
           </div>
