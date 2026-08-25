@@ -43,11 +43,9 @@ export function About() {
           <Appear preset="up" className="col-span-2 flex flex-col gap-5 px-2.5 tablet:gap-[30px] tablet:px-5">
             <SectionTag>{tag}</SectionTag>
             <div className="flex flex-col gap-[29px] tablet:gap-[36px] desktop:gap-[45px]">
-              {paragraphs.map((paragraph) => (
-                <TextReveal key={paragraph} as="p" className="text-h3">
-                  {paragraph}
-                </TextReveal>
-              ))}
+              <TextReveal className="flex flex-col gap-10" paragraphClassName="text-h3">
+                {paragraphs}
+              </TextReveal>
             </div>
           </Appear>
 

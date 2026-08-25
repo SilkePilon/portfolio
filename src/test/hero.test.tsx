@@ -26,5 +26,5 @@ test('hero is a full-viewport header section', () => {
 
   const section = container.querySelector('#hero')
   expect(section?.tagName).toBe('HEADER')
-  expect(section).toHaveClass('h-screen')
+  expect(section?.className).toMatch(/100svh/)
 })

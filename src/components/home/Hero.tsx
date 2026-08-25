@@ -1,9 +1,9 @@
 'use client'
+import { motion, useScroll, useTransform } from 'motion/react'
 import { Appear } from '@/components/anim/Appear'
 import { wasPreloaderShown } from '@/components/layout/Preloader'
 import { Corners } from '@/components/ui/Corners'
 import { FitText } from '@/components/ui/FitText'
-import { LogoMark } from '@/components/ui/Icons'
 import { RichSpan } from '@/components/ui/RichText'
 import { Container, GridLines, Section } from '@/components/ui/Section'
 import { home } from '@/content/home'
@@ -23,14 +23,18 @@ const spacer = 'relative hidden h-px w-full self-start desktop:block'
 
 /** Full-viewport opening: portrait behind the ELIAN / KENT wordmarks, intro copy and the certification badge. */
 export function Hero() {
+  // Framer parallax (speed 90): the photo scrolls 10% slower than the page.
+  const { scrollY } = useScroll()
+  const bgY = useTransform(scrollY, (v) => v * 0.1)
   return (
-    <Section as="header" id="hero" className="isolate flex h-screen items-end justify-center overflow-clip">
+    <Section as="header" id="hero" className="isolate flex min-h-[calc(100svh-69px)] items-end justify-center overflow-clip tablet:min-h-0 tablet:h-[calc(100svh-65px)]">
+      <motion.div style={{ y: bgY }} className="pointer-events-none absolute inset-0 z-0">
       <Appear
         preset="scale"
         duration={1.5}
         delay={heroDelay(1)}
         trigger="mount"
-        className="pointer-events-none absolute inset-0 z-0"
+        className="absolute inset-0"
       >
         <img
           src={image.src}
@@ -40,6 +44,7 @@ export function Hero() {
           className="size-full object-cover object-center"
         />
       </Appear>
+      </motion.div>
       <GridLines className="z-[1]" />
 
       <Container grid={false} className="z-[1] flex flex-col items-start justify-end">
@@ -83,7 +88,7 @@ export function Hero() {
               className="relative flex h-min flex-1 items-center justify-center gap-2.5 border-y border-rule bg-black/20 p-5"
             >
               <Corners />
-              <LogoMark className="h-5 w-[25px] shrink-0" />
+              <img src="/images/resend-icon-white.svg" alt="Resend" width={20} height={20} className="size-5 shrink-0" />
               <span className="flex-1 text-mono">{badge}</span>
             </Appear>
           </div>

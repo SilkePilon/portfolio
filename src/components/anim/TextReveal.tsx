@@ -2,13 +2,14 @@
 import { createElement, useLayoutEffect, useRef } from 'react'
 import { gsap, SplitText } from '@/lib/gsap'
 
-type Props = { children: string; className?: string; as?: 'p' | 'h2' | 'h3' | 'div' }
+type Props = { children: string | string[]; className?: string; as?: 'p' | 'h2' | 'h3' | 'div'; paragraphClassName?: string }
 
 /**
  * Scroll-scrubbed character reveal (the About paragraphs): characters start at 40% opacity and
  * brighten one after another as the block moves from 90% to 70% of the viewport.
+ * Pass an array to reveal several paragraphs as ONE continuous run (the template animates the whole block).
  */
-export function TextReveal({ children, className, as = 'p' }: Props) {
+export function TextReveal({ children, className, as = 'p', paragraphClassName }: Props) {
   const ref = useRef<HTMLElement>(null)
 
   useLayoutEffect(() => {
@@ -30,5 +31,12 @@ export function TextReveal({ children, className, as = 'p' }: Props) {
     return () => ctx.revert()
   }, [children])
 
+  if (Array.isArray(children)) {
+    return createElement(
+      'div',
+      { ref, className },
+      children.map((text, i) => createElement('p', { key: i, className: paragraphClassName }, text)),
+    )
+  }
   return createElement(as, { ref, className }, children)
 }

@@ -28,7 +28,7 @@ export function Navbar() {
       >
         <div className="relative mx-auto flex w-full max-w-[1600px] items-center border-x border-rule">
           <Corners variant="2-bottom" />
-          <div className="flex flex-1 items-center justify-between px-5 py-3.5 desktop:flex-none desktop:py-0 desktop:pr-0">
+          <div className="flex flex-1 items-center justify-between px-5 py-3.5 desktop:py-0 desktop:pr-0">
             <Logo />
             <button
               type="button"
@@ -41,7 +41,7 @@ export function Navbar() {
               <span className={cn('block h-px w-5 bg-white transition-transform duration-300', open && '-translate-y-[3.5px] -rotate-45')} />
             </button>
           </div>
-          <ul className="hidden flex-[2] items-center justify-center gap-[30px] desktop:flex">
+          <ul className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-[30px] desktop:flex">
             {site.nav.map((l) => (
               <li key={l.to}>
                 <Link href={l.to} className="group block py-[25px] text-nav">

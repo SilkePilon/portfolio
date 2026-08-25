@@ -45,7 +45,7 @@ export function Footer() {
           <ul className="flex flex-col gap-3.5">
             {site.socials.map((s) => (
               <li key={s.label}>
-                <a href={s.href} target="_blank" rel="noopener noreferrer" className="group inline-block text-nav">
+                <a href={s.href} target="_blank" rel="noopener noreferrer" className="group inline-block text-nav leading-none">
                   <SlideText text={s.label} idle="text-white" />
                 </a>
               </li>
@@ -68,8 +68,8 @@ export function Footer() {
           </a>
         </div>
       </div>
-      <div className="relative mx-auto w-full max-w-[1600px] overflow-hidden pt-5">
-        <FitText text={site.name} lineHeight={0.82} className="font-display font-bold uppercase tracking-[-0.05em] text-white" />
+      <div className="relative mx-auto w-full max-w-[1600px] pb-5 pt-5">
+        <FitText text={site.name} lineHeight={0.8} className="font-display font-bold uppercase tracking-[-0.05em] text-white" />
       </div>
     </motion.footer>
     </div>

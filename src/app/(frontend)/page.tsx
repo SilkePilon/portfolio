@@ -20,8 +20,10 @@ export default async function HomePage() {
     <>
       <Hero />
       <BioStrip />
-      <About />
-      <Metrics />
+      <div className="flex w-full flex-col items-center gap-[70px]">
+        <About />
+        <Metrics />
+      </div>
       <ShowcaseReel />
       <WorksGrid works={works} />
       <Services />

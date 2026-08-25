@@ -32,7 +32,7 @@ export function Clients() {
               <SectionTag>{tag}</SectionTag>
             </Appear>
             <Appear preset="left" className="w-full">
-              <h2 className="text-h2">
+              <h2 className="max-w-[500px] text-h2">
                 <RichSpan parts={heading} />
               </h2>
             </Appear>
