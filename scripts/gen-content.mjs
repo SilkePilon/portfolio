@@ -3,6 +3,7 @@
 import { readFileSync, writeFileSync } from 'node:fs'
 
 const pages = JSON.parse(readFileSync('reference/content_pages.json', 'utf8'))
+const bodies = JSON.parse(readFileSync('reference/blogs_body.json', 'utf8'))
 const q = (s) => JSON.stringify(s)
 const img = (src, alt, w = 1600, h = 1200) => `{ src: ${q(src)}, alt: ${q(alt)}, width: ${w}, height: ${h} }`
 
@@ -70,25 +71,22 @@ const blogs = blogMeta
   .map(([slug, title, category, file, w, h]) => {
     const b = pages[`blogs_${slug}.html`].blocks
     const date = (b.find((x) => x[0] === 'p' && /\d{4}/.test(x[1])) ?? [null, 'November 18, 2025'])[1]
-    const intro = b.find((x) => x[0] === 'h5')[1]
-    const sections = []
-    for (let i = 0; i < b.length; i++) {
-      if (b[i][0] !== 'h3') continue
-      const ps = []
-      let j = i + 1
-      while (j < b.length && b[j][0] === 'h5') ps.push(b[j++][1])
-      if (ps.length) sections.push({ heading: b[i][1], paragraphs: ps })
-    }
-    const secs = sections.map((s) => `      { heading: ${q(s.heading)}, paragraphs: [${s.paragraphs.map(q).join(', ')}] },`).join('\n')
+    const body = bodies[slug]
+    const blocks = body
+      .map((blk) =>
+        blk.kind === 'list'
+          ? `      { kind: 'list', items: [${blk.items.map(q).join(', ')}] },`
+          : `      { kind: ${q(blk.kind)}, text: ${q(blk.text)} },`,
+      )
+      .join('\n')
     return `  {
     slug: ${q(slug)},
     title: ${q(title)},
     category: ${q(category)},
     date: ${q(date)},
     cover: ${img(`/images/blogs/${file}`, title, w, h)},
-    intro: ${q(intro)},
-    sections: [
-${secs}
+    body: [
+${blocks}
     ],
   },`
   })

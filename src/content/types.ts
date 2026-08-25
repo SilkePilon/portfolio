@@ -21,15 +21,15 @@ export type Work = {
   gallery: Img[]
 }
 
-export type BlogSection = { heading: string; paragraphs: string[] }
+export type BlogBlock = { kind: 'heading' | 'paragraph'; text: string } | { kind: 'list'; items: string[] }
 export type Blog = {
   slug: string
   title: string
   category: string
   date: string
   cover: Img
-  intro: string
-  sections: BlogSection[]
+  /** Article body in reading order: uppercase h3 headings, paragraphs, bullet lists. */
+  body: BlogBlock[]
 }
 
 export type Metric = { end: number; suffix: string; label: string; text: string; dots: 1 | 2 | 3 | 4 }
