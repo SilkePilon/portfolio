@@ -1,3 +1,4 @@
+'use client'
 import { Container, Section } from '@/components/ui/Section'
 
 /** TODO(task): replace this stub with the real section (see the plan). */

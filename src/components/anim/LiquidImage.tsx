@@ -1,3 +1,4 @@
+'use client'
 import { useEffect, useRef, useState } from 'react'
 import type { Img } from '@/content/types'
 import { cn } from '@/lib/cn'

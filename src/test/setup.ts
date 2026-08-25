@@ -1,24 +1,40 @@
 import '@testing-library/jest-dom/vitest'
+import { vi } from 'vitest'
 
-class ObserverStub {
+// next/navigation hooks need the App Router context; give components a plain stand-in in jsdom.
+vi.mock('next/navigation', () => ({
+  usePathname: () => '/',
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn(), back: vi.fn() }),
+  useSearchParams: () => new URLSearchParams(),
+  useParams: () => ({}),
+  notFound: () => {
+    throw new Error('notFound')
+  },
+}))
+
+// jsdom lacks these browser APIs used by motion / gsap / lenis
+class RO {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+;(globalThis as unknown as { ResizeObserver: unknown }).ResizeObserver = RO
+;(globalThis as unknown as { IntersectionObserver: unknown }).IntersectionObserver = class {
+  root = null
+  rootMargin = ''
+  thresholds = []
   observe() {}
   unobserve() {}
   disconnect() {}
   takeRecords() {
     return []
   }
-  root = null
-  rootMargin = ''
-  thresholds = []
 }
-
-globalThis.ResizeObserver = ObserverStub as unknown as typeof ResizeObserver
-globalThis.IntersectionObserver = ObserverStub as unknown as typeof IntersectionObserver
-
+window.scrollTo = () => {}
 if (!window.matchMedia) {
-  window.matchMedia = ((query: string) => ({
+  window.matchMedia = ((q: string) => ({
     matches: false,
-    media: query,
+    media: q,
     onchange: null,
     addListener() {},
     removeListener() {},
@@ -27,9 +43,5 @@ if (!window.matchMedia) {
     dispatchEvent() {
       return false
     },
-  })) as typeof window.matchMedia
+  })) as unknown as typeof window.matchMedia
 }
-
-window.scrollTo = (() => {}) as typeof window.scrollTo
-Object.defineProperty(HTMLMediaElement.prototype, 'play', { configurable: true, value: () => Promise.resolve() })
-Object.defineProperty(HTMLMediaElement.prototype, 'pause', { configurable: true, value: () => {} })

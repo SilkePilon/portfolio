@@ -27,6 +27,7 @@ export const site = {
     avatar: { src: '/images/about-2.png', alt: 'Elian Kent', width: 2400, height: 1600 } as Img,
   },
   contact: { email: 'hello@eliankent.com', phone: '+00 0123456789' },
+  ogImage: { src: '/images/og.png', alt: 'Elian Kent', width: 1200, height: 630 } as Img,
   footer: {
     tagline: [
       { text: 'Crafting thoughtful digital experiences built on', muted: true },

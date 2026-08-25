@@ -1,5 +1,6 @@
+'use client'
 import { Fragment } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { LiquidImage } from '@/components/anim/LiquidImage'
 import { Corners } from '@/components/ui/Corners'
 import type { Work } from '@/content/types'
@@ -10,7 +11,7 @@ import type { Work } from '@/content/types'
  */
 export function WorkCard({ work }: { work: Work }) {
   return (
-    <Link to={`/works/${work.slug}`} className="group flex h-full w-full flex-col gap-3.5 tablet:gap-5">
+    <Link href={`/works/${work.slug}`} className="group flex h-full w-full flex-col gap-3.5 tablet:gap-5">
       <div className="relative min-h-0 flex-1 border border-rule bg-black p-2.5 tablet:p-5">
         <Corners />
         <div className="relative h-full w-full overflow-hidden shadow-[0_0_0_1px_var(--rule)]">

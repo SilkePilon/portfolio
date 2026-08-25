@@ -1,3 +1,4 @@
+'use client'
 import { Appear } from '@/components/anim/Appear'
 import { ArrowButton } from '@/components/ui/ArrowButton'
 import { RichSpan } from '@/components/ui/RichText'
@@ -5,7 +6,8 @@ import { Container, Section } from '@/components/ui/Section'
 import { SectionTag } from '@/components/ui/SectionTag'
 import { WorkCard } from '@/components/works/WorkCard'
 import { home } from '@/content/home'
-import { getWork } from '@/content/works'
+import type { Work } from '@/content/types'
+import { works as staticWorks } from '@/content/works'
 import { cn } from '@/lib/cn'
 
 /**
@@ -24,7 +26,8 @@ const rows: { slug: string; cell: string }[][] = [
 ]
 
 /** "Selected works" — five project cards on the page grid, closing with the explore-all-works cell. */
-export function WorksGrid() {
+/** `works` comes from the CMS (falls back to the static content). */
+export function WorksGrid({ works = staticWorks }: { works?: Work[] }) {
   const { tag, heading, text, outro, cta } = home.works
 
   return (
@@ -49,7 +52,7 @@ export function WorksGrid() {
         {rows.map((row, i) => (
           <div key={i} className="grid w-full grid-cols-1 gap-y-[30px] tablet:grid-cols-2 tablet:gap-y-[50px] desktop:grid-cols-4">
             {row.map(({ slug, cell }) => {
-              const work = getWork(slug)
+              const work = works.find((w) => w.slug === slug)
               return work ? (
                 <Appear key={slug} preset="up" className={cn('w-full self-start', cell)}>
                   <WorkCard work={work} />

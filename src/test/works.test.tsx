@@ -1,5 +1,4 @@
 import { render, screen, within } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
 import { LiquidImage } from '@/components/anim/LiquidImage'
 import { WorksGrid } from '@/components/home/WorksGrid'
 import { WorkCard } from '@/components/works/WorkCard'
@@ -8,9 +7,9 @@ import { works } from '@/content/works'
 
 const renderSection = () =>
   render(
-    <MemoryRouter>
+    <>
       <WorksGrid />
-    </MemoryRouter>,
+    </>,
   )
 
 test('WorksGrid renders the eyebrow and the section heading', () => {
@@ -44,9 +43,9 @@ test('WorksGrid closes with the outro sentence and the explore-all-works cta', (
 test('WorkCard renders its cover, title and every service', () => {
   const work = works[0]
   const { container } = render(
-    <MemoryRouter>
+    <>
       <WorkCard work={work} />
-    </MemoryRouter>,
+    </>,
   )
   expect(screen.getByRole('link')).toHaveAttribute('href', '/works/sienna')
   expect(screen.getByRole('heading', { level: 3, name: work.title })).toBeInTheDocument()

@@ -1,0 +1,37 @@
+import { Hero } from '@/components/home/Hero'
+import { BioStrip } from '@/components/home/BioStrip'
+import { About } from '@/components/home/About'
+import { Metrics } from '@/components/home/Metrics'
+import { ShowcaseReel } from '@/components/home/ShowcaseReel'
+import { WorksGrid } from '@/components/home/WorksGrid'
+import { Services } from '@/components/home/Services'
+import { Testimonials } from '@/components/home/Testimonials'
+import { Clients } from '@/components/home/Clients'
+import { Approach } from '@/components/home/Approach'
+import { Awards } from '@/components/home/Awards'
+import { BlogsPreview } from '@/components/home/BlogsPreview'
+import { Faq } from '@/components/home/Faq'
+import { Contact } from '@/components/home/Contact'
+import { getHomePosts, getWorks } from '@/lib/cms'
+
+export default async function HomePage() {
+  const [works, posts] = await Promise.all([getWorks(), getHomePosts()])
+  return (
+    <>
+      <Hero />
+      <BioStrip />
+      <About />
+      <Metrics />
+      <ShowcaseReel />
+      <WorksGrid works={works} />
+      <Services />
+      <Testimonials />
+      <Clients />
+      <Approach />
+      <Awards />
+      <BlogsPreview posts={posts} />
+      <Faq />
+      <Contact />
+    </>
+  )
+}

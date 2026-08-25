@@ -1,3 +1,4 @@
+'use client'
 import { Appear } from '@/components/anim/Appear'
 import { wasPreloaderShown } from '@/components/layout/Preloader'
 import { Corners } from '@/components/ui/Corners'

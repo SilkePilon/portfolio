@@ -1,5 +1,4 @@
 import { act, render, screen } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
 import { Appear } from '@/components/anim/Appear'
 import { Counter } from '@/components/anim/Counter'
 import { Preloader } from '@/components/layout/Preloader'
@@ -21,9 +20,9 @@ test('Appear renders its children', () => {
 test('Preloader shows four panels and the brand name, then unmounts', () => {
   vi.useFakeTimers()
   render(
-    <MemoryRouter initialEntries={['/']}>
+    <>
       <Preloader />
-    </MemoryRouter>,
+    </>,
   )
   const overlay = screen.getByTestId('preloader')
   expect(overlay.querySelectorAll('.bg-white')).toHaveLength(4)

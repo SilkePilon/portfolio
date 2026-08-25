@@ -1,7 +1,8 @@
+'use client'
 import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
-import { useLocation } from 'react-router-dom'
-import { site } from '@/content/site'
+import { usePathname } from 'next/navigation'
+import { useSite } from '@/components/layout/SiteProvider'
 import { getLenis } from '@/lib/lenis'
 
 let played = false
@@ -17,7 +18,8 @@ const TOTAL_MS = 2400
  * and the panels collapse downward one after another. Only on the first load of the home page.
  */
 export function Preloader() {
-  const { pathname } = useLocation()
+  const site = useSite()
+  const pathname = usePathname()
   // Decided during render (not in an effect) so siblings rendered in the same commit — the Hero — already see `wasPreloaderShown()`.
   const [visible, setVisible] = useState(() => {
     const show = !played && pathname === '/'

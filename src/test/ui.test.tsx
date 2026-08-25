@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
 import { ArrowButton } from '@/components/ui/ArrowButton'
 import { RichSpan } from '@/components/ui/RichText'
 import { Dots } from '@/components/ui/Dots'
@@ -8,11 +7,11 @@ import { Corners } from '@/components/ui/Corners'
 
 test('ArrowButton renders a router link with stacked labels', () => {
   render(
-    <MemoryRouter>
+    <>
       <ArrowButton to="/works" bar>
         Explore all works
       </ArrowButton>
-    </MemoryRouter>,
+    </>,
   )
   const link = screen.getByRole('link')
   expect(link).toHaveAttribute('href', '/works')

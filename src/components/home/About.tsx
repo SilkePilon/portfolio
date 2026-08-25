@@ -1,3 +1,4 @@
+'use client'
 import { Appear } from '@/components/anim/Appear'
 import { TextReveal } from '@/components/anim/TextReveal'
 import { Corners } from '@/components/ui/Corners'

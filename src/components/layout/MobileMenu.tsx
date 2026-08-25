@@ -1,7 +1,8 @@
+'use client'
 import { useEffect } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { Link } from 'react-router-dom'
-import { site } from '@/content/site'
+import Link from 'next/link'
+import { useSite } from '@/components/layout/SiteProvider'
 import { ArrowButton } from '@/components/ui/ArrowButton'
 import { ArrowIcon } from '@/components/ui/Icons'
 import { Logo } from '@/components/ui/Logo'
@@ -9,6 +10,7 @@ import { getLenis } from '@/lib/lenis'
 
 /** Full-screen navigation overlay for tablet/phone. */
 export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const site = useSite()
   useEffect(() => {
     if (!open) return
     document.body.style.overflow = 'hidden'
@@ -54,7 +56,7 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ type: 'spring', bounce: 0, duration: 0.8, delay: 0.05 * i }}
                 >
-                  <Link to={l.to} onClick={onClose} className="flex items-center justify-between px-5 py-6 font-display text-[32px] font-normal uppercase leading-none tracking-[-0.02em]">
+                  <Link href={l.to} onClick={onClose} className="flex items-center justify-between px-5 py-6 font-display text-[32px] font-normal uppercase leading-none tracking-[-0.02em]">
                     <span>{l.label}</span>
                     <ArrowIcon className="size-4" />
                   </Link>

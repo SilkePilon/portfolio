@@ -1,6 +1,8 @@
+'use client'
 import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { site } from '@/content/site'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useSite } from '@/components/layout/SiteProvider'
 import { cn } from '@/lib/cn'
 import { ArrowButton } from '@/components/ui/ArrowButton'
 import { Corners } from '@/components/ui/Corners'
@@ -10,14 +12,15 @@ import { MobileMenu } from './MobileMenu'
 
 /** Static top bar: logo, centred links (desktop) or hamburger (tablet/phone), "Book a Call" cell. */
 export function Navbar() {
+  const site = useSite()
   const [open, setOpen] = useState(false)
-  const location = useLocation()
+  const pathname = usePathname()
 
   useEffect(() => {
     setOpen(false)
-  }, [location.pathname, location.hash])
+  }, [pathname])
 
-  const overlay = location.pathname === '/'
+  const overlay = pathname === '/'
 
   return (
     <>
@@ -46,7 +49,7 @@ export function Navbar() {
           <ul className="hidden flex-[2] items-center justify-center gap-[30px] desktop:flex">
             {site.nav.map((l) => (
               <li key={l.to}>
-                <Link to={l.to} className="group block py-[25px] text-nav">
+                <Link href={l.to} className="group block py-[25px] text-nav">
                   <SlideText text={l.label} />
                 </Link>
               </li>

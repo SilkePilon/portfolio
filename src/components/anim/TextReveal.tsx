@@ -1,3 +1,4 @@
+'use client'
 import { createElement, useLayoutEffect, useRef } from 'react'
 import { gsap, SplitText } from '@/lib/gsap'
 

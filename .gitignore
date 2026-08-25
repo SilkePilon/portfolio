@@ -31,3 +31,13 @@ qa
 qa/
 reference/
 .superpowers/
+
+# next / payload
+.next/
+next-env.d.ts
+*.tsbuildinfo
+.env
+.env*.local
+media/
+*.db
+*.db-journal

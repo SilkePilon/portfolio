@@ -1,0 +1,76 @@
+import type { GlobalConfig } from 'payload'
+import { authenticated, publicRead } from '../access'
+
+const link = [
+  { name: 'label', type: 'text' as const, required: true },
+  { name: 'href', type: 'text' as const, required: true },
+]
+
+export const Site: GlobalConfig = {
+  slug: 'site',
+  label: 'Site settings',
+  admin: { group: 'Settings' },
+  access: { read: publicRead, update: authenticated },
+  fields: [
+    {
+      type: 'tabs',
+      tabs: [
+        {
+          label: 'Brand',
+          fields: [
+            { name: 'name', type: 'text', required: true, defaultValue: 'Elian Kent', admin: { description: 'Used in titles, the preloader and the giant footer wordmark.' } },
+            {
+              type: 'row',
+              fields: [
+                { name: 'wordmarkLine1', type: 'text', required: true, defaultValue: 'EliaN', admin: { description: 'Logo, first line' } },
+                { name: 'wordmarkLine2', type: 'text', required: true, defaultValue: 'Kent', admin: { description: 'Logo, second line' } },
+              ],
+            },
+            { name: 'description', type: 'textarea', required: true, admin: { description: 'Default meta description / Open Graph description.' } },
+            { name: 'ogImage', type: 'upload', relationTo: 'media', label: 'Social share image' },
+          ],
+        },
+        {
+          label: 'Navigation',
+          fields: [
+            { name: 'nav', type: 'array', labels: { singular: 'Link', plural: 'Links' }, admin: { description: 'Header + footer sitemap. Use "/#about" style links for home sections.' }, fields: [{ name: 'label', type: 'text', required: true }, { name: 'to', type: 'text', required: true }] },
+            { name: 'bookCall', type: 'group', label: 'Book-a-call button', fields: link },
+          ],
+        },
+        {
+          label: 'Contact & socials',
+          fields: [
+            { name: 'contact', type: 'group', fields: [{ name: 'email', type: 'text', required: true }, { name: 'phone', type: 'text', required: true }] },
+            { name: 'socials', type: 'array', labels: { singular: 'Social link', plural: 'Social links' }, fields: link },
+            {
+              name: 'profile',
+              type: 'group',
+              admin: { description: 'The small avatar + name + role shown in Clients, Blogs and Contact.' },
+              fields: [{ name: 'name', type: 'text', required: true }, { name: 'role', type: 'text', required: true }, { name: 'avatar', type: 'upload', relationTo: 'media' }],
+            },
+          ],
+        },
+        {
+          label: 'Footer',
+          fields: [
+            { name: 'taglineMuted', type: 'text', label: 'Tagline (grey part)', defaultValue: 'Crafting thoughtful digital experiences built on' },
+            { name: 'taglineStrong', type: 'text', label: 'Tagline (white part)', defaultValue: ' clarity, purpose, and precision.' },
+            { name: 'socialsTitle', type: 'text', defaultValue: 'Follow on' },
+            { name: 'socialsText', type: 'text', defaultValue: 'Creating experiences that balance aesthetics, usability, and intent.' },
+            {
+              name: 'createdBy',
+              type: 'group',
+              label: '"Created by" credit',
+              fields: [
+                { name: 'label', type: 'text', defaultValue: 'Created by' },
+                { name: 'name', type: 'text' },
+                { name: 'href', type: 'text' },
+                { name: 'avatar', type: 'upload', relationTo: 'media' },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ],
+}

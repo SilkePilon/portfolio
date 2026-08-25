@@ -1,3 +1,4 @@
+'use client'
 import { useLayoutEffect, useRef } from 'react'
 import { Video } from '@/components/ui/Video'
 import { home } from '@/content/home'

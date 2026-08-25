@@ -1,6 +1,7 @@
+'use client'
 import { useRef } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
-import { site } from '@/content/site'
+import { useSite } from '@/components/layout/SiteProvider'
 import { ArrowButton } from '@/components/ui/ArrowButton'
 import { FitText } from '@/components/ui/FitText'
 import { Logo } from '@/components/ui/Logo'
@@ -10,6 +11,7 @@ import { SlideText } from '@/components/ui/SlideText'
 
 /** Four-column footer with sitemap, socials and the giant wordmark; parallaxes up (−170px → 0) as it enters. */
 export function Footer() {
+  const site = useSite()
   const ref = useRef<HTMLElement>(null)
   const reduce = useReducedMotion()
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end end'] })

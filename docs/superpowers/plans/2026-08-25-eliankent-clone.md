@@ -996,3 +996,27 @@ Facts: container `gap-[70px]`: heading (`px-5`, tag + `Rich` h2 `max-w-[500px]`)
 - [ ] Interaction check with `reference/interact.mjs` adapted to localhost: nav hover, card hover (liquid), testimonial next, FAQ open, mobile menu, client hover.
 - [ ] `README.md`: stack, `npm run dev|build|test|shot`, where content lives (`src/content`), how to swap images (drop into `public/images`, update `src/content`), `VITE_FORM_ENDPOINT`, deploy notes (any static host; SPA fallback to `index.html` required).
 - [ ] Final: `npm run build`, `npm test`, `npm run lint`; commit `chore: qa fixes and readme`.
+
+---
+
+## Phase 5 — CMS migration (Next.js + Payload 3) — revision 2026-08-25 evening
+
+Decisions: one Next.js App Router app with the Payload admin, SQLite, CMS scope = Posts + Works + Media + Messages + Site global (see spec §12). Vite, react-router and the `src/pages` shells are gone; everything below the page level (primitives, sections, animations, content files) carried over.
+
+### Task 20: Migrate the app shell to Next.js + Payload — DONE
+- `package.json` scripts: `dev` (next dev :3000), `build`, `start`, `payload`, `generate:types`, `generate:importmap`, `seed`, `typecheck`, `test`, `shot`, `compare`.
+- Config: `next.config.ts` (`withPayload`), `postcss.config.mjs` (`@tailwindcss/postcss`), `tsconfig.json` (Next plugin, `@/*` + `@payload-config` paths), `vitest.config.mts` (jsdom + `vite-tsconfig-paths`), `src/test/setup.ts` mocks `next/navigation`.
+- Payload: `src/payload.config.ts`, `src/cms/access.ts`, `src/cms/collections/{Works,Posts,Media,Messages,Users}.ts`, `src/cms/globals/Site.ts`; generated `src/payload-types.ts` and `src/app/(payload)/admin/importMap.js`.
+- Frontend: `src/app/(frontend)/layout.tsx` (fonts, metadata from the Site global, `Shell`), pages for `/`, `/works`, `/works/[slug]`, `/blogs`, `/blogs/[slug]`, `not-found`; `src/app/api/contact/route.ts`.
+- Adapters: `src/lib/cms.ts` (getSite/getWorks/getWork/getNextWork/getPosts/getPost/getNextPosts/getHomePosts with static fallback), `src/lib/lexical.ts`, `src/lib/form.ts`.
+- Components: `react-router` → `next/link` / `usePathname`; `'use client'` on interactive files; `Shell` + `SiteProvider`/`useSite()` replace `Layout`/`Seo`; `WorksGrid`/`BlogsPreview` take CMS data as props; new `WorksIndex`, `WorkDetail`, `BlogsIndex`, `BlogDetail`, `BlogCard`, `NotFoundView`.
+- Seed: `scripts/seed.ts` (`npm run seed`).
+
+### Task 21: Remaining home sections (inline)
+Finish Task 7 (Metrics), then Tasks 10–16 exactly as specified above; `BlogsPreview` receives `posts: Blog[]` from the page (three home posts) and `Contact` submits through `src/lib/form.ts`.
+
+### Task 22: Works/blogs page polish (Tasks 17–18 against the CMS)
+`WorksIndex`, `WorkDetail`, `BlogsIndex`, `BlogDetail` exist; compare them with `reference/shots/home_works.png`, `home_works_destello.png`, `home_blogs.png`, `home_blogs_the-roadmap-behind-great-design.png` and the digests, and fix deltas (card placement, meta rows, gallery, sticky cover).
+
+### Task 23: QA against the original (Task 19, adjusted)
+`npm run build && npm start` (port 3000) then `node scripts/compare.mjs http://localhost:3000`; fix deltas; verify the admin flow (create first user at `/admin`, edit a work, see it on `/works`), the contact form → Messages, and `npm run seed` idempotency. README already documents the CMS; add a Dockerfile if a container deploy is wanted.

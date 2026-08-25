@@ -1,3 +1,4 @@
+'use client'
 import { useEffect, useRef, useState } from 'react'
 import { useInView } from 'motion/react'
 import { cn } from '@/lib/cn'

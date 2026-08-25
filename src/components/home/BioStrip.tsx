@@ -1,3 +1,4 @@
+'use client'
 import { Appear } from '@/components/anim/Appear'
 import { Corners } from '@/components/ui/Corners'
 import { Container, Section } from '@/components/ui/Section'

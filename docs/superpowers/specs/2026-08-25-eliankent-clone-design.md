@@ -155,3 +155,18 @@ Fields: Name, Email, Phone, Budget, Message (all required, email format check). 
 6. QA compare + fixes, README (how to edit content, env var, deploy).
 
 Estimate: 8–11 h of agent work over several sessions.
+
+## 12. Revision — Next.js + Payload 3 CMS (2026-08-25, evening)
+
+Decision (user): the site must be editable quickly through **Payload CMS**. Chosen setup: **one Next.js (App Router) app that hosts both the site and the Payload 3 admin**, database **SQLite** (`@payloadcms/db-sqlite`, file `payload.db`), CMS scope = **Posts + Works + Media collections, a Messages collection (contact-form inbox) and a Site-settings global**. Home-section copy (hero, bio, about, metrics, services, testimonials, clients, approach, awards, FAQ, contact labels) stays in `src/content/home.ts`. This supersedes §3 (stack), §7 (content model for works/posts/site), §8 (form), §9 (SEO) and the deploy notes in §10/§11.
+
+### Architecture v2
+- Next.js 16 (App Router, React 19, TypeScript) + Payload 3.88 (`@payloadcms/next`, `@payloadcms/richtext-lexical`), Tailwind v4 via `@tailwindcss/postcss`; the animation stack is unchanged (`motion`, GSAP, Lenis, three.js).
+- Routes: `src/app/(frontend)/{page,works/page,works/[slug]/page,blogs/page,blogs/[slug]/page,not-found}.tsx` are server components that read content through `src/lib/cms.ts` and render client components; `src/app/(payload)/*` is the generated admin (`/admin`) and REST/GraphQL API (`/api/*`); `src/app/api/contact/route.ts` stores form submissions.
+- `src/lib/cms.ts` maps Payload documents to the existing content types (`Work`, `Blog`, `site`) so every component keeps its props; when the database is empty or unreachable it falls back to the static content files. Rich text (Lexical) ⇄ the blog `body` blocks via `src/lib/lexical.ts`.
+- The frontend root layout is `dynamic = 'force-dynamic'` so edits are visible on the next request (no cache to bust).
+- `Shell` (client) wraps every page: `SiteProvider` (CMS site settings via `useSite()`), preloader, navbar, ruled `<main>`, footer.
+- Payload config: `src/payload.config.ts`; collections in `src/cms/collections/` (Works, Posts, Media, Messages, Users), global in `src/cms/globals/Site.ts`; public read, authenticated write. Media files live in `media/` (git-ignored) and are served from `/api/media/file/<name>`.
+- `npm run seed` imports the template's placeholder works, posts, images and site settings into the CMS (idempotent). `npm run generate:types` regenerates `src/payload-types.ts` after schema changes.
+- Hosting: any Node host (`npm run build && npm start`), or Docker; the SQLite file and `media/` must persist between deploys. Static hosting is no longer possible.
+- Env: `PAYLOAD_SECRET`, `DATABASE_URI` (default `file:./payload.db`), `NEXT_PUBLIC_SITE_URL`; optional `NEXT_PUBLIC_FORM_ENDPOINT` to bypass the built-in inbox.

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { cn } from '@/lib/cn'
 import { ArrowIcon } from './Icons'
 
@@ -54,7 +54,7 @@ export function ArrowButton({ to, href, onClick, type = 'button', bar = false, a
   )
   if (to) {
     return (
-      <Link to={to} className={cls} aria-label={ariaLabel}>
+      <Link href={to} className={cls} aria-label={ariaLabel}>
         {inner}
       </Link>
     )
