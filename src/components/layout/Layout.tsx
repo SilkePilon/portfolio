@@ -14,7 +14,7 @@ export function Layout() {
       <SmoothScroll />
       <ScrollManager />
       <Navbar />
-      <main className="theme-dark relative flex w-full flex-col items-center gap-[100px] overflow-x-clip bg-black pb-[100px] text-white tablet:gap-[150px] tablet:pb-[150px]">
+      <main className="theme-dark relative z-[1] flex w-full flex-col items-center gap-[100px] overflow-x-clip bg-black pb-[100px] text-white tablet:gap-[150px] tablet:pb-[150px]">
         <GridLines />
         <Outlet />
       </main>

@@ -3,7 +3,7 @@
 import { chromium } from 'playwright-core'
 import { mkdirSync } from 'node:fs'
 
-const exe = `${process.env.HOME}/.cache/ms-playwright/chromium-1234/chrome-linux64/chrome`
+const exe = process.env.CHROME_PATH || chromium.executablePath()
 const [, , path = '/', name = 'home', base = 'http://localhost:5173', widthsArg = '1440,1024,390'] = process.argv
 const widths = widthsArg.split(',').map(Number)
 mkdirSync('qa', { recursive: true })
@@ -22,7 +22,14 @@ for (const width of widths) {
   await page.waitForTimeout(1200)
   await page.evaluate(() => window.scrollTo(0, 0))
   await page.waitForTimeout(600)
-  await page.screenshot({ path: `qa/${name}-${width}.png`, fullPage: true })
+  if (selector) {
+    const el = page.locator(selector).first()
+    await el.scrollIntoViewIfNeeded()
+    await page.waitForTimeout(800)
+    await el.screenshot({ path: `qa/${name}-${width}.png` })
+  } else {
+    await page.screenshot({ path: `qa/${name}-${width}.png`, fullPage: true })
+  }
   console.log('saved', `qa/${name}-${width}.png`, 'height', total)
   await page.close()
 }

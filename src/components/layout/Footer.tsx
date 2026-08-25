@@ -16,6 +16,7 @@ export function Footer() {
   const y = useTransform(scrollYProgress, [0, 1], [-170, 0])
 
   return (
+    <div className="relative z-0 w-full bg-gray-900">
     <motion.footer ref={ref} style={reduce ? undefined : { y }} className="theme-dark relative w-full overflow-hidden bg-gray-900 px-2.5 text-white tablet:px-5">
       <GridLines />
       <div className="relative mx-auto grid w-full max-w-[1600px] grid-cols-2 border-y border-rule desktop:grid-cols-4">
@@ -66,8 +67,9 @@ export function Footer() {
         </div>
       </div>
       <div className="relative mx-auto w-full max-w-[1600px] overflow-hidden pt-5">
-        <FitText text={site.name} lineHeight={0.74} className="font-display font-bold uppercase tracking-[-0.05em] text-white" />
+        <FitText text={site.name} lineHeight={0.82} className="font-display font-bold uppercase tracking-[-0.05em] text-white" />
       </div>
     </motion.footer>
+    </div>
   )
 }
