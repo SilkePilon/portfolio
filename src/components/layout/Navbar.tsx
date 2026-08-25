@@ -17,9 +17,17 @@ export function Navbar() {
     setOpen(false)
   }, [location.pathname, location.hash])
 
+  const overlay = location.pathname === '/'
+
   return (
     <>
-      <nav className="theme-dark relative z-20 w-full border-b border-rule bg-black px-2.5 text-white tablet:px-5" aria-label="Main">
+      <nav
+        className={cn(
+          'theme-dark z-20 w-full border-b border-rule bg-black px-2.5 text-white tablet:px-5',
+          overlay ? 'absolute left-0 top-0' : 'relative',
+        )}
+        aria-label="Main"
+      >
         <div className="relative mx-auto flex w-full max-w-[1600px] items-center border-x border-rule">
           <Corners variant="2-bottom" />
           <div className="flex flex-1 items-center justify-between px-5 py-3.5 desktop:flex-none desktop:py-0 desktop:pr-0">
