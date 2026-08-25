@@ -40,7 +40,7 @@ Screenshots use the Playwright Chromium build; install it once with `npx playwri
 - **Blog posts** — title, slug, order, `featured` (the three featured posts appear on the home page), date, category, cover, rich-text body (Heading 3 for section titles; paragraphs and bullet lists render).
 - **Media** — uploads (served from `/api/media/file/<name>`, stored in `media/`).
 - **Messages** — contact-form submissions (inbox).
-- **Site settings** — brand name + logo wordmark, meta description, share image, navigation links, "book a call" button, contact e-mail/phone, social links, the small profile (avatar/name/role), footer texts and the "created by" credit.
+- **Site settings** — brand name + logo wordmark, meta description, share image, **home hero (background photo, the two big name lines, badge text)**, navigation links, "book a call" button, contact e-mail/phone, social links, the small profile (avatar/name/role), footer texts and the "created by" credit.
 
 Edits are live on the next request (pages are rendered on demand). When the database is empty the site falls back to the static content in `src/content/`.
 

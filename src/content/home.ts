@@ -4,15 +4,13 @@ const img = (src: string, alt: string, width: number, height: number): Img => ({
 
 export const home = {
   hero: {
-    name: ['EliaN', 'Kent'] as const,
+    /** Image, name and badge are edited in the CMS (Site settings → Home hero); see src/content/site.ts for the fallbacks. */
     intro: [
       { text: 'I create digital experiences that feel', muted: true },
       { text: ' effortless to use and powerful in impact—FRAMER sites' },
       { text: ' that help modern brands grow', muted: true },
       { text: ' with clarity and confidence' },
     ] as Rich,
-    badge: 'Building the future of email at Resend.',
-    image: img('/images/hero.png', 'Elian Kent', 2400, 1412),
   },
 
   bio: [

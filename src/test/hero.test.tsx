@@ -1,8 +1,10 @@
 import { render, screen } from '@testing-library/react'
 import { Hero } from '@/components/home/Hero'
 import { home } from '@/content/home'
+import { site } from '@/content/site'
 
-const { badge, image, intro, name } = home.hero
+const { intro } = home.hero
+const { badge, image, name } = site.hero
 
 test('hero renders the wordmarks, portrait, intro copy and badge', () => {
   render(<Hero />)

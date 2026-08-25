@@ -39,7 +39,7 @@ test('blogs are unique and complete', () => {
 
 test('home content images exist', () => {
   ;[
-    home.hero.image,
+    site.hero.image,
     home.about.image1,
     home.about.image2,
     home.approach.image,

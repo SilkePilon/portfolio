@@ -2,6 +2,7 @@ import { act, render, screen } from '@testing-library/react'
 import { Appear } from '@/components/anim/Appear'
 import { Counter } from '@/components/anim/Counter'
 import { Preloader } from '@/components/layout/Preloader'
+import { site } from '@/content/site'
 
 test('Counter starts at zero with prefix/suffix', () => {
   render(<Counter end={62} suffix="+" />)
@@ -26,7 +27,7 @@ test('Preloader shows four panels and the brand name, then unmounts', () => {
   )
   const overlay = screen.getByTestId('preloader')
   expect(overlay.querySelectorAll('.bg-white')).toHaveLength(4)
-  expect(screen.getAllByText('E').length).toBeGreaterThanOrEqual(1)
+  expect(screen.getAllByText(site.name[0]).length).toBeGreaterThanOrEqual(1)
   act(() => {
     vi.advanceTimersByTime(2500)
   })

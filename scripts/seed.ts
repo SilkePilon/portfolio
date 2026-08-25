@@ -93,6 +93,7 @@ if (!current.nav?.length) {
       wordmarkLine2: site.wordmark[1],
       description: site.description,
       ogImage: await media(site.ogImage),
+      hero: { image: await media(site.hero.image), nameLine1: site.hero.name[0], nameLine2: site.hero.name[1], badge: site.hero.badge },
       nav: site.nav.map((l) => ({ label: l.label, to: l.to })),
       bookCall: site.bookCall,
       contact: site.contact,

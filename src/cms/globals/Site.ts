@@ -31,6 +31,27 @@ export const Site: GlobalConfig = {
           ],
         },
         {
+          label: 'Home hero',
+          fields: [
+            {
+              name: 'hero',
+              type: 'group',
+              label: false,
+              fields: [
+                { name: 'image', type: 'upload', relationTo: 'media', label: 'Background photo', admin: { description: 'Full-bleed photo behind the wordmarks (2400×1412 in the template).' } },
+                {
+                  type: 'row',
+                  fields: [
+                    { name: 'nameLine1', type: 'text', label: 'Big name, line 1', admin: { description: 'e.g. Elian' } },
+                    { name: 'nameLine2', type: 'text', label: 'Big name, line 2', admin: { description: 'e.g. Kent' } },
+                  ],
+                },
+                { name: 'badge', type: 'text', label: 'Badge text', admin: { description: 'Small cell bottom-left, e.g. "Building the future of email at Resend."' } },
+              ],
+            },
+          ],
+        },
+        {
           label: 'Navigation',
           fields: [
             { name: 'nav', type: 'array', labels: { singular: 'Link', plural: 'Links' }, admin: { description: 'Header + footer sitemap. Use "/#about" style links for home sections.' }, fields: [{ name: 'label', type: 'text', required: true }, { name: 'to', type: 'text', required: true }] },

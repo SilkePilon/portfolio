@@ -533,6 +533,24 @@ export interface Site {
    */
   description: string;
   ogImage?: (number | null) | Media;
+  hero?: {
+    /**
+     * Full-bleed photo behind the wordmarks (2400×1412 in the template).
+     */
+    image?: (number | null) | Media;
+    /**
+     * e.g. Elian
+     */
+    nameLine1?: string | null;
+    /**
+     * e.g. Kent
+     */
+    nameLine2?: string | null;
+    /**
+     * Small cell bottom-left, e.g. "Building the future of email at Resend."
+     */
+    badge?: string | null;
+  };
   /**
    * Header + footer sitemap. Use "/#about" style links for home sections.
    */
@@ -590,6 +608,14 @@ export interface SiteSelect<T extends boolean = true> {
   wordmarkLine2?: T;
   description?: T;
   ogImage?: T;
+  hero?:
+    | T
+    | {
+        image?: T;
+        nameLine1?: T;
+        nameLine2?: T;
+        badge?: T;
+      };
   nav?:
     | T
     | {

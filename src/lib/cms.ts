@@ -151,6 +151,11 @@ function mapSite(d: SiteDoc): SiteContent | null {
       },
     },
     ogImage: img(d.ogImage, { src: '/images/og.png', alt: d.name, width: 1200, height: 630 }),
+    hero: {
+      image: img(d.hero?.image, staticSite.hero.image),
+      name: [d.hero?.nameLine1 || staticSite.hero.name[0], d.hero?.nameLine2 || staticSite.hero.name[1]],
+      badge: d.hero?.badge || staticSite.hero.badge,
+    },
   }
 }
 
