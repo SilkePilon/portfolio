@@ -37,10 +37,12 @@
   :root {
     --rule: rgba(255, 255, 255, 0.15);
     --corner: #ffffff;
+    --tone-fg: #ffffff;
   }
   .theme-dark {
     --rule: rgba(255, 255, 255, 0.15);
     --corner: #ffffff;
+    --tone-fg: #ffffff;
     color: var(--color-white);
   }
   .theme-light {
