@@ -24,13 +24,13 @@ const spacer = 'relative hidden h-px w-full self-start desktop:block'
 /** Full-viewport opening: portrait behind the ELIAN / KENT wordmarks, intro copy and the certification badge. */
 export function Hero() {
   return (
-    <Section as="header" id="hero" className="flex h-screen items-end justify-center overflow-clip">
+    <Section as="header" id="hero" className="isolate flex h-screen items-end justify-center overflow-clip">
       <Appear
         preset="scale"
         duration={1.5}
         delay={heroDelay(1)}
         trigger="mount"
-        className="pointer-events-none absolute inset-0 -z-10 brightness-[0.8] tablet:brightness-100"
+        className="pointer-events-none absolute inset-0 z-0"
       >
         <img
           src={image.src}

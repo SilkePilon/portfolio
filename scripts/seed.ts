@@ -30,8 +30,9 @@ async function media(img: Img): Promise<number> {
   return id
 }
 
+/** "November 18, 2025" → ISO at noon UTC so the day survives any server timezone. */
 const iso = (human: string) => {
-  const d = new Date(human)
+  const d = new Date(`${human} 12:00:00 UTC`)
   return Number.isNaN(d.getTime()) ? '2025-11-18T12:00:00.000Z' : d.toISOString()
 }
 

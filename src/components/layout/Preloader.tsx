@@ -20,10 +20,12 @@ const TOTAL_MS = 2400
 export function Preloader() {
   const site = useSite()
   const pathname = usePathname()
-  // Decided during render (not in an effect) so siblings rendered in the same commit — the Hero — already see `wasPreloaderShown()`.
+  // Decided during render (not in an effect) so siblings rendered in the same commit — the Hero — already see
+  // `wasPreloaderShown()`. Only the browser records it: the server module lives across requests and must keep
+  // rendering the overlay so its HTML matches the client's first render.
   const [visible, setVisible] = useState(() => {
     const show = !played && pathname === '/'
-    if (show) played = true
+    if (show && typeof window !== 'undefined') played = true
     return show
   })
   const [exit, setExit] = useState(false)
