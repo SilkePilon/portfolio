@@ -30,3 +30,4 @@ qa
 # local qa + scraped reference material
 qa/
 reference/
+.superpowers/
