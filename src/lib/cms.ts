@@ -25,7 +25,7 @@ function img(m: MediaRef, fallback: Img): Img {
 const placeholder = (alt: string): Img => ({ src: '/images/og.png', alt, width: 1200, height: 630 })
 
 export const formatDate = (iso: string | null | undefined, fallback = ''): string =>
-  iso ? new Date(iso).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' }) : fallback
+  iso ? new Date(iso).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : fallback
 
 function mapWork(d: WorkDoc): Work {
   const title = d.title
