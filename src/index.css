@@ -1,4 +1,5 @@
 @import "tailwindcss";
+/* Webfonts and the Lenis stylesheet are imported from src/main.tsx (Tailwind v4 drops unresolved package @imports). */
 
 @theme {
   --breakpoint-*: initial;

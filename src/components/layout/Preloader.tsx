@@ -18,12 +18,16 @@ const TOTAL_MS = 2400
  */
 export function Preloader() {
   const { pathname } = useLocation()
-  const [visible, setVisible] = useState(() => !played && pathname === '/')
+  // Decided during render (not in an effect) so siblings rendered in the same commit — the Hero — already see `wasPreloaderShown()`.
+  const [visible, setVisible] = useState(() => {
+    const show = !played && pathname === '/'
+    if (show) played = true
+    return show
+  })
   const [exit, setExit] = useState(false)
 
   useEffect(() => {
     if (!visible) return
-    played = true
     document.body.style.overflow = 'hidden'
     getLenis()?.stop()
     const t1 = window.setTimeout(() => setExit(true), HOLD_MS)
