@@ -17,8 +17,6 @@
   --color-gray-300: #c4c4c4;
   --color-gray-100: #e0e0e0;
   --color-link: #0099ff;
-  --color-rule: var(--rule);
-  --color-corner: var(--corner);
 
   --font-display: "Host Grotesk Variable", "Host Grotesk", sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
@@ -26,6 +24,13 @@
 
   --ease-framer: cubic-bezier(0.79, 0.04, 0.16, 1);
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Theme-dependent colours: inlined so utilities read the nearest .theme-dark / .theme-light value. */
+@theme inline {
+  --color-rule: var(--rule);
+  --color-corner: var(--corner);
+  --color-fg: var(--tone-fg);
 }
 
 @layer base {
