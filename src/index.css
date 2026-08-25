@@ -1,0 +1,185 @@
+@import "tailwindcss";
+
+@theme {
+  --breakpoint-*: initial;
+  --breakpoint-tablet: 810px;
+  --breakpoint-desktop: 1200px;
+
+  --color-*: initial;
+  --color-black: #0e0e0e;
+  --color-white: #ffffff;
+  --color-light: #ededed;
+  --color-gray-900: #1a1a1a;
+  --color-gray-800: #212121;
+  --color-gray-500: #999999;
+  --color-gray-400: #ababab;
+  --color-gray-300: #c4c4c4;
+  --color-gray-100: #e0e0e0;
+  --color-link: #0099ff;
+  --color-rule: var(--rule);
+  --color-corner: var(--corner);
+
+  --font-display: "Host Grotesk Variable", "Host Grotesk", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --font-sans: "Inter Variable", Inter, sans-serif;
+
+  --ease-framer: cubic-bezier(0.79, 0.04, 0.16, 1);
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  :root {
+    --rule: rgba(255, 255, 255, 0.15);
+    --corner: rgba(255, 255, 255, 0.5);
+  }
+  .theme-dark {
+    --rule: rgba(255, 255, 255, 0.15);
+    --corner: rgba(255, 255, 255, 0.5);
+    color: var(--color-white);
+  }
+  .theme-light {
+    --rule: rgba(0, 0, 0, 0.15);
+    --corner: rgba(0, 0, 0, 0.5);
+    color: var(--color-black);
+  }
+  html {
+    background: var(--color-black);
+    color: var(--color-white);
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    font-family: var(--font-sans);
+    overflow-x: clip;
+  }
+  img,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+  input,
+  textarea {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    outline: none;
+    border-radius: 0;
+  }
+}
+
+/* Type presets copied from the Framer style presets: phone / tablet (>=810) / desktop (>=1200) */
+@utility text-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  @media (width >= 810px) { font-size: 90px; }
+  @media (width >= 1200px) { font-size: 120px; }
+}
+@utility text-h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 50px;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  @media (width >= 810px) { font-size: 64px; }
+  @media (width >= 1200px) { font-size: 80px; }
+}
+@utility text-h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  @media (width >= 810px) { font-size: 40px; }
+  @media (width >= 1200px) { font-size: 50px; }
+}
+@utility text-h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  @media (width >= 810px) { font-size: 24px; }
+  @media (width >= 1200px) { font-size: 30px; }
+}
+@utility text-h4-regular {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  @media (width >= 810px) { font-size: 24px; }
+  @media (width >= 1200px) { font-size: 30px; }
+}
+@utility text-h5 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  @media (width >= 810px) { font-size: 16px; }
+  @media (width >= 1200px) { font-size: 18px; }
+}
+@utility text-lead {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  @media (width >= 810px) { font-size: 18px; }
+  @media (width >= 1200px) { font-size: 22px; }
+}
+@utility text-body {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  @media (width >= 810px) { font-size: 16px; }
+  @media (width >= 1200px) { font-size: 18px; }
+}
+@utility text-mono {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.4;
+  text-transform: uppercase;
+  @media (width >= 810px) { font-size: 13px; }
+}
+@utility text-mono-bold {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.4;
+  text-transform: uppercase;
+  @media (width >= 810px) { font-size: 13px; }
+}
+@utility text-nav {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  @media (width >= 810px) { font-size: 14px; }
+}
