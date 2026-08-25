@@ -12,6 +12,7 @@ export function createLenis(): Lenis {
   gsap.ticker.add(tick)
   gsap.ticker.lagSmoothing(0)
   instance = lenis
+  ;(window as unknown as { __lenis?: Lenis }).__lenis = lenis // used by the screenshot scripts
   const destroy = lenis.destroy.bind(lenis)
   lenis.destroy = () => {
     gsap.ticker.remove(tick)
