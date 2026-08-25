@@ -65,8 +65,8 @@ export function Preloader() {
       ))}
       <motion.div
         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-h4 text-black"
-        initial={{ y: 0 }}
-        animate={exit ? { y: 260 } : { y: 0 }}
+        initial={{ y: 0, opacity: 1 }}
+        animate={exit ? { y: '60vh', opacity: 0 } : { y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: EASE }}
       >
         {chars.map((c, i) => (

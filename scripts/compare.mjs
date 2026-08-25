@@ -1,12 +1,12 @@
 // Local vs original full-page screenshots, side by side.
 // usage: node scripts/compare.mjs [localBase] [originalBase]
-//   defaults: http://localhost:4173 (vite preview) and https://eliankent.framer.website
+//   defaults: http://localhost:3000 (next dev / next start) and https://eliankent.framer.website
 // output: qa/cmp-<name>-<width>.png (local | original) for every template at 1440 / 1024 / 390.
 import { chromium } from 'playwright-core'
 import { mkdirSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
 
-const [, , localBase = 'http://localhost:4173', origBase = 'https://eliankent.framer.website'] = process.argv
+const [, , localBase = 'http://localhost:3000', origBase = 'https://eliankent.framer.website'] = process.argv
 const PAGES = [
   ['/', 'home'],
   ['/works', 'works'],
