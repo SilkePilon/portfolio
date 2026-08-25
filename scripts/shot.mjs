@@ -4,7 +4,7 @@ import { chromium } from 'playwright-core'
 import { mkdirSync } from 'node:fs'
 
 const exe = process.env.CHROME_PATH || chromium.executablePath()
-const [, , path = '/', name = 'home', base = 'http://localhost:5173', widthsArg = '1440,1024,390'] = process.argv
+const [, , path = '/', name = 'home', selector = '', base = 'http://localhost:5173'] = process.argv
 const widths = widthsArg.split(',').map(Number)
 mkdirSync('qa', { recursive: true })
 
