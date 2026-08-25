@@ -89,7 +89,7 @@ export function Hero() {
             >
               <Corners />
               <img src="/images/resend-icon-white.svg" alt="Resend" width={28} height={28} className="size-7 shrink-0" />
-              <span className="flex-1 text-mono">{badge}</span>
+              <span className="flex-1 whitespace-nowrap text-mono text-[11px]">{badge}</span>
             </Appear>
           </div>
 
