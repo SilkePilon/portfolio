@@ -11,7 +11,7 @@ export const home = {
       { text: ' that help modern brands grow', muted: true },
       { text: ' with clarity and confidence' },
     ] as Rich,
-    badge: 'Works at Resend',
+    badge: 'Building the future of email at Resend.',
     image: img('/images/hero.png', 'Elian Kent', 2400, 1412),
   },
 

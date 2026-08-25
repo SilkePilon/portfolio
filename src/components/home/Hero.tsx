@@ -88,7 +88,7 @@ export function Hero() {
               className="relative flex h-min flex-1 items-center justify-center gap-2.5 border-y border-rule bg-black/20 p-5"
             >
               <Corners />
-              <img src="/images/resend-icon-white.svg" alt="Resend" width={20} height={20} className="size-5 shrink-0" />
+              <img src="/images/resend-icon-white.svg" alt="Resend" width={28} height={28} className="size-7 shrink-0" />
               <span className="flex-1 text-mono">{badge}</span>
             </Appear>
           </div>
