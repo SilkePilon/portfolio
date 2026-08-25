@@ -1,0 +1,45 @@
+import { render, screen, within } from '@testing-library/react'
+import { BlogsPreview } from '@/components/home/BlogsPreview'
+import { home } from '@/content/home'
+import { homeBlogs } from '@/content/blogs'
+import { site } from '@/content/site'
+
+test('BlogsPreview renders the tag, heading and read-more cta', () => {
+  const { container } = render(<BlogsPreview />)
+  expect(container.querySelector('#blogs')).not.toBeNull()
+  expect(screen.getByText(home.blogsPreview.tag)).toBeInTheDocument()
+  const heading = screen.getByRole('heading', { level: 2 })
+  expect(heading).toHaveTextContent('Stories')
+  expect(heading).toHaveTextContent('behind the work')
+
+  const cta = screen.getAllByRole('link').find((a) => a.getAttribute('href') === '/blogs')
+  expect(cta).toBeDefined()
+  expect(within(cta as HTMLElement).getAllByText(home.blogsPreview.cta).length).toBeGreaterThan(0)
+})
+
+test('BlogsPreview renders the profile card with the site profile and the profile text', () => {
+  render(<BlogsPreview />)
+  expect(screen.getByText(site.profile.name)).toBeInTheDocument()
+  expect(screen.getByText(site.profile.role)).toBeInTheDocument()
+  for (const part of home.blogsPreview.profileText) if (part.text) expect(screen.getByText(part.text.trim())).toBeInTheDocument()
+})
+
+test('BlogsPreview falls back to homeBlogs when no posts are passed, linking each card', () => {
+  render(<BlogsPreview />)
+  for (const post of homeBlogs) {
+    expect(screen.getByRole('link', { name: new RegExp(post.title) })).toHaveAttribute('href', `/blogs/${post.slug}`)
+  }
+})
+
+test('BlogsPreview renders the three CMS posts it is given instead of the static fallback', () => {
+  const posts = [
+    { ...homeBlogs[0], slug: 'custom-a', title: 'Custom Post A' },
+    { ...homeBlogs[1], slug: 'custom-b', title: 'Custom Post B' },
+    { ...homeBlogs[2], slug: 'custom-c', title: 'Custom Post C' },
+  ]
+  render(<BlogsPreview posts={posts} />)
+  for (const post of posts) {
+    expect(screen.getByRole('link', { name: new RegExp(post.title) })).toHaveAttribute('href', `/blogs/${post.slug}`)
+  }
+  expect(screen.queryByText(homeBlogs[0].title)).toBeNull()
+})
