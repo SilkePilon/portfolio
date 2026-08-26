@@ -10,13 +10,13 @@ import '@fontsource-variable/inter'
 import 'lenis/dist/lenis.css'
 import '@/index.css'
 import { Shell } from '@/components/layout/Shell'
-import { getSite } from '@/lib/cms'
+import { getContent } from '@/lib/cms'
 
 /** Content is read from the CMS on every request so edits show up immediately. */
 export const dynamic = 'force-dynamic'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const site = await getSite()
+  const { site } = await getContent()
   // SITE_URL is read at runtime (works with the prebuilt Docker image); NEXT_PUBLIC_SITE_URL is the build-time fallback.
   const base = process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
   return {
@@ -37,11 +37,11 @@ export async function generateMetadata(): Promise<Metadata> {
 export const viewport = { themeColor: '#0e0e0e' }
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  const site = await getSite()
+  const content = await getContent()
   return (
     <html lang="en">
       <body>
-        <Shell site={site}>{children}</Shell>
+        <Shell content={content}>{children}</Shell>
       </body>
     </html>
   )

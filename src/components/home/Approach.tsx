@@ -1,17 +1,17 @@
 'use client'
 import { Appear } from '@/components/anim/Appear'
+import { useHome } from '@/components/layout/ContentProvider'
 import { Corners } from '@/components/ui/Corners'
 import { Dots } from '@/components/ui/Dots'
 import { RichSpan } from '@/components/ui/RichText'
 import { Container, Section } from '@/components/ui/Section'
 import { SectionTag } from '@/components/ui/SectionTag'
-import { home } from '@/content/home'
 import { cn } from '@/lib/cn'
 
 /** Approach(04) — light section: heading row (tag + h2, lead paragraph pinned right on desktop), then a
  * 4:3 photo beside a 2×2 grid of numbered process steps with dot progress markers. */
 export function Approach() {
-  const { tag, heading, text, image, steps } = home.approach
+  const { tag, heading, text, image, steps } = useHome().approach
 
   return (
     <Section id="approach" tone="light">

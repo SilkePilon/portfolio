@@ -1,7 +1,7 @@
 'use client'
 import { useRef } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
-import { useSite } from '@/components/layout/SiteProvider'
+import { useSite } from '@/components/layout/ContentProvider'
 import { ArrowButton } from '@/components/ui/ArrowButton'
 import { FitText } from '@/components/ui/FitText'
 import { Logo } from '@/components/ui/Logo'

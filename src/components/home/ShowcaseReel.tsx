@@ -1,10 +1,8 @@
 'use client'
 import { useLayoutEffect, useRef } from 'react'
+import { useHome } from '@/components/layout/ContentProvider'
 import { Video } from '@/components/ui/Video'
-import { home } from '@/content/home'
 import { gsap, ScrollTrigger } from '@/lib/gsap'
-
-const [firstWord, secondWord] = home.reel.words
 
 /**
  * Scroll-driven showcase reel: a sticky 100vh frame sitting over a 300vh spacer (400vh in total).
@@ -12,6 +10,8 @@ const [firstWord, secondWord] = home.reel.words
  * un-zooms from 1.8 to 1, and the two words slide in from ±1200px to meet in the middle.
  */
 export function ShowcaseReel() {
+  const { video, words } = useHome().reel
+  const [firstWord, secondWord] = words
   const root = useRef<HTMLElement>(null)
   const holder = useRef<HTMLDivElement>(null)
   const inner = useRef<HTMLDivElement>(null)
@@ -39,14 +39,14 @@ export function ShowcaseReel() {
       live = false
       ctx.revert()
     }
-  }, [])
+  }, [firstWord, secondWord])
 
   return (
     <section ref={root} id="reel" className="relative z-[2] flex w-full flex-col items-center justify-center overflow-clip">
       <div className="pointer-events-none sticky top-0 z-[1] flex h-screen w-full flex-col items-center justify-center overflow-clip tablet:flex-row">
         <div ref={holder} className="absolute top-0 left-0 z-[1] flex h-full w-full items-center justify-center overflow-clip will-change-transform">
           <div ref={inner} className="relative h-full w-full brightness-[0.6] will-change-transform">
-            <Video src={home.reel.video} className="bg-black" />
+            <Video src={video} className="bg-black" />
           </div>
         </div>
         <div ref={first} className="relative z-[2] whitespace-pre text-display will-change-transform">

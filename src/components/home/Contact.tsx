@@ -1,22 +1,17 @@
 'use client'
 import { useState, type ChangeEvent, type FormEvent } from 'react'
 import { Appear } from '@/components/anim/Appear'
-import { useSite } from '@/components/layout/SiteProvider'
+import { useHome, useSite } from '@/components/layout/ContentProvider'
 import { ArrowButton } from '@/components/ui/ArrowButton'
 import { Corners } from '@/components/ui/Corners'
 import { Profile } from '@/components/ui/Profile'
 import { RichSpan } from '@/components/ui/RichText'
 import { Section } from '@/components/ui/Section'
 import { SectionTag } from '@/components/ui/SectionTag'
-import { home } from '@/content/home'
 import { cn } from '@/lib/cn'
 import { submit as submitForm, validate, type FormErrors, type FormValues } from '@/lib/form'
 
-const { tag, heading, sentence, connectLabel, fields, replyNote, submit: submitLabel, submitting, sent, failed } = home.contact
-
 const empty: FormValues = { Name: '', Email: '', Phone: '', Budget: '', Message: '', website: '' }
-
-const field = (name: keyof Omit<FormValues, 'website'>) => fields.find((f) => f.name === name)!
 
 type Status = 'idle' | 'pending' | 'success' | 'error'
 
@@ -37,7 +32,7 @@ function Field({
   onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
   className?: string
 }) {
-  const f = field(name)
+  const f = useHome().contact.fields.find((x) => x.name === name)!
   const error = errors[name]
   return (
     <label className={cn('flex flex-1 flex-col gap-2.5', className)}>
@@ -69,6 +64,7 @@ function Field({
 
 /** "Have a Project in Mind?" — CMS profile/contact details + the message form, posting through `src/lib/form.ts`. */
 export function Contact() {
+  const { tag, heading, sentence, connectLabel, replyNote, submit: submitLabel, submitting, sent, failed } = useHome().contact
   const site = useSite()
   const [values, setValues] = useState<FormValues>(empty)
   const [errors, setErrors] = useState<FormErrors>({})

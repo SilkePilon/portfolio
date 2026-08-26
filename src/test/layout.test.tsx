@@ -1,11 +1,12 @@
 import { render, screen } from '@testing-library/react'
+import { staticContent } from '@/components/layout/ContentProvider'
 import { Shell } from '@/components/layout/Shell'
 import { NotFoundView } from '@/components/pages/NotFoundView'
 import { site } from '@/content/site'
 
 test('shell renders navbar, footer and children', () => {
   render(
-    <Shell site={site}>
+    <Shell content={staticContent}>
       <p>page content</p>
     </Shell>,
   )
@@ -19,7 +20,7 @@ test('shell renders navbar, footer and children', () => {
 
 test('shell uses the site content it is given', () => {
   render(
-    <Shell site={{ ...site, name: 'Acme Studio', socials: [{ label: 'Mastodon', href: 'https://example.com' }] }}>
+    <Shell content={{ ...staticContent, site: { ...site, name: 'Acme Studio', socials: [{ label: 'Mastodon', href: 'https://example.com' }] } }}>
       <p>x</p>
     </Shell>,
   )

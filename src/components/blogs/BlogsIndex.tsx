@@ -1,13 +1,14 @@
 'use client'
-import type { Blog } from '@/content/types'
-import { pages } from '@/content/home'
 import { Appear } from '@/components/anim/Appear'
+import { usePages, usePosts } from '@/components/layout/ContentProvider'
 import { RichSpan } from '@/components/ui/RichText'
 import { Container, Section } from '@/components/ui/Section'
 import { SectionTag } from '@/components/ui/SectionTag'
 import { BlogCard } from './BlogCard'
 
-export function BlogsIndex({ posts }: { posts: Blog[] }) {
+export function BlogsIndex() {
+  const pages = usePages()
+  const posts = usePosts()
   return (
     <Section as="header" className="pt-[100px] tablet:pt-[150px]">
       <Container className="gap-y-[70px]">

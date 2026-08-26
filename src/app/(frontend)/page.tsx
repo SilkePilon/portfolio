@@ -12,10 +12,8 @@ import { Awards } from '@/components/home/Awards'
 import { BlogsPreview } from '@/components/home/BlogsPreview'
 import { Faq } from '@/components/home/Faq'
 import { Contact } from '@/components/home/Contact'
-import { getHomePosts, getWorks } from '@/lib/cms'
 
-export default async function HomePage() {
-  const [works, posts] = await Promise.all([getWorks(), getHomePosts()])
+export default function HomePage() {
   return (
     <>
       <Hero />
@@ -25,13 +23,13 @@ export default async function HomePage() {
         <Metrics />
       </div>
       <ShowcaseReel />
-      <WorksGrid works={works} />
+      <WorksGrid />
       <Services />
       <Testimonials />
       <Clients />
       <Approach />
       <Awards />
-      <BlogsPreview posts={posts} />
+      <BlogsPreview />
       <Faq />
       <Contact />
     </>

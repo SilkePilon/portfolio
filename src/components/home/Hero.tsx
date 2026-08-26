@@ -1,15 +1,12 @@
 'use client'
 import { motion, useScroll, useTransform } from 'motion/react'
 import { Appear } from '@/components/anim/Appear'
-import { useSite } from '@/components/layout/SiteProvider'
+import { useHome, useSite } from '@/components/layout/ContentProvider'
 import { wasPreloaderShown } from '@/components/layout/Preloader'
 import { Corners } from '@/components/ui/Corners'
 import { FitText } from '@/components/ui/FitText'
 import { RichSpan } from '@/components/ui/RichText'
 import { Container, GridLines, Section } from '@/components/ui/Section'
-import { home } from '@/content/home'
-
-const { intro } = home.hero
 
 /** The original delays are timed against the preloader's 1s hold; without it everything starts 1s earlier. */
 const heroDelay = (t: number) => (wasPreloaderShown() ? t : Math.max(0, t - 1))
@@ -25,6 +22,7 @@ const spacer = 'relative hidden h-px w-full self-start desktop:block'
 /** Full-viewport opening: portrait behind the ELIAN / KENT wordmarks, intro copy and the certification badge. */
 export function Hero() {
   const { hero: { image, name, badge } } = useSite()
+  const { intro } = useHome().hero
   // Framer parallax (speed 90): the photo scrolls 10% slower than the page.
   const { scrollY } = useScroll()
   const bgY = useTransform(scrollY, (v) => v * 0.1)

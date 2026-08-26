@@ -1,17 +1,18 @@
 'use client'
 import type { ReactNode } from 'react'
+import type { Content } from '@/lib/content'
 import { GridLines } from '@/components/ui/Section'
+import { ContentProvider } from './ContentProvider'
 import { Footer } from './Footer'
 import { Navbar } from './Navbar'
 import { Preloader } from './Preloader'
 import { ScrollManager } from './ScrollManager'
-import { SiteProvider, type SiteContent } from './SiteProvider'
 import { SmoothScroll } from './SmoothScroll'
 
 /** Page shell: preloader (home, first load), navbar, ruled main column, footer. */
-export function Shell({ site, children }: { site: SiteContent; children: ReactNode }) {
+export function Shell({ content, children }: { content: Content; children: ReactNode }) {
   return (
-    <SiteProvider value={site}>
+    <ContentProvider value={content}>
       <Preloader />
       <SmoothScroll />
       <ScrollManager />
@@ -21,6 +22,6 @@ export function Shell({ site, children }: { site: SiteContent; children: ReactNo
         {children}
       </main>
       <Footer />
-    </SiteProvider>
+    </ContentProvider>
   )
 }

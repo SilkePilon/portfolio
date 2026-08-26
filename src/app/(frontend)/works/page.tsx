@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
 import { WorksIndex } from '@/components/works/WorksIndex'
-import { getWorks } from '@/lib/cms'
-import { pages } from '@/content/home'
+import { getPages } from '@/lib/cms'
 
-export const metadata: Metadata = { title: 'Works', description: pages.works.text }
+export async function generateMetadata(): Promise<Metadata> {
+  const p = await getPages()
+  return { title: 'Works', description: p.works.text }
+}
 
-export default async function WorksPage() {
-  return <WorksIndex works={await getWorks()} />
+export default function WorksPage() {
+  return <WorksIndex />
 }

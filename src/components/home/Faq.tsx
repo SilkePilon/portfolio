@@ -2,13 +2,13 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
 import { Appear } from '@/components/anim/Appear'
+import { useHome, useLists } from '@/components/layout/ContentProvider'
 import { ArrowButton } from '@/components/ui/ArrowButton'
 import { Corners } from '@/components/ui/Corners'
 import { PlusIcon } from '@/components/ui/Icons'
 import { RichSpan } from '@/components/ui/RichText'
 import { Container, Section } from '@/components/ui/Section'
 import { SectionTag } from '@/components/ui/SectionTag'
-import { home } from '@/content/home'
 import { cn } from '@/lib/cn'
 
 const easeOut = [0.22, 1, 0.36, 1] as const
@@ -40,7 +40,8 @@ function FaqRow({ q, a, isOpen, isFirst, onToggle }: { q: string; a: string; isO
 
 /** FAQ accordion (one item open at a time) followed by a "didn't find your answer?" CTA row. */
 export function Faq() {
-  const { tag, heading, items, outroHeading, outroText, outroCta } = home.faq
+  const { tag, heading, outroHeading, outroText, outroCta } = useHome().faq
+  const items = useLists().faqs
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (

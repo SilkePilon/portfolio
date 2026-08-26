@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { useSite } from '@/components/layout/SiteProvider'
+import { useSite } from '@/components/layout/ContentProvider'
 import { cn } from '@/lib/cn'
 import { LogoMark } from './Icons'
 

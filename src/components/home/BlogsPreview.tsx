@@ -1,25 +1,22 @@
 'use client'
 import { Appear } from '@/components/anim/Appear'
 import { BlogCard } from '@/components/blogs/BlogCard'
-import { useSite } from '@/components/layout/SiteProvider'
+import { useHome, useHomePosts, useSite } from '@/components/layout/ContentProvider'
 import { ArrowButton } from '@/components/ui/ArrowButton'
 import { Profile } from '@/components/ui/Profile'
 import { RichSpan } from '@/components/ui/RichText'
 import { Container, Section } from '@/components/ui/Section'
 import { SectionTag } from '@/components/ui/SectionTag'
-import { homeBlogs } from '@/content/blogs'
-import { home } from '@/content/home'
-import type { Blog } from '@/content/types'
 
 /**
  * "Stories behind the work" — heading + read-more cta, then a profile card and three BlogCards
  * placed like the template: card1 top-right, card2/card3 staggered onto the next row.
- * `posts` comes from the CMS (the three featured posts); falls back to `homeBlogs` when empty.
+ * The three featured posts come from the CMS through `useHomePosts()`.
  */
-export function BlogsPreview({ posts = [] }: { posts?: Blog[] }) {
-  const { tag, heading, cta, profileText } = home.blogsPreview
+export function BlogsPreview() {
+  const { tag, heading, cta, profileText } = useHome().blogsPreview
   const site = useSite()
-  const items = posts.length ? posts : homeBlogs
+  const items = useHomePosts()
 
   return (
     <Section id="blogs">

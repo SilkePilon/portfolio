@@ -1,14 +1,12 @@
 'use client'
 import type { Work } from '@/content/types'
-import { pages } from '@/content/home'
 import { Appear } from '@/components/anim/Appear'
+import { usePages } from '@/components/layout/ContentProvider'
 import { ArrowButton } from '@/components/ui/ArrowButton'
 import { Corners } from '@/components/ui/Corners'
 import { Container, Section } from '@/components/ui/Section'
 import { SectionTag } from '@/components/ui/SectionTag'
 import { WorkCard } from './WorkCard'
-
-const L = pages.workLabels
 
 function MetaRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -20,6 +18,8 @@ function MetaRow({ label, children }: { label: string; children: React.ReactNode
 }
 
 export function WorkDetail({ work, next }: { work: Work; next: Work }) {
+  const pages = usePages()
+  const L = pages.workLabels
   return (
     <>
       <Section as="header" className="pt-[100px] tablet:pt-[150px]">

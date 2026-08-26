@@ -1,5 +1,6 @@
 import { render, screen, within } from '@testing-library/react'
 import { BlogsPreview } from '@/components/home/BlogsPreview'
+import { ContentProvider, staticContent } from '@/components/layout/ContentProvider'
 import { home } from '@/content/home'
 import { homeBlogs } from '@/content/blogs'
 import { site } from '@/content/site'
@@ -24,20 +25,24 @@ test('BlogsPreview renders the profile card with the site profile and the profil
   for (const part of home.blogsPreview.profileText) if (part.text) expect(screen.getByText(part.text.trim())).toBeInTheDocument()
 })
 
-test('BlogsPreview falls back to homeBlogs when no posts are passed, linking each card', () => {
+test('BlogsPreview falls back to the static homeBlogs without a provider, linking each card', () => {
   render(<BlogsPreview />)
   for (const post of homeBlogs) {
     expect(screen.getByRole('link', { name: new RegExp(post.title) })).toHaveAttribute('href', `/blogs/${post.slug}`)
   }
 })
 
-test('BlogsPreview renders the three CMS posts it is given instead of the static fallback', () => {
+test('BlogsPreview renders the three CMS posts from the provider instead of the static fallback', () => {
   const posts = [
     { ...homeBlogs[0], slug: 'custom-a', title: 'Custom Post A' },
     { ...homeBlogs[1], slug: 'custom-b', title: 'Custom Post B' },
     { ...homeBlogs[2], slug: 'custom-c', title: 'Custom Post C' },
   ]
-  render(<BlogsPreview posts={posts} />)
+  render(
+    <ContentProvider value={{ ...staticContent, homePosts: posts }}>
+      <BlogsPreview />
+    </ContentProvider>,
+  )
   for (const post of posts) {
     expect(screen.getByRole('link', { name: new RegExp(post.title) })).toHaveAttribute('href', `/blogs/${post.slug}`)
   }

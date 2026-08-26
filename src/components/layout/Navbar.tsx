@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useSite } from '@/components/layout/SiteProvider'
+import { useSite } from '@/components/layout/ContentProvider'
 import { cn } from '@/lib/cn'
 import { ArrowButton } from '@/components/ui/ArrowButton'
 import { Corners } from '@/components/ui/Corners'

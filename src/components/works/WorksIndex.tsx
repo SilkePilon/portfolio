@@ -1,7 +1,6 @@
 'use client'
-import type { Work } from '@/content/types'
-import { pages } from '@/content/home'
 import { Appear } from '@/components/anim/Appear'
+import { usePages, useWorks } from '@/components/layout/ContentProvider'
 import { RichSpan } from '@/components/ui/RichText'
 import { Container, Section } from '@/components/ui/Section'
 import { SectionTag } from '@/components/ui/SectionTag'
@@ -18,7 +17,9 @@ const placement: Record<string, string> = {
 }
 const order = ['glidex', 'veon', 'sienna', 'zayla', 'destello']
 
-export function WorksIndex({ works }: { works: Work[] }) {
+export function WorksIndex() {
+  const pages = usePages()
+  const works = useWorks()
   const sorted = [...works].sort((a, b) => (order.indexOf(a.slug) + 1 || 99) - (order.indexOf(b.slug) + 1 || 99))
   return (
     <Section as="header" className="pt-[100px] tablet:pt-[150px]">

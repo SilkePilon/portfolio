@@ -1,16 +1,17 @@
 'use client'
 import { Appear } from '@/components/anim/Appear'
+import { useHome, useLists } from '@/components/layout/ContentProvider'
 import { Chip } from '@/components/ui/Chip'
 import { Corners } from '@/components/ui/Corners'
 import { RichSpan } from '@/components/ui/RichText'
 import { Container, Section } from '@/components/ui/Section'
 import { SectionTag } from '@/components/ui/SectionTag'
-import { home } from '@/content/home'
 import { cn } from '@/lib/cn'
 
 /** Services(04) — light section: heading, two lead photos, then the four-row service list. */
 export function Services() {
-  const { tag, heading, text, images, rows } = home.services
+  const { tag, heading, text, images } = useHome().services
+  const rows = useLists().services
   const [image1, image2] = images
 
   return (

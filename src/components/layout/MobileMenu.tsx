@@ -2,7 +2,7 @@
 import { useEffect } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import Link from 'next/link'
-import { useSite } from '@/components/layout/SiteProvider'
+import { useSite } from '@/components/layout/ContentProvider'
 import { ArrowButton } from '@/components/ui/ArrowButton'
 import { ArrowIcon } from '@/components/ui/Icons'
 import { Logo } from '@/components/ui/Logo'

@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
 import { usePathname } from 'next/navigation'
-import { useSite } from '@/components/layout/SiteProvider'
+import { useSite } from '@/components/layout/ContentProvider'
 import { getLenis } from '@/lib/lenis'
 
 let played = false

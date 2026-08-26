@@ -2,15 +2,12 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
 import { Appear } from '@/components/anim/Appear'
-import { useSite } from '@/components/layout/SiteProvider'
+import { useHome, useLists, useSite } from '@/components/layout/ContentProvider'
 import { ArrowButton } from '@/components/ui/ArrowButton'
 import { Profile } from '@/components/ui/Profile'
 import { RichSpan } from '@/components/ui/RichText'
 import { Container, Section } from '@/components/ui/Section'
 import { SectionTag } from '@/components/ui/SectionTag'
-import { home } from '@/content/home'
-
-const { tag, heading, text, sentence, cta, list } = home.clients
 
 /**
  * "Brands I've worked with": eyebrow + h2 + intro on the right, then a 4-col row of sentence/
@@ -19,6 +16,8 @@ const { tag, heading, text, sentence, cta, list } = home.clients
  * below `desktop:`).
  */
 export function Clients() {
+  const { tag, heading, text, sentence, cta } = useHome().clients
+  const list = useLists().clients
   const site = useSite()
   const [hovered, setHovered] = useState<number | null>(null)
   const active = hovered !== null ? list[hovered] : null

@@ -1,13 +1,11 @@
 'use client'
 import { Appear } from '@/components/anim/Appear'
+import { useHome, useWorks } from '@/components/layout/ContentProvider'
 import { ArrowButton } from '@/components/ui/ArrowButton'
 import { RichSpan } from '@/components/ui/RichText'
 import { Container, Section } from '@/components/ui/Section'
 import { SectionTag } from '@/components/ui/SectionTag'
 import { WorkCard } from '@/components/works/WorkCard'
-import { home } from '@/content/home'
-import type { Work } from '@/content/types'
-import { works as staticWorks } from '@/content/works'
 import { cn } from '@/lib/cn'
 
 /**
@@ -26,9 +24,9 @@ const rows: { slug: string; cell: string }[][] = [
 ]
 
 /** "Selected works" — five project cards on the page grid, closing with the explore-all-works cell. */
-/** `works` comes from the CMS (falls back to the static content). */
-export function WorksGrid({ works = staticWorks }: { works?: Work[] }) {
-  const { tag, heading, text, outro, cta } = home.works
+export function WorksGrid() {
+  const { tag, heading, text, outro, cta } = useHome().works
+  const works = useWorks()
 
   return (
     <Section id="works">

@@ -1,9 +1,9 @@
 'use client'
 import { Appear } from '@/components/anim/Appear'
 import { Counter } from '@/components/anim/Counter'
+import { useHome } from '@/components/layout/ContentProvider'
 import { Dots } from '@/components/ui/Dots'
 import { Container, Section } from '@/components/ui/Section'
-import { home } from '@/content/home'
 import { cn } from '@/lib/cn'
 
 /**
@@ -21,11 +21,12 @@ const desktopPlacement = [
 
 /** Four counters (projects, years, satisfaction, rating) — "Container - metrices" inside Section - About. */
 export function Metrics() {
+  const { metrics } = useHome()
   return (
     <Section id="metrics">
       <Container grid={false}>
         <div className="grid w-full grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4">
-          {home.metrics.map((metric, i) => (
+          {metrics.map((metric, i) => (
             <Appear
               key={metric.label}
               preset="fade"

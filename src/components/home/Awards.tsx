@@ -1,16 +1,17 @@
 'use client'
 import { Appear } from '@/components/anim/Appear'
+import { useHome, useLists } from '@/components/layout/ContentProvider'
 import { Corners } from '@/components/ui/Corners'
 import { RichSpan } from '@/components/ui/RichText'
 import { Container, Section } from '@/components/ui/Section'
 import { SectionTag } from '@/components/ui/SectionTag'
-import { home } from '@/content/home'
 import { cn } from '@/lib/cn'
 
 /** Awards & Recognitions — dark section: tag/heading/sentence on the left, four numbered award
  * rows (name left, description right on tablet+, stacked on phone) on the right. */
 export function Awards() {
-  const { tag, heading, sentence, list } = home.awards
+  const { tag, heading, sentence } = useHome().awards
+  const list = useLists().awards
 
   return (
     <Section id="awards">

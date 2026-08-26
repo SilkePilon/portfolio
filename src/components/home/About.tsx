@@ -1,16 +1,15 @@
 'use client'
 import { Appear } from '@/components/anim/Appear'
 import { TextReveal } from '@/components/anim/TextReveal'
+import { useHome } from '@/components/layout/ContentProvider'
 import { Corners } from '@/components/ui/Corners'
 import { RichSpan } from '@/components/ui/RichText'
 import { Container, Section } from '@/components/ui/Section'
 import { SectionTag } from '@/components/ui/SectionTag'
-import { home } from '@/content/home'
-
-const { tag, paragraphs, image1, caption, image2, resultTag, resultHeading } = home.about
 
 /** Portrait crop with its corner markers: column-stacked on phone/desktop, side-by-side only at tablet width. */
 function Portrait() {
+  const { image1, caption } = useHome().about
   return (
     <Appear
       preset="fade"
@@ -36,6 +35,7 @@ function Portrait() {
 
 /** About-section copy + portrait, then the outcome photo and the "driven result" line — mirrors Section - About / Container - metrices title. */
 export function About() {
+  const { tag, paragraphs, image2, resultTag, resultHeading } = useHome().about
   return (
     <Section id="about">
       <div className="flex flex-col gap-[30px] tablet:gap-[50px] desktop:gap-[70px]">
@@ -43,7 +43,7 @@ export function About() {
           <Appear preset="up" className="col-span-2 flex flex-col gap-5 px-2.5 tablet:gap-[30px] tablet:px-5">
             <SectionTag>{tag}</SectionTag>
             <div className="flex flex-col gap-[29px] tablet:gap-[36px] desktop:gap-[45px]">
-              <TextReveal className="flex flex-col gap-10" paragraphClassName="text-h3">
+              <TextReveal key={paragraphs.join('|')} className="flex flex-col gap-10" paragraphClassName="text-h3">
                 {paragraphs}
               </TextReveal>
             </div>

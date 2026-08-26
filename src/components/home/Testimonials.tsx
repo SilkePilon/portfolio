@@ -2,16 +2,13 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Appear } from '@/components/anim/Appear'
+import { useHome, useLists } from '@/components/layout/ContentProvider'
 import { Corners } from '@/components/ui/Corners'
 import { Dots } from '@/components/ui/Dots'
 import { RichSpan } from '@/components/ui/RichText'
 import { Container, Section } from '@/components/ui/Section'
 import { SectionTag } from '@/components/ui/SectionTag'
 import { cn } from '@/lib/cn'
-import { home } from '@/content/home'
-
-const { tag, heading, prev, next, items } = home.testimonials
-const count = items.length
 
 const slideEase = 'transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)]'
 
@@ -29,6 +26,9 @@ function ControlLabel({ children }: { children: string }) {
 
 /** Slider card: quote + author fade/slide between testimonials, `Dots` tracks the active index. */
 export function Testimonials() {
+  const { tag, heading, prev, next } = useHome().testimonials
+  const items = useLists().testimonials
+  const count = items.length
   const [index, setIndex] = useState(0)
   const item = items[index]
 

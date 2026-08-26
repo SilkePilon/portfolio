@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
 import { BlogsIndex } from '@/components/blogs/BlogsIndex'
-import { getPosts } from '@/lib/cms'
-import { pages } from '@/content/home'
+import { getPages } from '@/lib/cms'
 
-export const metadata: Metadata = { title: 'Blogs', description: pages.blogs.text }
+export async function generateMetadata(): Promise<Metadata> {
+  const p = await getPages()
+  return { title: 'Blogs', description: p.blogs.text }
+}
 
-export default async function BlogsPage() {
-  return <BlogsIndex posts={await getPosts()} />
+export default function BlogsPage() {
+  return <BlogsIndex />
 }

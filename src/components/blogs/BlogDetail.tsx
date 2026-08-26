@@ -1,7 +1,7 @@
 'use client'
 import type { Blog } from '@/content/types'
-import { pages } from '@/content/home'
 import { Appear } from '@/components/anim/Appear'
+import { usePages } from '@/components/layout/ContentProvider'
 import { ArrowButton } from '@/components/ui/ArrowButton'
 import { Corners } from '@/components/ui/Corners'
 import { BlogBody } from '@/components/ui/RichText'
@@ -10,6 +10,7 @@ import { SectionTag } from '@/components/ui/SectionTag'
 import { BlogCard } from './BlogCard'
 
 export function BlogDetail({ post, next }: { post: Blog; next: Blog[] }) {
+  const pages = usePages()
   const [intro, ...rest] = post.body[0]?.kind === 'paragraph' ? [post.body[0], ...post.body.slice(1)] : [undefined, ...post.body]
   return (
     <>
