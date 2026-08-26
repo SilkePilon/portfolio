@@ -5,11 +5,17 @@ import type { Blog, Img, Work } from '@/content/types'
 import { works as staticWorks } from '@/content/works'
 import { blogs as staticBlogs, homeBlogs as staticHomeBlogs } from '@/content/blogs'
 import { site as staticSite } from '@/content/site'
+import { home as staticHome, pages as staticPages } from '@/content/home'
 import type { Post as PostDoc, Work as WorkDoc } from '@/payload-types'
 import { lexicalToBlocks } from './lexical'
 import { img, mapSite, type SiteContent } from './site-map'
+import { mapHome } from './home-map'
+import { mapPages } from './pages-map'
+import { mapAward, mapClient, mapFaq, mapService, mapTestimonial } from './lists-map'
+import type { Content, HomeContent, Lists, PagesContent } from './content'
 
 export type { SiteContent } from './site-map'
+export type { Content, HomeContent, Lists, PagesContent } from './content'
 
 const payload = () => getPayload({ config })
 
@@ -117,4 +123,72 @@ export function getHomePosts(): Promise<Blog[]> {
 
 export function getSite(): Promise<SiteContent> {
   return safely('site', async () => mapSite(await (await payload()).findGlobal({ slug: 'site', depth: 1 })), staticSite)
+}
+
+export function getHome(): Promise<HomeContent> {
+  return safely('home', async () => mapHome(await (await payload()).findGlobal({ slug: 'home', depth: 1 })), staticHome)
+}
+
+export function getPages(): Promise<PagesContent> {
+  return safely('pages', async () => mapPages(await (await payload()).findGlobal({ slug: 'pages', depth: 1 })), staticPages)
+}
+
+export async function getLists(): Promise<Lists> {
+  const [services, testimonials, clients, awards, faqs] = await Promise.all([
+    safely(
+      'services',
+      async () => {
+        const r = await (await payload()).find({ collection: 'services', sort: '_order', limit: 100, depth: 1, pagination: false })
+        return r.docs.length ? r.docs.map(mapService) : null
+      },
+      staticHome.services.rows,
+    ),
+    safely(
+      'testimonials',
+      async () => {
+        const r = await (await payload()).find({ collection: 'testimonials', sort: '_order', limit: 100, depth: 1, pagination: false })
+        return r.docs.length ? r.docs.map(mapTestimonial) : null
+      },
+      staticHome.testimonials.items,
+    ),
+    safely(
+      'clients',
+      async () => {
+        const r = await (await payload()).find({ collection: 'clients', sort: '_order', limit: 100, depth: 1, pagination: false })
+        return r.docs.length ? r.docs.map(mapClient) : null
+      },
+      staticHome.clients.list,
+    ),
+    safely(
+      'awards',
+      async () => {
+        const r = await (await payload()).find({ collection: 'awards', sort: '_order', limit: 100, depth: 1, pagination: false })
+        return r.docs.length ? r.docs.map(mapAward) : null
+      },
+      staticHome.awards.list,
+    ),
+    safely(
+      'faqs',
+      async () => {
+        const r = await (await payload()).find({ collection: 'faqs', sort: '_order', limit: 100, depth: 1, pagination: false })
+        return r.docs.length ? r.docs.map(mapFaq) : null
+      },
+      staticHome.faq.items,
+    ),
+  ])
+  return { services, testimonials, clients, awards, faqs }
+}
+
+/** Everything a page needs to render, fetched together with static fallbacks per field. */
+export async function getContent(): Promise<Content> {
+  const [site, home, pages, lists, works, posts, homePosts] = await Promise.all([
+    getSite(),
+    getHome(),
+    getPages(),
+    getLists(),
+    getWorks(),
+    getPosts(),
+    getHomePosts(),
+  ])
+  return { site, home, pages, lists, works, posts, homePosts }
 }
