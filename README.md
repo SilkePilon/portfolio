@@ -26,6 +26,7 @@ On the first visit to `/admin` Payload asks you to create the first admin user. 
 | `npm run seed` | import the placeholder content into the CMS |
 | `npm run generate:types` | regenerate `src/payload-types.ts` after changing collections |
 | `npm run generate:importmap` | regenerate the admin import map (after adding custom admin components) |
+| `npm run payload -- migrate:create <name>` | write a DB migration to `src/migrations/` after changing collections/globals — required for production (dev applies schema changes automatically) |
 | `npm test` | Vitest (content integrity, components, adapters) |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run shot -- /works works [selector] [baseUrl]` | screenshots of a route at 1440 / 1024 / 390 into `qa/` |
@@ -38,7 +39,7 @@ Screenshots use the Playwright Chromium build; install it once with `npx playwri
 **In the CMS (`/admin`)**
 - **Works** — the case studies: title, slug, order, date, cover + hover image, description, overview, client/industry/live URL, services, 4-image gallery. Order = position on the home page and the works page.
 - **Blog posts** — title, slug, order, `featured` (the three featured posts appear on the home page), date, category, cover, rich-text body (Heading 3 for section titles; paragraphs and bullet lists render).
-- **Media** — uploads (served from `/api/media/file/<name>`, stored in `media/`).
+- **Media** — uploads (served from `/api/media/file/<name>`, stored in `media/` or `MEDIA_DIR`).
 - **Messages** — contact-form submissions (inbox).
 - **Site settings** — brand name + logo wordmark, meta description, share image, **home hero (background photo, the two big name lines, badge text)**, navigation links, "book a call" button, contact e-mail/phone, social links, the small profile (avatar/name/role), footer texts and the "created by" credit.
 
@@ -50,9 +51,19 @@ Edits are live on the next request (pages are rendered on demand). When the data
 
 Submissions go to `/api/contact` and land in the CMS **Messages** collection. To send them elsewhere instead, set `NEXT_PUBLIC_FORM_ENDPOINT` to any URL that accepts a JSON `POST` (`{ Name, Email, Phone, Budget, Message }`).
 
-## Deploying
+## Deploying — Docker (recommended)
 
-This is a Node app (not a static site): `npm run build && npm start`, or the included `Dockerfile`. Persist `payload.db` and `media/` between deploys (mount them as volumes) and set `PAYLOAD_SECRET`, `DATABASE_URI` (default `file:./payload.db`) and `NEXT_PUBLIC_SITE_URL`.
+Every GitHub release publishes a ready-to-run image to `ghcr.io/silkepilon/portfolio` (`latest`, `1.2.3`, `1.2`, `1`). One container, one volume:
+
+```bash
+curl -O https://raw.githubusercontent.com/SilkePilon/portfolio/main/docker-compose.yml
+printf 'PAYLOAD_SECRET=%s\nSITE_URL=https://your-domain.com\n' "$(openssl rand -hex 32)" > .env
+docker compose up -d          # http://localhost:3000 — admin at /admin
+```
+
+The database and uploads live in the `/data` volume; upgrade with `docker compose pull && docker compose up -d`. Full guide (env vars, backups, seeding, releasing, building locally): **[docs/deploy.md](docs/deploy.md)**.
+
+Running without Docker is `npm run build && npm start` with `PAYLOAD_SECRET`, `SITE_URL`, `DATABASE_URI` and `MEDIA_DIR` set (see `.env.example`).
 
 ## Project notes
 

@@ -1,0 +1,18 @@
+# Run the published image:   docker compose up -d
+# Build from source instead: docker compose up -d --build   (uncomment `build: .`)
+services:
+  portfolio:
+    image: ghcr.io/silkepilon/portfolio:latest
+    # build: .
+    container_name: portfolio
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET:?set PAYLOAD_SECRET in .env (openssl rand -hex 32)}
+      SITE_URL: ${SITE_URL:-http://localhost:3000}
+    volumes:
+      - portfolio-data:/data
+
+volumes:
+  portfolio-data:

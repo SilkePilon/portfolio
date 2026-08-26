@@ -17,7 +17,8 @@ export const dynamic = 'force-dynamic'
 
 export async function generateMetadata(): Promise<Metadata> {
   const site = await getSite()
-  const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  // SITE_URL is read at runtime (works with the prebuilt Docker image); NEXT_PUBLIC_SITE_URL is the build-time fallback.
+  const base = process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
   return {
     metadataBase: new URL(base),
     title: { default: site.name, template: `%s - ${site.name}` },
