@@ -5,22 +5,13 @@ import type { Blog, Img, Work } from '@/content/types'
 import { works as staticWorks } from '@/content/works'
 import { blogs as staticBlogs, homeBlogs as staticHomeBlogs } from '@/content/blogs'
 import { site as staticSite } from '@/content/site'
-import type { Media, Post as PostDoc, Site as SiteDoc, Work as WorkDoc } from '@/payload-types'
+import type { Post as PostDoc, Work as WorkDoc } from '@/payload-types'
 import { lexicalToBlocks } from './lexical'
+import { img, mapSite, type SiteContent } from './site-map'
 
-/** Shape every layout component consumes (same as the static `site` content). */
-export type SiteContent = typeof staticSite
+export type { SiteContent } from './site-map'
 
 const payload = () => getPayload({ config })
-
-type MediaRef = Media | number | string | null | undefined
-
-function img(m: MediaRef, fallback: Img): Img {
-  if (m && typeof m === 'object' && m.url) {
-    return { src: m.url, alt: m.alt || fallback.alt, width: m.width ?? fallback.width, height: m.height ?? fallback.height }
-  }
-  return fallback
-}
 
 const placeholder = (alt: string): Img => ({ src: '/images/og.png', alt, width: 1200, height: 630 })
 
@@ -122,41 +113,6 @@ export function getHomePosts(): Promise<Blog[]> {
     },
     staticHomeBlogs,
   )
-}
-
-function mapSite(d: SiteDoc): SiteContent | null {
-  if (!d.nav?.length) return null // never saved in the admin → keep the static content
-  return {
-    name: d.name,
-    wordmark: [d.wordmarkLine1, d.wordmarkLine2] as unknown as SiteContent['wordmark'],
-    description: d.description,
-    nav: d.nav.map((l) => ({ label: l.label, to: l.to })),
-    bookCall: { label: d.bookCall?.label ?? staticSite.bookCall.label, href: d.bookCall?.href ?? staticSite.bookCall.href },
-    socials: (d.socials ?? []).map((s) => ({ label: s.label, href: s.href })),
-    profile: {
-      name: d.profile?.name ?? staticSite.profile.name,
-      role: d.profile?.role ?? staticSite.profile.role,
-      avatar: img(d.profile?.avatar, staticSite.profile.avatar),
-    },
-    contact: { email: d.contact?.email ?? staticSite.contact.email, phone: d.contact?.phone ?? staticSite.contact.phone },
-    footer: {
-      tagline: [{ text: d.taglineMuted ?? '', muted: true }, { text: d.taglineStrong ?? '' }],
-      socialsTitle: d.socialsTitle ?? staticSite.footer.socialsTitle,
-      socialsText: d.socialsText ?? staticSite.footer.socialsText,
-      createdBy: {
-        label: d.createdBy?.label ?? staticSite.footer.createdBy.label,
-        name: d.createdBy?.name ?? staticSite.footer.createdBy.name,
-        href: d.createdBy?.href ?? staticSite.footer.createdBy.href,
-        avatar: img(d.createdBy?.avatar, staticSite.footer.createdBy.avatar),
-      },
-    },
-    ogImage: img(d.ogImage, { src: '/images/og.png', alt: d.name, width: 1200, height: 630 }),
-    hero: {
-      image: img(d.hero?.image, staticSite.hero.image),
-      name: [d.hero?.nameLine1 || staticSite.hero.name[0], d.hero?.nameLine2 || staticSite.hero.name[1]],
-      badge: d.hero?.badge || staticSite.hero.badge,
-    },
-  }
 }
 
 export function getSite(): Promise<SiteContent> {
