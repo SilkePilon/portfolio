@@ -70,6 +70,11 @@ export interface Config {
     works: Work;
     posts: Post;
     media: Media;
+    services: Service;
+    testimonials: Testimonial;
+    clients: Client;
+    awards: Award;
+    faqs: Faq;
     messages: Message;
     users: User;
     'payload-kv': PayloadKv;
@@ -82,6 +87,11 @@ export interface Config {
     works: WorksSelect<false> | WorksSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    services: ServicesSelect<false> | ServicesSelect<true>;
+    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
+    clients: ClientsSelect<false> | ClientsSelect<true>;
+    awards: AwardsSelect<false> | AwardsSelect<true>;
+    faqs: FaqsSelect<false> | FaqsSelect<true>;
     messages: MessagesSelect<false> | MessagesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -94,9 +104,13 @@ export interface Config {
   };
   fallbackLocale: null;
   globals: {
+    home: Home;
+    pages: Page;
     site: Site;
   };
   globalsSelect: {
+    home: HomeSelect<false> | HomeSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
     site: SiteSelect<false> | SiteSelect<true>;
   };
   locale: null;
@@ -133,15 +147,12 @@ export interface UserAuthOperations {
  */
 export interface Work {
   id: number;
+  _order?: string | null;
   title: string;
   /**
    * URL segment: /works/<slug>
    */
   slug: string;
-  /**
-   * Sort order on the home page and the works page (ascending).
-   */
-  order: number;
   date?: string | null;
   /**
    * Card image (4:3).
@@ -205,15 +216,12 @@ export interface Media {
  */
 export interface Post {
   id: number;
+  _order?: string | null;
   title: string;
   /**
    * URL segment: /blogs/<slug>
    */
   slug: string;
-  /**
-   * Sort order on the blogs page (ascending).
-   */
-  order: number;
   /**
    * Show on the home page (the first three featured posts are used).
    */
@@ -242,6 +250,125 @@ export interface Post {
     };
     [k: string]: unknown;
   };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services".
+ */
+export interface Service {
+  id: number;
+  _order?: string | null;
+  /**
+   * Service row title, e.g. "Website Design & Development".
+   */
+  title: string;
+  /**
+   * Service row description.
+   */
+  text?: string | null;
+  /**
+   * Small pill tags shown on the service row (e.g. "Figma", "Framer").
+   */
+  tags?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Image revealed on hover for this service row.
+   */
+  image?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials".
+ */
+export interface Testimonial {
+  id: number;
+  _order?: string | null;
+  /**
+   * The quote, shown in the testimonial card.
+   */
+  quote: string;
+  /**
+   * Person’s name, shown under the quote.
+   */
+  name: string;
+  /**
+   * Person’s role and company, e.g. "Director, Aestha Studio".
+   */
+  role?: string | null;
+  /**
+   * Small photo shown next to the name.
+   */
+  avatar?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clients".
+ */
+export interface Client {
+  id: number;
+  _order?: string | null;
+  /**
+   * Client name, shown under the logo.
+   */
+  name: string;
+  /**
+   * Year worked with, e.g. "2025".
+   */
+  year?: string | null;
+  /**
+   * Client logo image.
+   */
+  image?: (number | null) | Media;
+  /**
+   * Optional link the client card opens (leave empty for none).
+   */
+  href?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "awards".
+ */
+export interface Award {
+  id: number;
+  _order?: string | null;
+  /**
+   * Award name, e.g. "Awwwards (3×)".
+   */
+  name: string;
+  /**
+   * Short description of the award.
+   */
+  text?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs".
+ */
+export interface Faq {
+  id: number;
+  _order?: string | null;
+  /**
+   * The question, shown as the accordion row.
+   */
+  question: string;
+  /**
+   * The answer, shown when the row is expanded.
+   */
+  answer: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -321,6 +448,26 @@ export interface PayloadLockedDocument {
         value: number | Media;
       } | null)
     | ({
+        relationTo: 'services';
+        value: number | Service;
+      } | null)
+    | ({
+        relationTo: 'testimonials';
+        value: number | Testimonial;
+      } | null)
+    | ({
+        relationTo: 'clients';
+        value: number | Client;
+      } | null)
+    | ({
+        relationTo: 'awards';
+        value: number | Award;
+      } | null)
+    | ({
+        relationTo: 'faqs';
+        value: number | Faq;
+      } | null)
+    | ({
         relationTo: 'messages';
         value: number | Message;
       } | null)
@@ -375,9 +522,9 @@ export interface PayloadMigration {
  * via the `definition` "works_select".
  */
 export interface WorksSelect<T extends boolean = true> {
+  _order?: T;
   title?: T;
   slug?: T;
-  order?: T;
   date?: T;
   cover?: T;
   hoverCover?: T;
@@ -406,9 +553,9 @@ export interface WorksSelect<T extends boolean = true> {
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
+  _order?: T;
   title?: T;
   slug?: T;
-  order?: T;
   featured?: T;
   date?: T;
   category?: T;
@@ -434,6 +581,72 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services_select".
+ */
+export interface ServicesSelect<T extends boolean = true> {
+  _order?: T;
+  title?: T;
+  text?: T;
+  tags?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
+  image?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials_select".
+ */
+export interface TestimonialsSelect<T extends boolean = true> {
+  _order?: T;
+  quote?: T;
+  name?: T;
+  role?: T;
+  avatar?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clients_select".
+ */
+export interface ClientsSelect<T extends boolean = true> {
+  _order?: T;
+  name?: T;
+  year?: T;
+  image?: T;
+  href?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "awards_select".
+ */
+export interface AwardsSelect<T extends boolean = true> {
+  _order?: T;
+  name?: T;
+  text?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs_select".
+ */
+export interface FaqsSelect<T extends boolean = true> {
+  _order?: T;
+  question?: T;
+  answer?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -512,6 +725,414 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home".
+ */
+export interface Home {
+  id: number;
+  hero?: {
+    /**
+     * Home page hero — the paragraph under the big name.
+     */
+    intro?: string | null;
+    /**
+     * Home page hero — the four label/value stats under the intro (e.g. Location — London, UK).
+     */
+    bio?:
+      | {
+          label: string;
+          value: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  about?: {
+    /**
+     * Small mono label above the heading, e.g. "Services(04)".
+     */
+    tag?: string | null;
+    /**
+     * Home page About section — the intro paragraphs next to the photo.
+     */
+    paragraphs?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Home page About section — the tall portrait photo.
+     */
+    image1?: (number | null) | Media;
+    /**
+     * Home page About section — the caption next to the second photo.
+     */
+    caption?: string | null;
+    /**
+     * Home page About section — the wide photo next to the caption.
+     */
+    image2?: (number | null) | Media;
+    /**
+     * Home page About section — small label above "Driven Result" heading.
+     */
+    resultTag?: string | null;
+    /**
+     * Home page About section — heading above the metrics row.
+     */
+    resultHeading?: string | null;
+    /**
+     * Home page About section — up to four count-up stats (position = dot number).
+     */
+    metrics?:
+      | {
+          /**
+           * e.g. 62
+           */
+          end: number;
+          /**
+           * e.g. "+" or "%".
+           */
+          suffix?: string | null;
+          /**
+           * e.g. "Projects".
+           */
+          label: string;
+          text?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  showcase?: {
+    /**
+     * Home page Showcase — first word of the spinning reel (e.g. "Show").
+     */
+    reelWord1?: string | null;
+    /**
+     * Home page Showcase — second word of the spinning reel (e.g. "Case").
+     */
+    reelWord2?: string | null;
+    /**
+     * Home page Showcase — full-bleed looping video (mp4).
+     */
+    video?: (number | null) | Media;
+  };
+  works?: {
+    /**
+     * Small mono label above the heading, e.g. "Services(04)".
+     */
+    tag?: string | null;
+    /**
+     * Home page Works section heading.
+     */
+    heading?: string | null;
+    /**
+     * Home page Works section — paragraph under the heading.
+     */
+    text?: string | null;
+    /**
+     * Home page Works section — closing paragraph before the button.
+     */
+    outro?: string | null;
+    /**
+     * Home page Works section — "Explore all works" button label.
+     */
+    cta?: string | null;
+  };
+  services?: {
+    /**
+     * Small mono label above the heading, e.g. "Services(04)".
+     */
+    tag?: string | null;
+    /**
+     * Home page Services section heading.
+     */
+    heading?: string | null;
+    /**
+     * Home page Services section — paragraph under the heading.
+     */
+    text?: string | null;
+    /**
+     * Home page Services section — first side photo.
+     */
+    image1?: (number | null) | Media;
+    /**
+     * Home page Services section — second side photo. Rows themselves are edited in the Services list.
+     */
+    image2?: (number | null) | Media;
+  };
+  testimonials?: {
+    /**
+     * Small mono label above the heading, e.g. "Services(04)".
+     */
+    tag?: string | null;
+    /**
+     * Home page Testimonials section heading.
+     */
+    heading?: string | null;
+    /**
+     * Home page Testimonials — "previous" slider button label.
+     */
+    prev?: string | null;
+    /**
+     * Home page Testimonials — "next" slider button label.
+     */
+    next?: string | null;
+  };
+  clients?: {
+    /**
+     * Small mono label above the heading, e.g. "Services(04)".
+     */
+    tag?: string | null;
+    /**
+     * Home page Clients section heading.
+     */
+    heading?: string | null;
+    /**
+     * Home page Clients section — paragraph under the heading.
+     */
+    text?: string | null;
+    /**
+     * Home page Clients section — sentence above the "Book a call" button.
+     */
+    sentence?: string | null;
+    /**
+     * Home page Clients section — "Book a call" button label.
+     */
+    cta?: string | null;
+  };
+  approach?: {
+    /**
+     * Small mono label above the heading, e.g. "Services(04)".
+     */
+    tag?: string | null;
+    /**
+     * Home page Approach section heading.
+     */
+    heading?: string | null;
+    /**
+     * Home page Approach section — paragraph under the heading.
+     */
+    text?: string | null;
+    /**
+     * Home page Approach section photo.
+     */
+    image?: (number | null) | Media;
+    /**
+     * Home page Approach section — up to four process steps (position = dot number).
+     */
+    steps?:
+      | {
+          title: string;
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  awards?: {
+    /**
+     * Small mono label above the heading, e.g. "Services(04)".
+     */
+    tag?: string | null;
+    /**
+     * Home page Awards section heading.
+     */
+    heading?: string | null;
+    /**
+     * Home page Awards section — sentence under the heading. Awards themselves are edited in the Awards list.
+     */
+    sentence?: string | null;
+  };
+  blogs?: {
+    /**
+     * Small mono label above the heading, e.g. "Services(04)".
+     */
+    tag?: string | null;
+    /**
+     * Home page Blogs section heading.
+     */
+    heading?: string | null;
+    /**
+     * Home page Blogs section — text next to the author avatar.
+     */
+    profileText?: string | null;
+    /**
+     * Home page Blogs section — "Read more blogs" button label.
+     */
+    cta?: string | null;
+  };
+  faq?: {
+    /**
+     * Small mono label above the heading, e.g. "Services(04)".
+     */
+    tag?: string | null;
+    /**
+     * Home page FAQ section heading.
+     */
+    heading?: string | null;
+    /**
+     * Home page FAQ section — "Didn’t find your answer?" heading.
+     */
+    outroHeading?: string | null;
+    /**
+     * Home page FAQ section — paragraph under the outro heading.
+     */
+    outroText?: string | null;
+    /**
+     * Home page FAQ section — "Send me a message" button label.
+     */
+    outroCta?: string | null;
+  };
+  contact?: {
+    /**
+     * Small mono label above the heading, e.g. "Services(04)".
+     */
+    tag?: string | null;
+    /**
+     * Home page Contact section heading.
+     */
+    heading?: string | null;
+    /**
+     * Home page Contact section — sentence under the heading.
+     */
+    sentence?: string | null;
+    /**
+     * Home page Contact section — small "Let’s Connect" label.
+     */
+    connectLabel?: string | null;
+    /**
+     * Home page Contact section — the form fields, in order.
+     */
+    fields?:
+      | {
+          /**
+           * Field label, e.g. "Name".
+           */
+          name: string;
+          placeholder?: string | null;
+          type?: ('text' | 'email' | 'tel' | 'textarea') | null;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Home page Contact section — "I usually reply within 24 hours" note.
+     */
+    replyNote?: string | null;
+    /**
+     * Contact form — submit button default label.
+     */
+    submit?: string | null;
+    /**
+     * Contact form — submit button label while sending.
+     */
+    submitting?: string | null;
+    /**
+     * Contact form — submit button label after a successful send.
+     */
+    sent?: string | null;
+    /**
+     * Contact form — submit button label after a failed send.
+     */
+    failed?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  notFound?: {
+    /**
+     * 404 page — big heading (e.g. "404").
+     */
+    heading?: string | null;
+    /**
+     * 404 page — explanation paragraph.
+     */
+    text?: string | null;
+    /**
+     * 404 page — "Back to Home" button label.
+     */
+    cta?: string | null;
+  };
+  works?: {
+    /**
+     * Small mono label above the heading, e.g. "Services(04)".
+     */
+    tag?: string | null;
+    /**
+     * Works page (/works) — heading at the top.
+     */
+    heading?: string | null;
+    /**
+     * Works page (/works) — paragraph under the heading.
+     */
+    text?: string | null;
+  };
+  blogs?: {
+    /**
+     * Small mono label above the heading, e.g. "Services(04)".
+     */
+    tag?: string | null;
+    /**
+     * Blogs page (/blogs) — heading at the top.
+     */
+    heading?: string | null;
+    /**
+     * Blogs page (/blogs) — paragraph under the heading.
+     */
+    text?: string | null;
+  };
+  workLabels?: {
+    /**
+     * Work case-study page — "Overview" section label.
+     */
+    overview?: string | null;
+    /**
+     * Work case-study page — "Date:" label.
+     */
+    date?: string | null;
+    /**
+     * Work case-study page — "Client:" label.
+     */
+    client?: string | null;
+    /**
+     * Work case-study page — "Industry:" label.
+     */
+    industry?: string | null;
+    /**
+     * Work case-study page — "Services:" label.
+     */
+    services?: string | null;
+    /**
+     * Work case-study page — "Live Project:" label.
+     */
+    live?: string | null;
+    /**
+     * Work case-study page — "Next Project" heading.
+     */
+    next?: string | null;
+    /**
+     * Work case-study page — "Explore all works" button label.
+     */
+    cta?: string | null;
+  };
+  blogLabels?: {
+    /**
+     * Blog post page — "Next Blogs" heading.
+     */
+    next?: string | null;
+    /**
+     * Blog post page — "Explore all blogs" button label.
+     */
+    cta?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site".
  */
 export interface Site {
@@ -585,8 +1206,10 @@ export interface Site {
     role: string;
     avatar?: (number | null) | Media;
   };
-  taglineMuted?: string | null;
-  taglineStrong?: string | null;
+  /**
+   * Footer — the tagline sentence above the social links.
+   */
+  tagline?: string | null;
   socialsTitle?: string | null;
   socialsText?: string | null;
   createdBy?: {
@@ -597,6 +1220,202 @@ export interface Site {
   };
   updatedAt?: string | null;
   createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home_select".
+ */
+export interface HomeSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        intro?: T;
+        bio?:
+          | T
+          | {
+              label?: T;
+              value?: T;
+              id?: T;
+            };
+      };
+  about?:
+    | T
+    | {
+        tag?: T;
+        paragraphs?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        image1?: T;
+        caption?: T;
+        image2?: T;
+        resultTag?: T;
+        resultHeading?: T;
+        metrics?:
+          | T
+          | {
+              end?: T;
+              suffix?: T;
+              label?: T;
+              text?: T;
+              id?: T;
+            };
+      };
+  showcase?:
+    | T
+    | {
+        reelWord1?: T;
+        reelWord2?: T;
+        video?: T;
+      };
+  works?:
+    | T
+    | {
+        tag?: T;
+        heading?: T;
+        text?: T;
+        outro?: T;
+        cta?: T;
+      };
+  services?:
+    | T
+    | {
+        tag?: T;
+        heading?: T;
+        text?: T;
+        image1?: T;
+        image2?: T;
+      };
+  testimonials?:
+    | T
+    | {
+        tag?: T;
+        heading?: T;
+        prev?: T;
+        next?: T;
+      };
+  clients?:
+    | T
+    | {
+        tag?: T;
+        heading?: T;
+        text?: T;
+        sentence?: T;
+        cta?: T;
+      };
+  approach?:
+    | T
+    | {
+        tag?: T;
+        heading?: T;
+        text?: T;
+        image?: T;
+        steps?:
+          | T
+          | {
+              title?: T;
+              text?: T;
+              id?: T;
+            };
+      };
+  awards?:
+    | T
+    | {
+        tag?: T;
+        heading?: T;
+        sentence?: T;
+      };
+  blogs?:
+    | T
+    | {
+        tag?: T;
+        heading?: T;
+        profileText?: T;
+        cta?: T;
+      };
+  faq?:
+    | T
+    | {
+        tag?: T;
+        heading?: T;
+        outroHeading?: T;
+        outroText?: T;
+        outroCta?: T;
+      };
+  contact?:
+    | T
+    | {
+        tag?: T;
+        heading?: T;
+        sentence?: T;
+        connectLabel?: T;
+        fields?:
+          | T
+          | {
+              name?: T;
+              placeholder?: T;
+              type?: T;
+              id?: T;
+            };
+        replyNote?: T;
+        submit?: T;
+        submitting?: T;
+        sent?: T;
+        failed?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  notFound?:
+    | T
+    | {
+        heading?: T;
+        text?: T;
+        cta?: T;
+      };
+  works?:
+    | T
+    | {
+        tag?: T;
+        heading?: T;
+        text?: T;
+      };
+  blogs?:
+    | T
+    | {
+        tag?: T;
+        heading?: T;
+        text?: T;
+      };
+  workLabels?:
+    | T
+    | {
+        overview?: T;
+        date?: T;
+        client?: T;
+        industry?: T;
+        services?: T;
+        live?: T;
+        next?: T;
+        cta?: T;
+      };
+  blogLabels?:
+    | T
+    | {
+        next?: T;
+        cta?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -650,8 +1469,7 @@ export interface SiteSelect<T extends boolean = true> {
         role?: T;
         avatar?: T;
       };
-  taglineMuted?: T;
-  taglineStrong?: T;
+  tagline?: T;
   socialsTitle?: T;
   socialsText?: T;
   createdBy?:

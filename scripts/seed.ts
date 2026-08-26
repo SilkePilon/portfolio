@@ -10,6 +10,7 @@ import { works } from '../src/content/works'
 import { blogs, homeBlogs } from '../src/content/blogs'
 import { site } from '../src/content/site'
 import { blocksToLexical } from '../src/lib/lexical'
+import { toMarked } from '../src/lib/marked'
 import type { Post } from '../src/payload-types'
 
 const payload = await getPayload({ config })
@@ -37,7 +38,7 @@ const iso = (human: string) => {
 }
 
 let n = 0
-for (const [i, w] of works.entries()) {
+for (const w of works) {
   const exists = await payload.find({ collection: 'works', where: { slug: { equals: w.slug } }, limit: 1 })
   if (exists.docs.length) continue
   await payload.create({
@@ -45,7 +46,6 @@ for (const [i, w] of works.entries()) {
     data: {
       title: w.title,
       slug: w.slug,
-      order: i + 1,
       date: iso(w.date),
       cover: await media(w.cover),
       hoverCover: await media(w.hoverCover),
@@ -63,7 +63,7 @@ for (const [i, w] of works.entries()) {
 }
 
 const featured = new Set(homeBlogs.map((b) => b.slug))
-for (const [i, b] of blogs.entries()) {
+for (const b of blogs) {
   const exists = await payload.find({ collection: 'posts', where: { slug: { equals: b.slug } }, limit: 1 })
   if (exists.docs.length) continue
   await payload.create({
@@ -71,7 +71,6 @@ for (const [i, b] of blogs.entries()) {
     data: {
       title: b.title,
       slug: b.slug,
-      order: i + 1,
       featured: featured.has(b.slug),
       date: iso(b.date),
       category: b.category,
@@ -99,8 +98,7 @@ if (!current.nav?.length) {
       contact: site.contact,
       socials: site.socials,
       profile: { name: site.profile.name, role: site.profile.role, avatar: await media(site.profile.avatar) },
-      taglineMuted: site.footer.tagline[0].text,
-      taglineStrong: site.footer.tagline[1].text,
+      tagline: toMarked(site.footer.tagline),
       socialsTitle: site.footer.socialsTitle,
       socialsText: site.footer.socialsText,
       createdBy: { label: site.footer.createdBy.label, name: site.footer.createdBy.name, href: site.footer.createdBy.href, avatar: await media(site.footer.createdBy.avatar) },

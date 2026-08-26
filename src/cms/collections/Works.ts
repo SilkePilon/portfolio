@@ -4,13 +4,13 @@ import { authenticated, publicRead } from '../access'
 export const Works: CollectionConfig = {
   slug: 'works',
   labels: { singular: 'Work', plural: 'Works' },
-  admin: { useAsTitle: 'title', defaultColumns: ['title', 'order', 'date'], group: 'Content' },
+  admin: { useAsTitle: 'title', defaultColumns: ['title', 'date'], group: 'Content' },
   access: { read: publicRead, create: authenticated, update: authenticated, delete: authenticated },
-  defaultSort: 'order',
+  orderable: true,
+  defaultSort: '_order',
   fields: [
     { name: 'title', type: 'text', required: true },
     { name: 'slug', type: 'text', required: true, unique: true, admin: { description: 'URL segment: /works/<slug>' } },
-    { name: 'order', type: 'number', required: true, defaultValue: 0, admin: { position: 'sidebar', description: 'Sort order on the home page and the works page (ascending).' } },
     { name: 'date', type: 'date', admin: { position: 'sidebar', date: { pickerAppearance: 'dayOnly' } } },
     {
       type: 'row',

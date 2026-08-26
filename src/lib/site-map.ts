@@ -1,5 +1,6 @@
 import type { Img } from '@/content/types'
 import { site as staticSite } from '@/content/site'
+import { parseMarked } from '@/lib/marked'
 import type { Media, Site as SiteDoc } from '@/payload-types'
 
 /** Shape every layout component consumes (same as the static `site` content). */
@@ -36,7 +37,7 @@ export function mapSite(d: SiteDoc): SiteContent | null {
     },
     contact: { email: d.contact?.email ?? staticSite.contact.email, phone: d.contact?.phone ?? staticSite.contact.phone },
     footer: {
-      tagline: [{ text: d.taglineMuted ?? '', muted: true }, { text: d.taglineStrong ?? '' }],
+      tagline: d.tagline ? parseMarked(d.tagline) : staticSite.footer.tagline,
       socialsTitle: d.socialsTitle ?? staticSite.footer.socialsTitle,
       socialsText: d.socialsText ?? staticSite.footer.socialsText,
       createdBy: {

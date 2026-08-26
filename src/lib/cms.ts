@@ -63,7 +63,7 @@ export function getWorks(): Promise<Work[]> {
   return safely(
     'works',
     async () => {
-      const r = await (await payload()).find({ collection: 'works', sort: 'order', limit: 100, depth: 1, pagination: false })
+      const r = await (await payload()).find({ collection: 'works', sort: '_order', limit: 100, depth: 1, pagination: false })
       return r.docs.length ? r.docs.map(mapWork) : null
     },
     staticWorks,
@@ -83,7 +83,7 @@ export function getPosts(): Promise<Blog[]> {
   return safely(
     'posts',
     async () => {
-      const r = await (await payload()).find({ collection: 'posts', sort: 'order', limit: 100, depth: 1, pagination: false })
+      const r = await (await payload()).find({ collection: 'posts', sort: '_order', limit: 100, depth: 1, pagination: false })
       return r.docs.length ? r.docs.map(mapPost) : null
     },
     staticBlogs,
@@ -106,9 +106,9 @@ export function getHomePosts(): Promise<Blog[]> {
     'home posts',
     async () => {
       const p = await payload()
-      const featured = await p.find({ collection: 'posts', where: { featured: { equals: true } }, sort: 'order', limit: 3, depth: 1 })
+      const featured = await p.find({ collection: 'posts', where: { featured: { equals: true } }, sort: '_order', limit: 3, depth: 1 })
       if (featured.docs.length >= 3) return featured.docs.map(mapPost)
-      const all = await p.find({ collection: 'posts', sort: 'order', limit: 3, depth: 1 })
+      const all = await p.find({ collection: 'posts', sort: '_order', limit: 3, depth: 1 })
       return all.docs.length ? all.docs.map(mapPost) : null
     },
     staticHomeBlogs,

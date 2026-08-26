@@ -1,5 +1,8 @@
 import type { GlobalConfig } from 'payload'
 import { authenticated, publicRead } from '../access'
+import { markedText } from '../fields'
+import { site } from '@/content/site'
+import { toMarked } from '@/lib/marked'
 
 const link = [
   { name: 'label', type: 'text' as const, required: true },
@@ -9,7 +12,7 @@ const link = [
 export const Site: GlobalConfig = {
   slug: 'site',
   label: 'Site settings',
-  admin: { group: 'Settings' },
+  admin: { group: 'Pages' },
   access: { read: publicRead, update: authenticated },
   fields: [
     {
@@ -74,8 +77,10 @@ export const Site: GlobalConfig = {
         {
           label: 'Footer',
           fields: [
-            { name: 'taglineMuted', type: 'text', label: 'Tagline (grey part)', defaultValue: 'Crafting thoughtful digital experiences built on' },
-            { name: 'taglineStrong', type: 'text', label: 'Tagline (white part)', defaultValue: ' clarity, purpose, and precision.' },
+            markedText('tagline', 'Footer tagline', {
+              defaultValue: toMarked(site.footer.tagline),
+              admin: { description: 'Footer — the tagline sentence above the social links.', rows: 3 },
+            }),
             { name: 'socialsTitle', type: 'text', defaultValue: 'Follow on' },
             { name: 'socialsText', type: 'text', defaultValue: 'Creating experiences that balance aesthetics, usability, and intent.' },
             {
