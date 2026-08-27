@@ -3,7 +3,8 @@ import type { Post as PostDoc, Work as WorkDoc } from '@/payload-types'
 import { lexicalToBlocks } from './lexical'
 import { img, placeholder } from './site-map'
 
-export const formatDate = (iso: string | null | undefined, fallback = ''): string =>
+/** "2026-01-31" → "January 31, 2026", the format the cards and detail pages show. */
+const formatDate = (iso: string | null | undefined, fallback = ''): string =>
   iso ? new Date(iso).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : fallback
 
 /** Maps a `works` document onto the shape the case-study components consume. */

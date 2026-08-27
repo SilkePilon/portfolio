@@ -29,7 +29,10 @@ async function safely<T>(label: string, fn: () => Promise<T | null>, fallback: T
   return fallback
 }
 
-export function getWorks(): Promise<Work[]> {
+// Every getter below is `cache()`d, so a request that reaches them from several places
+// (a page, its `generateMetadata`, the layout) still makes a single round-trip each.
+
+export const getWorks = cache(function getWorks(): Promise<Work[]> {
   return safely(
     'works',
     async () => {
@@ -38,7 +41,7 @@ export function getWorks(): Promise<Work[]> {
     },
     staticWorks,
   )
-}
+})
 
 export async function getWork(slug: string): Promise<Work | undefined> {
   return (await getWorks()).find((w) => w.slug === slug)
@@ -49,7 +52,7 @@ export async function getNextWork(slug: string): Promise<Work> {
   return all[(all.findIndex((w) => w.slug === slug) + 1) % all.length]
 }
 
-export function getPosts(): Promise<Blog[]> {
+export const getPosts = cache(function getPosts(): Promise<Blog[]> {
   return safely(
     'posts',
     async () => {
@@ -58,7 +61,7 @@ export function getPosts(): Promise<Blog[]> {
     },
     staticBlogs,
   )
-}
+})
 
 export async function getPost(slug: string): Promise<Blog | undefined> {
   return (await getPosts()).find((b) => b.slug === slug)
@@ -71,7 +74,7 @@ export async function getNextPosts(slug: string, n = 2): Promise<Blog[]> {
 }
 
 /** The three posts on the home page: featured ones first, then the newest by order. */
-export function getHomePosts(): Promise<Blog[]> {
+export const getHomePosts = cache(function getHomePosts(): Promise<Blog[]> {
   return safely(
     'home posts',
     async () => {
@@ -83,21 +86,21 @@ export function getHomePosts(): Promise<Blog[]> {
     },
     staticHomeBlogs,
   )
-}
+})
 
-export function getSite(): Promise<SiteContent> {
+export const getSite = cache(function getSite(): Promise<SiteContent> {
   return safely('site', async () => mapSite(await (await payload()).findGlobal({ slug: 'site', depth: 1 })), staticSite)
-}
+})
 
-export function getHome(): Promise<HomeContent> {
+export const getHome = cache(function getHome(): Promise<HomeContent> {
   return safely('home', async () => mapHome(await (await payload()).findGlobal({ slug: 'home', depth: 1 })), staticHome)
-}
+})
 
-export function getPages(): Promise<PagesContent> {
+export const getPages = cache(function getPages(): Promise<PagesContent> {
   return safely('pages', async () => mapPages(await (await payload()).findGlobal({ slug: 'pages', depth: 1 })), staticPages)
-}
+})
 
-export async function getLists(): Promise<Lists> {
+export const getLists = cache(async function getLists(): Promise<Lists> {
   const [services, testimonials, clients, awards, faqs] = await Promise.all([
     safely(
       'services',
@@ -141,7 +144,7 @@ export async function getLists(): Promise<Lists> {
     ),
   ])
   return { services, testimonials, clients, awards, faqs }
-}
+})
 
 /**
  * Everything a page needs to render, fetched together with static fallbacks per field.

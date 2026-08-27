@@ -46,7 +46,7 @@ Back up by copying the volume (`docker run --rm -v portfolio-data:/data -v "$PWD
 | variable | required | default | notes |
 | --- | --- | --- | --- |
 | `PAYLOAD_SECRET` | **yes** | — | signs admin sessions; the container refuses to start without it |
-| `SITE_URL` | recommended | `http://localhost:3000` | public URL used for absolute metadata/share links |
+| `SITE_URL` | recommended | `http://localhost:3000` | public URL used for absolute metadata/share links. Must be the same origin you open `/admin` on — the live-preview pane is same-origin checked, so a mismatch leaves it frozen on the last saved version |
 | `DATABASE_URI` | no | `file:/data/payload.db` | libSQL URL; keep it on the volume |
 | `MEDIA_DIR` | no | `/data/media` | upload directory |
 | `PORT` | no | `3000` | listening port inside the container |
