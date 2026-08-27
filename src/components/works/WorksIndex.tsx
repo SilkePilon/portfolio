@@ -8,14 +8,16 @@ import { WorkCard } from './WorkCard'
 import { cn } from '@/lib/cn'
 
 /**
- * Desktop placement of the cards on the 4-column grid (original works page), by position in the
- * CMS order — so drag-to-reorder in the admin changes which card sits where. Anything past the
- * template's five slots falls back to a half-width cell.
+ * Desktop cells of the 4-column grid (original works page) by position in the CMS order, so
+ * drag-to-reorder in the admin changes which card sits where. The slot order reproduces the
+ * template with the seeded order (sienna, glidex, veon, zayla, destello): the first card takes
+ * the wide row-2 cell, the second the small top-left one, the third the wide top-right one.
+ * Anything past the five slots falls back to a half-width cell.
  */
 const placement = [
+  'desktop:col-start-2 desktop:col-span-2 desktop:row-start-2',
   'desktop:col-start-1 desktop:col-span-1 desktop:row-start-1',
   'desktop:col-start-3 desktop:col-span-2 desktop:row-start-1',
-  'desktop:col-start-2 desktop:col-span-2 desktop:row-start-2',
   'desktop:col-start-1 desktop:col-span-2 desktop:row-start-3',
   'desktop:col-start-2 desktop:col-span-2 desktop:row-start-4',
 ]
