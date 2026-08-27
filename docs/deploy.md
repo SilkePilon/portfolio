@@ -36,7 +36,7 @@ Everything that must survive upgrades is in the **`/data`** volume:
 
 | path | contents |
 | --- | --- |
-| `/data/payload.db` | SQLite database — works, posts, site settings, admin users, contact messages |
+| `/data/payload.db` | SQLite database — works, posts, home lists, home/pages/site settings, admin users, contact messages |
 | `/data/media/` | uploaded images and videos |
 
 Back up by copying the volume (`docker run --rm -v portfolio-data:/data -v "$PWD":/backup busybox tar czf /backup/portfolio-data.tgz -C /data .`). Nothing else in the container holds state.
@@ -64,7 +64,7 @@ Pin a major (`:1`) or exact version (`:1.2.3`) in `docker-compose.yml` if you pr
 
 ## 5. Placeholder content (optional)
 
-The image does not include the seed script. The site renders the template's static placeholder content until you add your own in `/admin`. To import the placeholder works/posts/images into a fresh volume, run the seed from a source checkout against that volume:
+The image does not include the seed script. The site renders the template's static placeholder content until you add your own in `/admin`. To import the placeholder content — works, posts, home-page copy, the home lists (services/testimonials/clients/awards/FAQ), site settings and the showcase video — into a fresh volume, run the seed from a source checkout against that volume:
 
 ```bash
 docker compose stop

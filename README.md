@@ -23,7 +23,7 @@ On the first visit to `/admin` Payload asks you to create the first admin user. 
 | --- | --- |
 | `npm run dev` | dev server on http://localhost:3000 |
 | `npm run build` / `npm start` | production build / production server |
-| `npm run seed` | import the placeholder content into the CMS |
+| `npm run seed` | import the template's placeholder copy, images and video into the CMS (idempotent) |
 | `npm run generate:types` | regenerate `src/payload-types.ts` after changing collections |
 | `npm run generate:importmap` | regenerate the admin import map (after adding custom admin components) |
 | `npm run payload -- migrate:create <name>` | write a DB migration to `src/migrations/` after changing collections/globals — required for production (dev applies schema changes automatically) |
@@ -36,16 +36,23 @@ Screenshots use the Playwright Chromium build; install it once with `npx playwri
 
 ## Editing the site
 
-**In the CMS (`/admin`)**
-- **Works** — the case studies: title, slug, order, date, cover + hover image, description, overview, client/industry/live URL, services, 4-image gallery. Order = position on the home page and the works page.
-- **Blog posts** — title, slug, order, `featured` (the three featured posts appear on the home page), date, category, cover, rich-text body (Heading 3 for section titles; paragraphs and bullet lists render).
-- **Media** — uploads (served from `/api/media/file/<name>`, stored in `media/` or `MEDIA_DIR`).
-- **Messages** — contact-form submissions (inbox).
-- **Site settings** — brand name + logo wordmark, meta description, share image, **home hero (background photo, the two big name lines, badge text)**, navigation links, "book a call" button, contact e-mail/phone, social links, the small profile (avatar/name/role), footer texts and the "created by" credit.
+Every piece of copy on the site — every page, section heading, list of cards, and the site-wide settings — is edited in the built-in admin at **`/admin`**. There is no code editing needed for day-to-day content changes. The sidebar is grouped:
 
-Edits are live on the next request (pages are rendered on demand). When the database is empty the site falls back to the static content in `src/content/`.
+| group | contains |
+| --- | --- |
+| **Pages** | Home page (every section of `/`, tab per section) · Other pages (404, works/blogs page intros, work/blog label copy) · Site settings (brand, hero, nav, footer, contact) |
+| **Content** | Works (case studies) · Blog posts · Media (uploads) |
+| **Home lists** | Services · Testimonials · Clients · Awards · FAQ — the repeating cards shown on the home page |
+| **Inbox** | Messages (contact-form submissions) |
+| **Admin** | Users |
 
-**In code (`src/content/home.ts`)** — the home-page section copy: hero, bio strip, about, metrics, services, testimonials, clients list, approach, awards, FAQ and the contact-form labels. Mixed-colour strings use the `Rich` shape: `[{ text: 'grey part', muted: true }, { br: true }, { text: 'white part' }]`. Images for those sections live in `public/images/**`; the reel video is `public/videos/showcase.mp4` (1280×720 H.264).
+**Live preview** — every document (globals, works, posts, home lists) opens with a live preview pane on the right. It re-renders the page as you type, no save needed. Use the **Mobile (390)** / **Tablet (810)** / **Desktop (1440)** buttons above the pane to check a section at each breakpoint.
+
+**Mixed-colour headings** — most headings and paragraphs are grey by default; wrap a part in `**double asterisks**` to render it white, e.g. `Design **that speaks for you**`. A newline in the field becomes a line break (`<br>`).
+
+**Drag to reorder** — Works, Blog posts, and every Home list (Services, Testimonials, Clients, Awards, FAQ) support drag-to-reorder in their list view; the order there is the order shown on the site. On Blog posts, toggle **`featured`** on up to three posts to choose which ones appear on the home page (falls back to the three most recent if fewer than three are featured).
+
+Edits are live on the next request (pages are rendered on demand). When a document or global has never been saved, the site falls back to the placeholder content in `src/content/` — those files are fallbacks and the source `npm run seed` imports into the CMS; they are not read once a document exists in the admin.
 
 ## Contact form
 
