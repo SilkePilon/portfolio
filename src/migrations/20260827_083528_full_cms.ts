@@ -1,4 +1,19 @@
 import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-sqlite'
+import { generateNKeysBetween } from 'payload/shared'
+
+/**
+ * Carries the old numeric `order` over to Payload's fractional `_order` keys, so an existing
+ * database keeps the order its editor dragged into place instead of losing it with the column.
+ */
+async function carryOrderOver(db: MigrateUpArgs['db'], table: 'works' | 'posts'): Promise<void> {
+  const name = sql.identifier(table)
+  const rows = await db.all<{ id: number }>(sql`SELECT id FROM ${name} ORDER BY "order" ASC`)
+  if (!rows.length) return
+  const keys = generateNKeysBetween(null, null, rows.length)
+  for (const [i, row] of rows.entries()) {
+    await db.run(sql`UPDATE ${name} SET _order = ${keys[i]} WHERE id = ${row.id}`)
+  }
+}
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.run(sql`CREATE TABLE \`services_tags\` (
@@ -131,6 +146,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	\`_order\` integer NOT NULL,
   	\`_parent_id\` integer NOT NULL,
   	\`id\` text PRIMARY KEY NOT NULL,
+  	\`key\` text NOT NULL,
   	\`name\` text NOT NULL,
   	\`placeholder\` text,
   	\`type\` text DEFAULT 'text',
@@ -250,9 +266,11 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   `)
   await db.run(sql`ALTER TABLE \`works\` ADD \`_order\` text;`)
   await db.run(sql`CREATE INDEX \`works__order_idx\` ON \`works\` (\`_order\`);`)
+  await carryOrderOver(db, 'works')
   await db.run(sql`ALTER TABLE \`works\` DROP COLUMN \`order\`;`)
   await db.run(sql`ALTER TABLE \`posts\` ADD \`_order\` text;`)
   await db.run(sql`CREATE INDEX \`posts__order_idx\` ON \`posts\` (\`_order\`);`)
+  await carryOrderOver(db, 'posts')
   await db.run(sql`ALTER TABLE \`posts\` DROP COLUMN \`order\`;`)
   await db.run(sql`ALTER TABLE \`payload_locked_documents_rels\` ADD \`services_id\` integer REFERENCES services(id);`)
   await db.run(sql`ALTER TABLE \`payload_locked_documents_rels\` ADD \`testimonials_id\` integer REFERENCES testimonials(id);`)
@@ -265,6 +283,9 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.run(sql`CREATE INDEX \`payload_locked_documents_rels_awards_id_idx\` ON \`payload_locked_documents_rels\` (\`awards_id\`);`)
   await db.run(sql`CREATE INDEX \`payload_locked_documents_rels_faqs_id_idx\` ON \`payload_locked_documents_rels\` (\`faqs_id\`);`)
   await db.run(sql`ALTER TABLE \`site\` ADD \`tagline\` text DEFAULT 'Crafting thoughtful digital experiences built on** clarity, purpose, and precision.**';`)
+  // Fold the old two-part footer tagline into the single marked-text field, so a customised
+  // footer survives instead of being replaced by the column default above.
+  await db.run(sql`UPDATE site SET tagline = COALESCE(tagline_muted,'') || CASE WHEN COALESCE(tagline_strong,'') <> '' THEN '**' || tagline_strong || '**' ELSE '' END WHERE tagline_muted IS NOT NULL OR tagline_strong IS NOT NULL`)
   await db.run(sql`ALTER TABLE \`site\` DROP COLUMN \`tagline_muted\`;`)
   await db.run(sql`ALTER TABLE \`site\` DROP COLUMN \`tagline_strong\`;`)
 }
