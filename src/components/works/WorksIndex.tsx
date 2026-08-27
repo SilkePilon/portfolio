@@ -7,20 +7,22 @@ import { SectionTag } from '@/components/ui/SectionTag'
 import { WorkCard } from './WorkCard'
 import { cn } from '@/lib/cn'
 
-/** Desktop placement of the five cards on the 4-column grid (original works page). */
-const placement: Record<string, string> = {
-  glidex: 'desktop:col-start-1 desktop:col-span-1 desktop:row-start-1',
-  veon: 'desktop:col-start-3 desktop:col-span-2 desktop:row-start-1',
-  sienna: 'desktop:col-start-2 desktop:col-span-2 desktop:row-start-2',
-  zayla: 'desktop:col-start-1 desktop:col-span-2 desktop:row-start-3',
-  destello: 'desktop:col-start-2 desktop:col-span-2 desktop:row-start-4',
-}
-const order = ['glidex', 'veon', 'sienna', 'zayla', 'destello']
+/**
+ * Desktop placement of the cards on the 4-column grid (original works page), by position in the
+ * CMS order — so drag-to-reorder in the admin changes which card sits where. Anything past the
+ * template's five slots falls back to a half-width cell.
+ */
+const placement = [
+  'desktop:col-start-1 desktop:col-span-1 desktop:row-start-1',
+  'desktop:col-start-3 desktop:col-span-2 desktop:row-start-1',
+  'desktop:col-start-2 desktop:col-span-2 desktop:row-start-2',
+  'desktop:col-start-1 desktop:col-span-2 desktop:row-start-3',
+  'desktop:col-start-2 desktop:col-span-2 desktop:row-start-4',
+]
 
 export function WorksIndex() {
   const pages = usePages()
   const works = useWorks()
-  const sorted = [...works].sort((a, b) => (order.indexOf(a.slug) + 1 || 99) - (order.indexOf(b.slug) + 1 || 99))
   return (
     <Section as="header" className="pt-[100px] tablet:pt-[150px]">
       <Container className="gap-y-[70px]">
@@ -34,8 +36,8 @@ export function WorksIndex() {
           <p className="text-mono text-gray-500 tablet:text-right">{pages.works.text}</p>
         </Appear>
         <div className="col-span-2 grid grid-cols-1 gap-y-[60px] tablet:grid-cols-2 desktop:col-span-4 desktop:grid-cols-4 desktop:gap-y-[100px]">
-          {sorted.map((w, i) => (
-            <Appear key={w.slug} preset="up" delay={0.1 * (i % 2)} className={cn('aspect-[580/450]', placement[w.slug] ?? 'desktop:col-span-2')}>
+          {works.map((w, i) => (
+            <Appear key={w.slug} preset="up" delay={0.1 * (i % 2)} className={cn('aspect-[580/450]', placement[i] ?? 'desktop:col-span-2')}>
               <WorkCard work={w} />
             </Appear>
           ))}

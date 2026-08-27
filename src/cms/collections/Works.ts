@@ -4,7 +4,13 @@ import { authenticated, publicRead } from '../access'
 export const Works: CollectionConfig = {
   slug: 'works',
   labels: { singular: 'Work', plural: 'Works' },
-  admin: { useAsTitle: 'title', defaultColumns: ['title', 'date'], group: 'Content' },
+  admin: {
+    useAsTitle: 'title',
+    defaultColumns: ['title', 'date'],
+    group: 'Content',
+    description:
+      'The home page shows the five works whose slugs match the template layout — sienna, glidex, veon, zayla, destello — each in its own hand-placed cell. Dragging to reorder here only changes the /works page.',
+  },
   access: { read: publicRead, create: authenticated, update: authenticated, delete: authenticated },
   orderable: true,
   defaultSort: '_order',

@@ -46,11 +46,13 @@ Every piece of copy on the site — every page, section heading, list of cards, 
 | **Inbox** | Messages (contact-form submissions) |
 | **Admin** | Users |
 
-**Live preview** — every document (globals, works, posts, home lists) opens with a live preview pane on the right. It re-renders the page as you type, no save needed. Use the **Mobile (390)** / **Tablet (810)** / **Desktop (1440)** buttons above the pane to check a section at each breakpoint.
+**Live preview** — every document (globals, works, posts, home lists) opens with a live preview pane on the right. It re-renders the page as you type, no save needed. Use the **Mobile (390)** / **Tablet (810)** / **Desktop (1440)** buttons above the pane to check a section at each breakpoint. **Other pages** previews `/works` on every tab, so the 404 tab has no preview of its own — open `/some-missing-url` in another tab to check that copy.
 
 **Mixed-colour headings** — most headings and paragraphs are grey by default; wrap a part in `**double asterisks**` to render it white, e.g. `Design **that speaks for you**`. A newline in the field becomes a line break (`<br>`).
 
-**Drag to reorder** — Works, Blog posts, and every Home list (Services, Testimonials, Clients, Awards, FAQ) support drag-to-reorder in their list view; the order there is the order shown on the site. On Blog posts, toggle **`featured`** on up to three posts to choose which ones appear on the home page (falls back to the three most recent if fewer than three are featured).
+The section tags (`Clients(08)`, `Services(04)`, `FAQ’S(08)` …) are plain text, counts included — when you add or remove rows in a list, update the number in the tag yourself.
+
+**Drag to reorder** — Blog posts and every Home list (Services, Testimonials, Clients, Awards, FAQ) support drag-to-reorder in their list view; the order there is the order shown on the site. Works can be dragged too, but that only reorders the **`/works`** page: the home page uses the template's fixed five-card layout and picks its cards by slug (`sienna`, `glidex`, `veon`, `zayla`, `destello`). On Blog posts, toggle **`featured`** on up to three posts to choose which ones appear on the home page (falls back to the three most recent if fewer than three are featured).
 
 Edits are live on the next request (pages are rendered on demand). When a document or global has never been saved, the site falls back to the placeholder content in `src/content/` — those files are fallbacks and the source `npm run seed` imports into the CMS; they are not read once a document exists in the admin.
 
