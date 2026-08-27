@@ -1,7 +1,10 @@
 import { render, screen, within } from '@testing-library/react'
 import { LiquidImage } from '@/components/anim/LiquidImage'
 import { WorksGrid } from '@/components/home/WorksGrid'
+import { ContentProvider, staticContent } from '@/components/layout/ContentProvider'
 import { WorkCard } from '@/components/works/WorkCard'
+import { WorkDetail } from '@/components/works/WorkDetail'
+import { WorksIndex } from '@/components/works/WorksIndex'
 import { home } from '@/content/home'
 import { works } from '@/content/works'
 
@@ -54,6 +57,41 @@ test('WorkCard renders its cover, title and every service', () => {
   const services = container.querySelector('p')
   expect(services?.querySelectorAll('br')).toHaveLength(work.services.length - 1)
   for (const service of work.services) expect(services).toHaveTextContent(service)
+})
+
+test('WorkDetail renders the provider copy for its slug, not the server prop (live preview)', () => {
+  const [work, next] = works
+  const edited = { ...work, title: '(cms) Sienna Studio', overview: '(cms) overview paragraph' }
+  render(
+    <ContentProvider value={{ ...staticContent, works: [edited, ...works.slice(1)] }}>
+      <WorkDetail work={work} next={next} />
+    </ContentProvider>,
+  )
+  expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('(cms) Sienna Studio')
+  expect(screen.getByText('(cms) overview paragraph')).toBeInTheDocument()
+  expect(screen.queryByRole('heading', { level: 1, name: work.title })).toBeNull()
+})
+
+test('WorkDetail picks the next card up from the provider too', () => {
+  const [work, next] = works
+  const editedNext = { ...next, title: '(cms) Next Project' }
+  render(
+    <ContentProvider value={{ ...staticContent, works: [works[0], editedNext, ...works.slice(2)] }}>
+      <WorkDetail work={work} next={next} />
+    </ContentProvider>,
+  )
+  expect(screen.getByRole('heading', { level: 3, name: '(cms) Next Project' })).toBeInTheDocument()
+})
+
+test('WorksIndex renders the works in the order the provider gives them', () => {
+  const reversed = [...works].reverse()
+  render(
+    <ContentProvider value={{ ...staticContent, works: reversed }}>
+      <WorksIndex />
+    </ContentProvider>,
+  )
+  const cards = screen.getAllByRole('link').filter((a) => a.getAttribute('href')?.startsWith('/works/'))
+  expect(cards.map((a) => a.getAttribute('href'))).toEqual(reversed.map((w) => `/works/${w.slug}`))
 })
 
 test('LiquidImage renders the plain images and never a WebGL context under jsdom', () => {

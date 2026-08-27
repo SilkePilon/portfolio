@@ -1,7 +1,7 @@
 'use client'
 import type { Work } from '@/content/types'
 import { Appear } from '@/components/anim/Appear'
-import { usePages } from '@/components/layout/ContentProvider'
+import { usePages, useWorks } from '@/components/layout/ContentProvider'
 import { ArrowButton } from '@/components/ui/ArrowButton'
 import { Corners } from '@/components/ui/Corners'
 import { Container, Section } from '@/components/ui/Section'
@@ -17,8 +17,15 @@ function MetaRow({ label, children }: { label: string; children: React.ReactNode
   )
 }
 
-export function WorkDetail({ work, next }: { work: Work; next: Work }) {
+/**
+ * The server hands in the work it rendered; both it and the "next" card are looked up again by slug
+ * in the client content so live-preview edits in the admin show up without a server round-trip.
+ */
+export function WorkDetail({ work: propWork, next: propNext }: { work: Work; next: Work }) {
   const pages = usePages()
+  const all = useWorks()
+  const work = all.find((w) => w.slug === propWork.slug) ?? propWork
+  const next = all.find((w) => w.slug === propNext.slug) ?? propNext
   const L = pages.workLabels
   return (
     <>

@@ -1,7 +1,7 @@
 'use client'
 import type { Blog } from '@/content/types'
 import { Appear } from '@/components/anim/Appear'
-import { usePages } from '@/components/layout/ContentProvider'
+import { usePages, usePosts } from '@/components/layout/ContentProvider'
 import { ArrowButton } from '@/components/ui/ArrowButton'
 import { Corners } from '@/components/ui/Corners'
 import { BlogBody } from '@/components/ui/RichText'
@@ -9,8 +9,15 @@ import { Container, Section } from '@/components/ui/Section'
 import { SectionTag } from '@/components/ui/SectionTag'
 import { BlogCard } from './BlogCard'
 
-export function BlogDetail({ post, next }: { post: Blog; next: Blog[] }) {
+/**
+ * The server hands in the post it rendered; it and the "next" cards are looked up again by slug in
+ * the client content so live-preview edits in the admin show up without a server round-trip.
+ */
+export function BlogDetail({ post: propPost, next: propNext }: { post: Blog; next: Blog[] }) {
   const pages = usePages()
+  const all = usePosts()
+  const post = all.find((p) => p.slug === propPost.slug) ?? propPost
+  const next = propNext.map((n) => all.find((p) => p.slug === n.slug) ?? n)
   const [intro, ...rest] = post.body[0]?.kind === 'paragraph' ? [post.body[0], ...post.body.slice(1)] : [undefined, ...post.body]
   return (
     <>

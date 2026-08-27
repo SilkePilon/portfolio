@@ -1,8 +1,9 @@
 import { render, screen, within } from '@testing-library/react'
+import { BlogDetail } from '@/components/blogs/BlogDetail'
 import { BlogsPreview } from '@/components/home/BlogsPreview'
 import { ContentProvider, staticContent } from '@/components/layout/ContentProvider'
 import { home } from '@/content/home'
-import { homeBlogs } from '@/content/blogs'
+import { blogs, homeBlogs } from '@/content/blogs'
 import { site } from '@/content/site'
 
 test('BlogsPreview renders the tag, heading and read-more cta', () => {
@@ -47,4 +48,27 @@ test('BlogsPreview renders the three CMS posts from the provider instead of the 
     expect(screen.getByRole('link', { name: new RegExp(post.title) })).toHaveAttribute('href', `/blogs/${post.slug}`)
   }
   expect(screen.queryByText(homeBlogs[0].title)).toBeNull()
+})
+
+test('BlogDetail renders the provider copy for its slug, not the server prop (live preview)', () => {
+  const [post, ...rest] = blogs
+  const edited = { ...post, title: '(cms) Edited While Typing' }
+  render(
+    <ContentProvider value={{ ...staticContent, posts: [edited, ...rest] }}>
+      <BlogDetail post={post} next={rest.slice(0, 2)} />
+    </ContentProvider>,
+  )
+  expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('(cms) Edited While Typing')
+  expect(screen.queryByRole('heading', { level: 1, name: post.title })).toBeNull()
+})
+
+test('BlogDetail looks the next cards up in the provider as well', () => {
+  const [post, second, third] = blogs
+  const editedSecond = { ...second, title: '(cms) Next Story' }
+  render(
+    <ContentProvider value={{ ...staticContent, posts: [post, editedSecond, third] }}>
+      <BlogDetail post={post} next={[second, third]} />
+    </ContentProvider>,
+  )
+  expect(screen.getByRole('link', { name: new RegExp('\\(cms\\) Next Story') })).toBeInTheDocument()
 })
