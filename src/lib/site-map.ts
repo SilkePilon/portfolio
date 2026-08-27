@@ -8,6 +8,9 @@ export type SiteContent = typeof staticSite
 
 type MediaRef = Media | number | string | null | undefined
 
+/** Stand-in image for a document whose upload is missing or unpopulated (the OG card, 1200×630). */
+export const placeholder = (alt: string): Img => ({ src: '/images/og.png', alt, width: 1200, height: 630 })
+
 export function img(m: MediaRef, fallback: Img): Img {
   if (m && typeof m === 'object' && m.url) {
     return { src: m.url, alt: m.alt || fallback.alt, width: m.width ?? fallback.width, height: m.height ?? fallback.height }
@@ -47,7 +50,7 @@ export function mapSite(d: SiteDoc): SiteContent | null {
         avatar: img(d.createdBy?.avatar, staticSite.footer.createdBy.avatar),
       },
     },
-    ogImage: img(d.ogImage, { src: '/images/og.png', alt: d.name, width: 1200, height: 630 }),
+    ogImage: img(d.ogImage, placeholder(d.name)),
     hero: {
       image: img(d.hero?.image, staticSite.hero.image),
       name: [d.hero?.nameLine1 || staticSite.hero.name[0], d.hero?.nameLine2 || staticSite.hero.name[1]],

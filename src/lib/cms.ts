@@ -1,14 +1,14 @@
 import 'server-only'
+import { cache } from 'react'
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import type { Blog, Img, Work } from '@/content/types'
+import type { Blog, Work } from '@/content/types'
 import { works as staticWorks } from '@/content/works'
 import { blogs as staticBlogs, homeBlogs as staticHomeBlogs } from '@/content/blogs'
 import { site as staticSite } from '@/content/site'
 import { home as staticHome, pages as staticPages } from '@/content/home'
-import type { Post as PostDoc, Work as WorkDoc } from '@/payload-types'
-import { lexicalToBlocks } from './lexical'
-import { img, mapSite, type SiteContent } from './site-map'
+import { mapSite, type SiteContent } from './site-map'
+import { mapPost, mapWork } from './docs-map'
 import { mapHome } from './home-map'
 import { mapPages } from './pages-map'
 import { mapAward, mapClient, mapFaq, mapService, mapTestimonial } from './lists-map'
@@ -18,42 +18,6 @@ export type { SiteContent } from './site-map'
 export type { Content, HomeContent, Lists, PagesContent } from './content'
 
 const payload = () => getPayload({ config })
-
-const placeholder = (alt: string): Img => ({ src: '/images/og.png', alt, width: 1200, height: 630 })
-
-export const formatDate = (iso: string | null | undefined, fallback = ''): string =>
-  iso ? new Date(iso).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : fallback
-
-function mapWork(d: WorkDoc): Work {
-  const title = d.title
-  const gallery = (d.gallery ?? []).map((g) => img(g.image, placeholder(title)))
-  const cover = img(d.cover, placeholder(title))
-  return {
-    slug: d.slug,
-    title,
-    services: (d.services ?? []).map((s) => s.label),
-    cover,
-    hoverCover: img(d.hoverCover, gallery[0] ?? cover),
-    description: d.description ?? '',
-    overview: d.overview ?? '',
-    date: formatDate(d.date),
-    client: d.client ?? '',
-    industry: d.industry ?? '',
-    liveUrl: d.liveUrl || undefined,
-    gallery,
-  }
-}
-
-function mapPost(d: PostDoc): Blog {
-  return {
-    slug: d.slug,
-    title: d.title,
-    category: d.category,
-    date: formatDate(d.date),
-    cover: img(d.cover, placeholder(d.title)),
-    body: lexicalToBlocks(d.body),
-  }
-}
 
 async function safely<T>(label: string, fn: () => Promise<T | null>, fallback: T): Promise<T> {
   try {
@@ -179,8 +143,11 @@ export async function getLists(): Promise<Lists> {
   return { services, testimonials, clients, awards, faqs }
 }
 
-/** Everything a page needs to render, fetched together with static fallbacks per field. */
-export async function getContent(): Promise<Content> {
+/**
+ * Everything a page needs to render, fetched together with static fallbacks per field.
+ * Cached per request so `generateMetadata` and `RootLayout` share a single round-trip.
+ */
+export const getContent = cache(async function getContent(): Promise<Content> {
   const [site, home, pages, lists, works, posts, homePosts] = await Promise.all([
     getSite(),
     getHome(),
@@ -191,4 +158,4 @@ export async function getContent(): Promise<Content> {
     getHomePosts(),
   ])
   return { site, home, pages, lists, works, posts, homePosts }
-}
+})

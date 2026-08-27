@@ -6,9 +6,7 @@ import type {
   Service as ServiceDoc,
   Testimonial as TestimonialDoc,
 } from '@/payload-types'
-import { img } from './site-map'
-
-const placeholder = (alt: string) => ({ src: '/images/og.png', alt, width: 1200, height: 630 })
+import { img, placeholder } from './site-map'
 
 export function mapService(d: ServiceDoc): Service {
   return {

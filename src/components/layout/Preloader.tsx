@@ -5,9 +5,12 @@ import { usePathname } from 'next/navigation'
 import { useSite } from '@/components/layout/ContentProvider'
 import { getLenis } from '@/lib/lenis'
 
+/** True inside the Payload admin's live-preview iframe, where the intro would only delay the preview. */
+const inPreviewFrame = () => typeof window !== 'undefined' && window.parent !== window
+
 let played = false
 /** True once the intro overlay has run during this page load (Hero uses it to keep its delays in sync). */
-export const wasPreloaderShown = () => played
+export const wasPreloaderShown = () => played && !inPreviewFrame()
 
 const EASE = [0.79, 0.04, 0.16, 1] as const
 const HOLD_MS = 1000
@@ -32,6 +35,12 @@ export function Preloader() {
 
   useEffect(() => {
     if (!visible) return
+    // Dismissed from the effect rather than skipped during render: the server cannot know it is being
+    // framed, so its HTML always contains the overlay and the first client render has to match it.
+    if (inPreviewFrame()) {
+      setVisible(false)
+      return
+    }
     document.body.style.overflow = 'hidden'
     getLenis()?.stop()
     const t1 = window.setTimeout(() => setExit(true), HOLD_MS)

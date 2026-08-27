@@ -4,6 +4,7 @@ import type { Content } from '@/lib/content'
 import { GridLines } from '@/components/ui/Section'
 import { ContentProvider } from './ContentProvider'
 import { Footer } from './Footer'
+import { LivePreviewBridge } from './LivePreviewBridge'
 import { Navbar } from './Navbar'
 import { Preloader } from './Preloader'
 import { ScrollManager } from './ScrollManager'
@@ -13,6 +14,7 @@ import { SmoothScroll } from './SmoothScroll'
 export function Shell({ content, children }: { content: Content; children: ReactNode }) {
   return (
     <ContentProvider value={content}>
+      <LivePreviewBridge />
       <Preloader />
       <SmoothScroll />
       <ScrollManager />
