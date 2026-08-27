@@ -13,7 +13,7 @@ function Portrait() {
   return (
     <Appear
       preset="fade"
-      className="col-span-2 flex flex-col items-end gap-[14px] px-2.5 tablet:flex-row tablet:gap-0 tablet:px-5 desktop:col-span-1 desktop:col-start-4 desktop:flex-col desktop:gap-[30px] desktop:px-5"
+      className="col-span-2 flex flex-col items-end gap-[14px] tablet:flex-row tablet:gap-0 desktop:col-span-1 desktop:col-start-4 desktop:flex-col desktop:gap-[30px]"
     >
       <div className="relative w-full border-y border-rule p-2.5 tablet:w-auto tablet:flex-1 tablet:p-5 desktop:w-full desktop:flex-none">
         <Corners />
@@ -26,7 +26,7 @@ function Portrait() {
           className="aspect-[3/4] w-full object-cover"
         />
       </div>
-      <p className="max-w-[280px] pr-2.5 text-right text-mono tablet:flex-1 tablet:pr-5 desktop:pr-0">
+      <p className="max-w-[280px] pr-2.5 text-right text-mono tablet:flex-1 tablet:pr-5 desktop:px-5">
         <RichSpan parts={caption} />
       </p>
     </Appear>
