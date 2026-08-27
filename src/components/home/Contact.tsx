@@ -8,10 +8,18 @@ import { Profile } from '@/components/ui/Profile'
 import { RichSpan } from '@/components/ui/RichText'
 import { Section } from '@/components/ui/Section'
 import { SectionTag } from '@/components/ui/SectionTag'
+import { home as staticHome } from '@/content/home'
+import type { FormField } from '@/content/types'
 import { cn } from '@/lib/cn'
 import { submit as submitForm, validate, type FormErrors, type FormValues } from '@/lib/form'
 
 const empty: FormValues = { Name: '', Email: '', Phone: '', Budget: '', Message: '', website: '' }
+
+/**
+ * The built-in row per form value. The five keys the form posts are fixed in code; the CMS rows only
+ * supply the label, placeholder and input type, so a renamed or deleted row degrades to these.
+ */
+const builtIn = Object.fromEntries(staticHome.contact.fields.map((f) => [f.key, f])) as Record<FormField['key'], FormField>
 
 type Status = 'idle' | 'pending' | 'success' | 'error'
 
@@ -26,13 +34,14 @@ function Field({
   onChange,
   className,
 }: {
-  name: keyof Omit<FormValues, 'website'>
+  name: FormField['key']
   values: FormValues
   errors: FormErrors
   onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
   className?: string
 }) {
-  const f = useHome().contact.fields.find((x) => x.name === name)!
+  // Matched on `key`, never on the label: editors can rename or delete the row in the admin.
+  const f = useHome().contact.fields.find((x) => x.key === name) ?? builtIn[name]
   const error = errors[name]
   return (
     <label className={cn('flex flex-1 flex-col gap-2.5', className)}>

@@ -205,7 +205,15 @@ export const Home: GlobalConfig = {
               admin: { description: 'Home page Contact section — the form fields, in order.' },
               defaultValue: home.contact.fields,
               fields: [
-                { name: 'name', type: 'text', required: true, admin: { description: 'Field label, e.g. "Name".' } },
+                {
+                  name: 'key',
+                  type: 'select',
+                  label: 'Form value',
+                  required: true,
+                  options: ['Name', 'Email', 'Phone', 'Budget', 'Message'],
+                  admin: { description: 'Which form value this row is — the label below is what visitors see' },
+                },
+                { name: 'name', type: 'text', label: 'Label', required: true, admin: { description: 'Field label, e.g. "Name".' } },
                 { name: 'placeholder', type: 'text' },
                 { name: 'type', type: 'select', defaultValue: 'text', options: ['text', 'email', 'tel', 'textarea'] },
               ],

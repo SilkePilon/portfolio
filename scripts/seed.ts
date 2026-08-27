@@ -5,7 +5,6 @@
 import path from 'path'
 import { getPayload } from 'payload'
 import config from '../src/payload.config'
-import type { Img } from '../src/content/types'
 import { works } from '../src/content/works'
 import { blogs, homeBlogs } from '../src/content/blogs'
 import { site } from '../src/content/site'
@@ -17,7 +16,7 @@ import type { Post } from '../src/payload-types'
 const payload = await getPayload({ config })
 const mediaIds = new Map<string, number>()
 
-async function media(img: Img): Promise<number> {
+async function media(img: { src: string; alt: string }): Promise<number> {
   const filename = path.basename(img.src)
   const cached = mediaIds.get(filename)
   if (cached) return cached
@@ -186,7 +185,7 @@ if (!currentHome.updatedAt) {
       showcase: {
         reelWord1: home.reel.words[0],
         reelWord2: home.reel.words[1],
-        video: await media({ src: '/videos/showcase.mp4', alt: 'Showcase reel', width: 1280, height: 720 }),
+        video: await media({ src: '/videos/showcase.mp4', alt: 'Showcase reel' }),
       },
       works: {
         tag: home.works.tag,
@@ -245,7 +244,7 @@ if (!currentHome.updatedAt) {
         heading: toMarked(home.contact.heading),
         sentence: toMarked(home.contact.sentence),
         connectLabel: home.contact.connectLabel,
-        fields: home.contact.fields.map((f) => ({ name: f.name, placeholder: f.placeholder, type: f.type })),
+        fields: home.contact.fields.map((f) => ({ key: f.key, name: f.name, placeholder: f.placeholder, type: f.type })),
         replyNote: toMarked(home.contact.replyNote),
         submit: home.contact.submit,
         submitting: home.contact.submitting,

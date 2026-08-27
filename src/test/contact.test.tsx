@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-import { afterEach, beforeEach, expect, test, vi } from 'vitest'
+import { afterEach, expect, test, vi } from 'vitest'
 import { Contact } from '@/components/home/Contact'
+import { ContentProvider, staticContent } from '@/components/layout/ContentProvider'
 import { home } from '@/content/home'
 import { site } from '@/content/site'
 
@@ -57,4 +58,24 @@ test('a valid submit posts through fetch and the button label becomes the "sent"
   await waitFor(() => expect(screen.getByRole('button', { name: home.contact.sent })).toBeInTheDocument())
 
   expect(fetchMock).toHaveBeenCalledWith('/api/contact', expect.objectContaining({ method: 'POST' }))
+})
+
+test('relabelled and missing CMS rows never break the form: the labels change, the posted keys do not', () => {
+  const fields = home.contact.fields
+    .filter((f) => f.key !== 'Phone')
+    .map((f) => (f.key === 'Budget' ? { ...f, name: 'Project budget' } : f))
+  const value = { ...staticContent, home: { ...home, contact: { ...home.contact, fields } } }
+
+  const { container } = render(
+    <ContentProvider value={value}>
+      <Contact />
+    </ContentProvider>,
+  )
+
+  expect(screen.getByText('Project budget')).toBeInTheDocument()
+  expect(container.querySelector('input[name="Budget"]')).not.toBeNull()
+  // Phone was deleted in the admin — the row still renders with the built-in label and key.
+  expect(container.querySelector('input[name="Phone"]')).not.toBeNull()
+  expect(screen.getByText('Phone')).toBeInTheDocument()
+  expect(container.querySelectorAll('[name]')).toHaveLength(6)
 })

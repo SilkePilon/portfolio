@@ -39,4 +39,14 @@ export type Client = { name: string; year: string; image: Img; href?: string }
 export type Step = { title: string; text: string; dots: 1 | 2 | 3 | 4 }
 export type Award = { name: string; text: string }
 export type Faq = { q: string; a: string }
-export type FormField = { name: string; placeholder: string; type: 'text' | 'email' | 'tel' | 'textarea' }
+/**
+ * One contact-form row. `key` is structural — it decides which value the row edits and which key is
+ * posted to `/api/contact` — while `name` is only the label visitors read, so editors can rename a
+ * field without breaking the form.
+ */
+export type FormField = {
+  key: 'Name' | 'Email' | 'Phone' | 'Budget' | 'Message'
+  name: string
+  placeholder: string
+  type: 'text' | 'email' | 'tel' | 'textarea'
+}

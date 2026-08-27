@@ -142,6 +142,8 @@ export interface UserAuthOperations {
   };
 }
 /**
+ * The home page shows the five works whose slugs match the template layout — sienna, glidex, veon, zayla, destello — each in its own hand-placed cell. Dragging to reorder here only changes the /works page.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "works".
  */
@@ -731,7 +733,7 @@ export interface Home {
   id: number;
   hero?: {
     /**
-     * Home page hero — the paragraph under the big name.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Home page hero — the paragraph under the big name.
      */
     intro?: string | null;
     /**
@@ -764,7 +766,7 @@ export interface Home {
      */
     image1?: (number | null) | Media;
     /**
-     * Home page About section — the caption next to the second photo.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Home page About section — the caption next to the second photo.
      */
     caption?: string | null;
     /**
@@ -776,7 +778,7 @@ export interface Home {
      */
     resultTag?: string | null;
     /**
-     * Home page About section — heading above the metrics row.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Home page About section — heading above the metrics row.
      */
     resultHeading?: string | null;
     /**
@@ -821,15 +823,15 @@ export interface Home {
      */
     tag?: string | null;
     /**
-     * Home page Works section heading.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Home page Works section heading.
      */
     heading?: string | null;
     /**
-     * Home page Works section — paragraph under the heading.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Home page Works section — paragraph under the heading.
      */
     text?: string | null;
     /**
-     * Home page Works section — closing paragraph before the button.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Home page Works section — closing paragraph before the button.
      */
     outro?: string | null;
     /**
@@ -843,7 +845,7 @@ export interface Home {
      */
     tag?: string | null;
     /**
-     * Home page Services section heading.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Home page Services section heading.
      */
     heading?: string | null;
     /**
@@ -865,7 +867,7 @@ export interface Home {
      */
     tag?: string | null;
     /**
-     * Home page Testimonials section heading.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Home page Testimonials section heading.
      */
     heading?: string | null;
     /**
@@ -883,15 +885,15 @@ export interface Home {
      */
     tag?: string | null;
     /**
-     * Home page Clients section heading.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Home page Clients section heading.
      */
     heading?: string | null;
     /**
-     * Home page Clients section — paragraph under the heading.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Home page Clients section — paragraph under the heading.
      */
     text?: string | null;
     /**
-     * Home page Clients section — sentence above the "Book a call" button.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Home page Clients section — sentence above the "Book a call" button.
      */
     sentence?: string | null;
     /**
@@ -905,7 +907,7 @@ export interface Home {
      */
     tag?: string | null;
     /**
-     * Home page Approach section heading.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Home page Approach section heading.
      */
     heading?: string | null;
     /**
@@ -933,11 +935,11 @@ export interface Home {
      */
     tag?: string | null;
     /**
-     * Home page Awards section heading.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Home page Awards section heading.
      */
     heading?: string | null;
     /**
-     * Home page Awards section — sentence under the heading. Awards themselves are edited in the Awards list.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Home page Awards section — sentence under the heading. Awards themselves are edited in the Awards list.
      */
     sentence?: string | null;
   };
@@ -947,11 +949,11 @@ export interface Home {
      */
     tag?: string | null;
     /**
-     * Home page Blogs section heading.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Home page Blogs section heading.
      */
     heading?: string | null;
     /**
-     * Home page Blogs section — text next to the author avatar.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Home page Blogs section — text next to the author avatar.
      */
     profileText?: string | null;
     /**
@@ -965,11 +967,11 @@ export interface Home {
      */
     tag?: string | null;
     /**
-     * Home page FAQ section heading.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Home page FAQ section heading.
      */
     heading?: string | null;
     /**
-     * Home page FAQ section — "Didn’t find your answer?" heading.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Home page FAQ section — "Didn’t find your answer?" heading.
      */
     outroHeading?: string | null;
     /**
@@ -987,11 +989,11 @@ export interface Home {
      */
     tag?: string | null;
     /**
-     * Home page Contact section heading.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Home page Contact section heading.
      */
     heading?: string | null;
     /**
-     * Home page Contact section — sentence under the heading.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Home page Contact section — sentence under the heading.
      */
     sentence?: string | null;
     /**
@@ -1004,6 +1006,10 @@ export interface Home {
     fields?:
       | {
           /**
+           * Which form value this row is — the label below is what visitors see
+           */
+          key: 'Name' | 'Email' | 'Phone' | 'Budget' | 'Message';
+          /**
            * Field label, e.g. "Name".
            */
           name: string;
@@ -1013,7 +1019,7 @@ export interface Home {
         }[]
       | null;
     /**
-     * Home page Contact section — "I usually reply within 24 hours" note.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Home page Contact section — "I usually reply within 24 hours" note.
      */
     replyNote?: string | null;
     /**
@@ -1062,7 +1068,7 @@ export interface Page {
      */
     tag?: string | null;
     /**
-     * Works page (/works) — heading at the top.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Works page (/works) — heading at the top.
      */
     heading?: string | null;
     /**
@@ -1076,7 +1082,7 @@ export interface Page {
      */
     tag?: string | null;
     /**
-     * Blogs page (/blogs) — heading at the top.
+     * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Blogs page (/blogs) — heading at the top.
      */
     heading?: string | null;
     /**
@@ -1207,7 +1213,7 @@ export interface Site {
     avatar?: (number | null) | Media;
   };
   /**
-   * Footer — the tagline sentence above the social links.
+   * Grey by default. Wrap the white part in **double asterisks**. Enter = new line. Footer — the tagline sentence above the social links.
    */
   tagline?: string | null;
   socialsTitle?: string | null;
@@ -1354,6 +1360,7 @@ export interface HomeSelect<T extends boolean = true> {
         fields?:
           | T
           | {
+              key?: T;
               name?: T;
               placeholder?: T;
               type?: T;

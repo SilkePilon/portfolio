@@ -43,11 +43,21 @@ test('reel words map with per-word fallback and video falls back to static when 
 })
 
 test('contact form fields are used as-is when saved, and fall back to static when empty', () => {
-  const h = mapHome({ ...base, contact: { fields: [{ name: 'Name', placeholder: 'Jane', type: 'text' }] } })
-  expect(h!.contact.fields).toEqual([{ name: 'Name', placeholder: 'Jane', type: 'text' }])
+  const h = mapHome({ ...base, contact: { fields: [{ key: 'Name', name: 'Your name', placeholder: 'Jane', type: 'text' }] } })
+  expect(h!.contact.fields).toEqual([{ key: 'Name', name: 'Your name', placeholder: 'Jane', type: 'text' }])
 
   const h2 = mapHome({ ...base, contact: { fields: [] } })
   expect(h2!.contact.fields).toEqual(staticHome.contact.fields)
+})
+
+test('a contact row saved before `key` existed keeps the static key for its position', () => {
+  const rows = [
+    { name: 'Name', placeholder: 'Jane', type: 'text' as const },
+    { name: 'E-mail', placeholder: 'jane@x.com', type: 'email' as const },
+  ] as NonNullable<NonNullable<Home['contact']>['fields']>
+  const h = mapHome({ ...base, contact: { fields: rows } })
+  expect(h!.contact.fields.map((f) => f.key)).toEqual(['Name', 'Email'])
+  expect(h!.contact.fields[1].name).toBe('E-mail')
 })
 
 test('list-owned fields (rows/items/list) always keep the static shape from the home global', () => {

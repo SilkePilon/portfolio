@@ -115,7 +115,17 @@ export function mapHome(d: HomeDoc): HomeContent | null {
       sentence: d.contact?.sentence ? parseMarked(d.contact.sentence) : staticHome.contact.sentence,
       connectLabel: d.contact?.connectLabel ?? staticHome.contact.connectLabel,
       fields: d.contact?.fields?.length
-        ? d.contact.fields.map((f) => ({ name: f.name, placeholder: f.placeholder ?? '', type: (f.type ?? 'text') as FormField['type'] }))
+        ? d.contact.fields.map((f, i) => {
+            // A row saved before `key` existed keeps the static field at its position — the form
+            // shape (which value each row edits) must never depend on the editable label.
+            const fallback = staticHome.contact.fields[i] ?? staticHome.contact.fields[0]
+            return {
+              key: (f.key ?? fallback.key) as FormField['key'],
+              name: f.name || fallback.name,
+              placeholder: f.placeholder ?? '',
+              type: (f.type ?? 'text') as FormField['type'],
+            }
+          })
         : staticHome.contact.fields,
       replyNote: d.contact?.replyNote ? parseMarked(d.contact.replyNote) : staticHome.contact.replyNote,
       submit: d.contact?.submit ?? staticHome.contact.submit,
