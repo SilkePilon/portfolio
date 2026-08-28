@@ -46,3 +46,21 @@ IBM Plex Mono for code, thin `rgba(255,255,255,.15)` rules, `--ease-framer` wher
 
 ## Out of scope
 Wiring the chosen option into the home page / CMS — separate task after Silke picks.
+
+## Outcome (2026-08-28)
+
+Option **10 — Exploded UI** was chosen and promoted to the real home-page showcase section; the lab is deleted.
+
+- `src/components/lab/showcase/LabOption.tsx` → `src/components/anim/ScrollStage.tsx` (`LabOption` → `ScrollStage`,
+  `data-lab-option` dropped; `seg` / `lerp` / `easeOut` / `easeInOut` still exported from there).
+- `src/components/lab/showcase/options/Option10Layers.tsx` → `src/components/home/Showcase.tsx`
+  (`export function Showcase`, section id `showcase`, `heightVh` 250, wrapper `z-[2] overflow-clip` to match
+  the reel it replaced); its dashboard → `src/components/home/showcase/{Dashboard,state,ui,code,layers}`,
+  with the `lab-` CSS prefix renamed to `sc-`.
+- CMS: the Showcase tab lost `reelWord1` / `reelWord2` / `video` and now holds a single `appName` text field
+  (default `Ledger`), read by the section for the demo app's sidebar brand. Migration
+  `src/migrations/20260828_191551_showcase_app.ts`.
+- Deleted: `src/app/(frontend)/lab/`, `src/components/lab/`, `scripts/lab-shot.mjs`,
+  `src/components/home/ShowcaseReel.tsx`, `src/components/ui/Video.tsx`, `public/videos/showcase.mp4`,
+  `src/test/{reel,showcase-lab}.test.tsx`. Options 1–9 live on only in this document and in git history
+  (last commit holding them: `fd0e8c5`).

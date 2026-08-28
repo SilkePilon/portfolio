@@ -28,7 +28,7 @@ Admin meta: title suffix ` · <site name>` replaced by a neutral ` · Portfolio 
 | --- | --- |
 | Hero | `intro` (marked text) · `bio` array {label, value} |
 | About | `tag`, `paragraphs` array {text}, `image1`, `caption` (marked), `image2`, `resultTag`, `resultHeading` (marked) · `metrics` array {end, suffix, label, text} (dots = index+1) |
-| Showcase | `reelWord1`, `reelWord2`, `video` upload (mp4) |
+| Showcase | `appName` (the interactive demo app’s name; superseded the reel words + video, see 2026-08-28-showcase-lab-design.md) |
 | Works | `tag`, `heading`, `text`, `outro` (marked), `cta` |
 | Services | `tag`, `heading` (marked), `text`, `image1`, `image2` (rows live in the Services collection) |
 | Testimonials | `tag`, `heading` (marked), `prev`, `next` |

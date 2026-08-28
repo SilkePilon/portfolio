@@ -1,6 +1,6 @@
 # Elian Kent — portfolio (Next.js + Payload CMS)
 
-A self-hostable rebuild of the free Framer template [Elian](https://www.framer.com/marketplace/templates/elian/) by Zaid Khan (published demo: https://eliankent.framer.website/). Layout, typography, responsive behaviour and animations follow the original 1:1; the case studies, blog posts and site settings are edited in a built-in **Payload CMS** admin, so the site can be updated in minutes without touching code. All copy, images and the reel video are placeholders meant to be replaced.
+A self-hostable rebuild of the free Framer template [Elian](https://www.framer.com/marketplace/templates/elian/) by Zaid Khan (published demo: https://eliankent.framer.website/). Layout, typography, responsive behaviour and animations follow the original 1:1; the case studies, blog posts and site settings are edited in a built-in **Payload CMS** admin, so the site can be updated in minutes without touching code. All copy and images are placeholders meant to be replaced.
 
 ## Stack
 
@@ -23,7 +23,7 @@ On the first visit to `/admin` Payload asks you to create the first admin user. 
 | --- | --- |
 | `npm run dev` | dev server on http://localhost:3000 |
 | `npm run build` / `npm start` | production build / production server |
-| `npm run seed` | import the template's placeholder copy, images and video into the CMS (idempotent) |
+| `npm run seed` | import the template's placeholder copy and images into the CMS (idempotent) |
 | `npm run generate:types` | regenerate `src/payload-types.ts` after changing collections |
 | `npm run generate:importmap` | regenerate the admin import map (after adding custom admin components) |
 | `npm run payload -- migrate:create <name>` | write a DB migration to `src/migrations/` after changing collections/globals — required for production (dev applies schema changes automatically) |
@@ -51,6 +51,8 @@ Every piece of copy on the site — every page, section heading, list of cards, 
 **Mixed-colour headings** — most headings and paragraphs are grey by default; wrap a part in `**double asterisks**` to render it white, e.g. `Design **that speaks for you**`. A newline in the field becomes a line break (`<br>`).
 
 The section tags (`Clients(08)`, `Services(04)`, `FAQ’S(08)` …) are plain text, counts included — when you add or remove rows in a list, update the number in the tag yourself.
+
+**Showcase** — the section between Metrics and Works is not an image or a video: it is a small interactive demo app (a trading terminal) that stays usable while it explodes into its five labelled layers as you scroll. Only its name is editable, under **Home page → Showcase → App name**; the layers, their labels and the app itself live in `src/components/home/Showcase.tsx` and `src/components/home/showcase/`.
 
 **Drag to reorder** — Blog posts and every Home list (Services, Testimonials, Clients, Awards, FAQ) support drag-to-reorder in their list view; the order there is the order shown on the site. Works can be dragged too, but that only reorders the **`/works`** page: the home page uses the template's fixed five-card layout and picks its cards by slug (`sienna`, `glidex`, `veon`, `zayla`, `destello`). On Blog posts, toggle **`featured`** on up to three posts to choose which ones appear on the home page (falls back to the three most recent if fewer than three are featured).
 
