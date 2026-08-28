@@ -1,6 +1,7 @@
 'use client'
 /**
- * The interactive app that lives on the `04 components` layer: "Ledger", a small trading terminal. Prices walk
+ * The interactive app that lives on the `04 components` layer: a small trading terminal (named in the CMS,
+ * "Ledger" by default). Prices walk
  * on a seeded LCG every 800 ms, the changed cells flash, sparklines scroll, the chart line slides, notifications
  * arrive on their own, and the order ticket really fills — position, cash, orders and activity all update.
  *
@@ -136,7 +137,7 @@ const MarketRow = memo(function MarketRow({ ticker, onSelect }: { ticker: Ticker
 /** Notification log line, shared by the activity strip under the chart and the Activity tab. */
 function ActivityLine({ notice, dense = false }: { notice: Notice; dense?: boolean }) {
   return (
-    <span className={cn('lab-row-in flex items-center gap-2.5', dense ? 'py-[3px]' : 'border-t border-white/[0.07] py-2 first:border-t-0')}>
+    <span className={cn('sc-row-in flex items-center gap-2.5', dense ? 'py-[3px]' : 'border-t border-white/[0.07] py-2 first:border-t-0')}>
       <span className="h-[6px] w-[6px] shrink-0 rounded-full" style={{ background: toneColor(notice.tone) }} />
       <span className="shrink-0 text-[11px] leading-none text-white">{notice.title}</span>
       <span className="min-w-0 flex-1 truncate text-[11px] leading-none text-gray-500">{notice.body}</span>
@@ -150,7 +151,7 @@ function Empty({ children }: { children: string }) {
     <span className="flex flex-1 items-center gap-2 text-[11px] leading-none text-gray-600">
       <span className="relative flex h-[6px] w-[6px]">
         <span className="absolute inset-0 rounded-full bg-white/25" />
-        <span className="lab-pulse absolute inset-0 rounded-full bg-white/25" />
+        <span className="sc-pulse absolute inset-0 rounded-full bg-white/25" />
       </span>
       {children}
     </span>
@@ -158,7 +159,7 @@ function Empty({ children }: { children: string }) {
 }
 
 /** The whole terminal. Sized by the layer it sits in (absolute inset-0). */
-export function TradingApp({ app }: { app: TradingApp }) {
+export function TradingApp({ app, name = 'Ledger' }: { app: TradingApp; name?: string }) {
   const { state, rootRef, setTab, select, setTimeframe, setSide, stepQty, placeOrder, dismiss } = app
   const { tickers, positions, orders, activity, toasts, ticket } = state
 
@@ -187,10 +188,10 @@ export function TradingApp({ app }: { app: TradingApp }) {
       <aside data-skel className="hidden w-[184px] shrink-0 flex-col border-r border-white/10 bg-[#0b0b0b] p-3 tablet:flex">
         <div className="flex items-center gap-2 rounded-[6px] border border-white/10 bg-white/[0.03] p-2">
           <span className={`${mono} grid h-6 w-6 shrink-0 place-items-center rounded-[5px] bg-white text-[11px] text-[#0e0e0e]`}>
-            L
+            {name.trim().charAt(0).toUpperCase() || 'L'}
           </span>
           <span className="min-w-0 flex-1">
-            <span className="block truncate text-[12px] leading-tight font-medium">Ledger</span>
+            <span className="block truncate text-[12px] leading-tight font-medium">{name}</span>
             <span className="block truncate text-[10px] leading-tight text-gray-500">Margin · USD</span>
           </span>
         </div>
@@ -381,7 +382,7 @@ export function TradingApp({ app }: { app: TradingApp }) {
                   <Empty>No orders yet — place one from the Portfolio tab.</Empty>
                 ) : (
                   orders.map((o) => (
-                    <span key={o.id} className="lab-row-in flex items-center gap-3 border-t border-white/[0.07] py-2 first:border-t-0">
+                    <span key={o.id} className="sc-row-in flex items-center gap-3 border-t border-white/[0.07] py-2 first:border-t-0">
                       <span className={`${mono} w-[52px] shrink-0 text-[11px] leading-none text-white`}>{o.symbol}</span>
                       <span
                         className={`${mono} w-[38px] shrink-0 text-[10px] leading-none uppercase`}

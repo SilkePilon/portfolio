@@ -50,7 +50,6 @@ test('home content images exist', () => {
     site.profile.avatar,
     site.footer.createdBy.avatar,
   ].forEach((i) => expect(img(i.src)).toBe(true))
-  expect(img(home.reel.video)).toBe(true)
   expect(home.metrics.map((m) => m.end)).toEqual([62, 3, 98, 5])
   expect(home.faq.items).toHaveLength(8)
   expect(site.nav.map((n) => n.label)).toEqual(['Home', 'About', 'Works', 'Blogs', 'Contact'])

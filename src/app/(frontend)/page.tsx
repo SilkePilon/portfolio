@@ -2,7 +2,7 @@ import { Hero } from '@/components/home/Hero'
 import { BioStrip } from '@/components/home/BioStrip'
 import { About } from '@/components/home/About'
 import { Metrics } from '@/components/home/Metrics'
-import { ShowcaseReel } from '@/components/home/ShowcaseReel'
+import { Showcase } from '@/components/home/Showcase'
 import { WorksGrid } from '@/components/home/WorksGrid'
 import { Services } from '@/components/home/Services'
 import { Testimonials } from '@/components/home/Testimonials'
@@ -22,7 +22,7 @@ export default function HomePage() {
         <About />
         <Metrics />
       </div>
-      <ShowcaseReel />
+      <Showcase />
       <WorksGrid />
       <Services />
       <Testimonials />

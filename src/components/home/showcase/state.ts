@@ -1,6 +1,6 @@
 'use client'
 /**
- * State for the lab's trading dashboard ("Ledger"). Everything is deterministic — there is no `Math.random`
+ * State for the showcase trading dashboard ("Ledger"). Everything is deterministic — there is no `Math.random`
  * anywhere, so the server render and the first client render are identical and the whole app is replayable
  * from a seed. Prices move through `stepTickers`, a pure LCG random walk that the reducer folds into state.
  *

@@ -36,10 +36,10 @@ test('saved metrics get sequential dots by position', () => {
   expect(h!.metrics.map((m) => m.end)).toEqual([10, 20])
 })
 
-test('reel words map with per-word fallback and video falls back to static when unset', () => {
-  const h = mapHome({ ...base, showcase: { reelWord1: 'Open', reelWord2: 'Work' } })
-  expect(h!.reel.words).toEqual(['Open', 'Work'])
-  expect(h!.reel.video).toBe(staticHome.reel.video)
+test('the showcase app name maps, and falls back to static when blank', () => {
+  expect(mapHome({ ...base, showcase: { appName: 'Vault' } })!.showcase.appName).toBe('Vault')
+  expect(mapHome({ ...base, showcase: { appName: '' } })!.showcase.appName).toBe(staticHome.showcase.appName)
+  expect(mapHome(base)!.showcase.appName).toBe(staticHome.showcase.appName)
 })
 
 test('contact form fields are used as-is when saved, and fall back to static when empty', () => {

@@ -47,7 +47,8 @@ export const home = {
     { end: 5, suffix: '+', label: 'Avg Rating', text: 'Trusted by founders, creatives & teams across different industries.', dots: 4 },
   ] as Metric[],
 
-  reel: { words: ['Show', 'Case'] as const, video: '/videos/showcase.mp4' },
+  /** Showcase section — the interactive demo app; only its name is editable, the layer labels are hardcoded. */
+  showcase: { appName: 'Ledger' },
 
   works: {
     tag: 'Selected works(05)',

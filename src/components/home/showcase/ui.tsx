@@ -1,6 +1,6 @@
 'use client'
 /**
- * Hand-built shadcn/ui look-alikes (zinc dark) for the lab's trading dashboard — no extra dependency.
+ * Hand-built shadcn/ui look-alikes (zinc dark) for the showcase trading dashboard — no extra dependency.
  * Cards `#191919` on a `#121212` shell, 1px `white/10` rules, 8/6px radii, `white/40` focus ring,
  * Inter for UI copy and IBM Plex Mono for every number.
  *
@@ -22,23 +22,23 @@ const FOCUS = 'outline-none focus-visible:ring-2 focus-visible:ring-white/40 foc
 
 /**
  * Every keyframe the app uses, mounted once by `TradingApp`. Kept next to the components that reference the
- * class names rather than in the global sheet — the lab is temporary and this keeps it self-contained.
+ * class names rather than in the global sheet — it keeps the section self-contained.
  */
 export function AppStyles() {
   return (
     <style>{`
-      @keyframes lab-flash-up { from { background-color: rgba(125,211,160,.26) } to { background-color: rgba(125,211,160,0) } }
-      @keyframes lab-flash-down { from { background-color: rgba(229,98,94,.26) } to { background-color: rgba(229,98,94,0) } }
-      @keyframes lab-toast-in { from { opacity: 0; transform: translateY(-14px) scale(.97) } to { opacity: 1; transform: none } }
-      @keyframes lab-row-in { from { opacity: 0; transform: translateY(-6px) } to { opacity: 1; transform: none } }
-      @keyframes lab-pulse { 0% { opacity: .55; transform: scale(1) } 70%, 100% { opacity: 0; transform: scale(2.6) } }
-      .lab-flash-up { animation: lab-flash-up .9s cubic-bezier(.22,1,.36,1) forwards }
-      .lab-flash-down { animation: lab-flash-down .9s cubic-bezier(.22,1,.36,1) forwards }
-      .lab-toast { animation: lab-toast-in .42s cubic-bezier(.22,1,.36,1) both }
-      .lab-row-in { animation: lab-row-in .32s cubic-bezier(.22,1,.36,1) both }
-      .lab-pulse { animation: lab-pulse 1.9s cubic-bezier(.22,1,.36,1) infinite }
+      @keyframes sc-flash-up { from { background-color: rgba(125,211,160,.26) } to { background-color: rgba(125,211,160,0) } }
+      @keyframes sc-flash-down { from { background-color: rgba(229,98,94,.26) } to { background-color: rgba(229,98,94,0) } }
+      @keyframes sc-toast-in { from { opacity: 0; transform: translateY(-14px) scale(.97) } to { opacity: 1; transform: none } }
+      @keyframes sc-row-in { from { opacity: 0; transform: translateY(-6px) } to { opacity: 1; transform: none } }
+      @keyframes sc-pulse { 0% { opacity: .55; transform: scale(1) } 70%, 100% { opacity: 0; transform: scale(2.6) } }
+      .sc-flash-up { animation: sc-flash-up .9s cubic-bezier(.22,1,.36,1) forwards }
+      .sc-flash-down { animation: sc-flash-down .9s cubic-bezier(.22,1,.36,1) forwards }
+      .sc-toast { animation: sc-toast-in .42s cubic-bezier(.22,1,.36,1) both }
+      .sc-row-in { animation: sc-row-in .32s cubic-bezier(.22,1,.36,1) both }
+      .sc-pulse { animation: sc-pulse 1.9s cubic-bezier(.22,1,.36,1) infinite }
       @media (prefers-reduced-motion: reduce) {
-        .lab-flash-up, .lab-flash-down, .lab-toast, .lab-row-in, .lab-pulse { animation: none }
+        .sc-flash-up, .sc-flash-down, .sc-toast, .sc-row-in, .sc-pulse { animation: none }
       }
     `}</style>
   )
@@ -91,7 +91,7 @@ export function Badge({
       {dot && (
         <span className="relative flex h-[5px] w-[5px] shrink-0">
           <span className="absolute inset-0 rounded-full" style={{ background: color }} />
-          {pulse && <span className="lab-pulse absolute inset-0 rounded-full" style={{ background: color }} />}
+          {pulse && <span className="sc-pulse absolute inset-0 rounded-full" style={{ background: color }} />}
         </span>
       )}
       {children}
@@ -247,7 +247,7 @@ export function Bell({ count }: { count: number }) {
  */
 export function Flash({ dir, children, className }: { dir: Tone; children: ReactNode; className?: string }) {
   return (
-    <span className={cn('-mx-1 rounded-[3px] px-1', dir === 'up' && 'lab-flash-up', dir === 'down' && 'lab-flash-down', className)}>
+    <span className={cn('-mx-1 rounded-[3px] px-1', dir === 'up' && 'sc-flash-up', dir === 'down' && 'sc-flash-down', className)}>
       {children}
     </span>
   )
@@ -349,7 +349,7 @@ export function PriceChart({
   const line = pts.map(([x, yy], i) => `${i ? 'L' : 'M'}${x.toFixed(2)},${yy.toFixed(2)}`).join('')
   const area = `${line}L100,100L${(-step).toFixed(2)},100Z`
   const lastY = pts[pts.length - 1][1]
-  const id = `lab-chart-${tone}`
+  const id = `sc-chart-${tone}`
 
   useLayoutEffect(() => {
     const g = scroller.current
@@ -408,7 +408,7 @@ export function Toast({ title, body, tone, onClose }: { title: string; body: str
   return (
     <div
       role="status"
-      className="lab-toast pointer-events-auto flex w-[248px] items-start gap-2 rounded-[8px] border border-white/12 bg-[#1d1d1d]/95 p-2.5 shadow-[0_18px_40px_rgba(0,0,0,.55)] backdrop-blur-sm"
+      className="sc-toast pointer-events-auto flex w-[248px] items-start gap-2 rounded-[8px] border border-white/12 bg-[#1d1d1d]/95 p-2.5 shadow-[0_18px_40px_rgba(0,0,0,.55)] backdrop-blur-sm"
     >
       <span className="mt-[3px] h-[7px] w-[7px] shrink-0 rounded-full" style={{ background: color }} />
       <span className="min-w-0 flex-1">

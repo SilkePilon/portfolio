@@ -1,14 +1,9 @@
 import { home as staticHome } from '@/content/home'
 import type { FormField } from '@/content/types'
 import { parseMarked } from '@/lib/marked'
-import type { Home as HomeDoc, Media } from '@/payload-types'
+import type { Home as HomeDoc } from '@/payload-types'
 import type { HomeContent } from './content'
 import { img } from './site-map'
-
-/** `.url` of a populated media relation, or undefined when unpopulated / unset. */
-function mediaUrl(m: number | Media | null | undefined): string | null | undefined {
-  return m && typeof m === 'object' ? m.url : undefined
-}
 
 /**
  * Maps the `home` global onto the static content shape. Returns null when the global
@@ -44,12 +39,8 @@ export function mapHome(d: HomeDoc): HomeContent | null {
           dots: (i + 1) as 1 | 2 | 3 | 4,
         }))
       : staticHome.metrics,
-    reel: {
-      words: [
-        d.showcase?.reelWord1 || staticHome.reel.words[0],
-        d.showcase?.reelWord2 || staticHome.reel.words[1],
-      ] as HomeContent['reel']['words'],
-      video: mediaUrl(d.showcase?.video) ?? staticHome.reel.video,
+    showcase: {
+      appName: d.showcase?.appName || staticHome.showcase.appName,
     },
     works: {
       tag: d.works?.tag ?? staticHome.works.tag,

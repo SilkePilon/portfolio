@@ -202,11 +202,11 @@ export function InteractionLayer({ rects }: { rects: LocalRect[] }) {
       {target && (
         <div className="absolute" style={{ left: target.x, top: target.y, width: target.w, height: target.h }}>
           <span className="absolute -inset-[3px] rounded-[8px] border-2 border-white/45" />
-          <span className="lab-ix-ripple absolute -inset-[3px] rounded-[8px] border border-white/60" />
+          <span className="sc-ix-ripple absolute -inset-[3px] rounded-[8px] border border-white/60" />
           <span className={`${MICRO} absolute -top-2.5 left-0 bg-[#0e0e0e] px-1 text-white`}>:focus</span>
           <svg
             viewBox="0 0 12 18"
-            className="lab-ix-cursor absolute h-[18px] w-[12px] drop-shadow-[0_1px_2px_rgba(0,0,0,.8)]"
+            className="sc-ix-cursor absolute h-[18px] w-[12px] drop-shadow-[0_1px_2px_rgba(0,0,0,.8)]"
             style={{ left: target.w * 0.6, top: target.h * 0.55 }}
           >
             <path d="M1 1 L1 15 L4.6 11.6 L7 17 L9.4 16 L7 10.8 L11 10.6 Z" fill="#ffffff" stroke="#0e0e0e" strokeWidth="1" strokeLinejoin="round" />

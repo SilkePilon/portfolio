@@ -79,15 +79,9 @@ export const Home: GlobalConfig = {
         {
           name: 'showcase',
           label: 'Showcase',
+          admin: { description: 'The Showcase section is an interactive demo app that explodes into its five layers as you scroll. Everything but the app’s name is built in code — the layer labels are not editable.' },
           fields: [
-            {
-              type: 'row',
-              fields: [
-                { name: 'reelWord1', type: 'text', label: 'Word 1', defaultValue: home.reel.words[0], admin: { description: 'Home page Showcase — first word of the spinning reel (e.g. "Show").' } },
-                { name: 'reelWord2', type: 'text', label: 'Word 2', defaultValue: home.reel.words[1], admin: { description: 'Home page Showcase — second word of the spinning reel (e.g. "Case").' } },
-              ],
-            },
-            { name: 'video', type: 'upload', relationTo: 'media', label: 'Showcase video', admin: { description: 'Home page Showcase — full-bleed looping video (mp4).' } },
+            { name: 'appName', type: 'text', label: 'App name', defaultValue: home.showcase.appName, admin: { description: 'Home page Showcase — the name shown in the demo app’s sidebar (e.g. "Ledger").' } },
           ],
         },
         {

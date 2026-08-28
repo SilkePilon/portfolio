@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Option10Layers } from '@/components/lab/showcase/options/Option10Layers'
+import { Showcase } from '@/components/home/Showcase'
+import { home } from '@/content/home'
 import {
   INITIAL,
   applyFill,
@@ -9,7 +10,7 @@ import {
   stateJson,
   stepTickers,
   type Order,
-} from '@/components/lab/showcase/options/dashboard/state'
+} from '@/components/home/showcase/state'
 
 const order = (over: Partial<Order> = {}): Order => ({
   id: 1,
@@ -124,10 +125,10 @@ describe('state layer JSON', () => {
   })
 })
 
-describe('Option10Layers', () => {
+describe('Showcase', () => {
   it('renders one interactive terminal with a label per layer', () => {
-    const { container } = render(<Option10Layers />)
-    expect(container.querySelectorAll('[data-lab-option]')).toHaveLength(1)
+    const { container } = render(<Showcase />)
+    expect(container.querySelectorAll('section#showcase')).toHaveLength(1)
     // The app is mounted once — a single order button, not one per layer.
     expect(screen.getAllByRole('button', { name: /Place order/ })).toHaveLength(1)
     for (const name of ['backend', 'state', 'layout', 'components', 'interaction']) {
@@ -135,9 +136,14 @@ describe('Option10Layers', () => {
     }
   })
 
+  it('names the demo app from the CMS', () => {
+    render(<Showcase />)
+    expect(screen.getAllByText(home.showcase.appName).length).toBeGreaterThan(0)
+  })
+
   it('selects a ticker from the watchlist, through to the state layer', async () => {
     const user = userEvent.setup()
-    render(<Option10Layers />)
+    render(<Showcase />)
     expect(document.body.textContent).toContain('"selected": "NVDA"')
 
     await user.click(screen.getByRole('button', { name: /TSLA/ }))
@@ -148,7 +154,7 @@ describe('Option10Layers', () => {
 
   it('steps the quantity and switches the order side', async () => {
     const user = userEvent.setup()
-    render(<Option10Layers />)
+    render(<Showcase />)
     const qty = screen.getByLabelText('Quantity')
     expect(qty).toHaveTextContent('10')
 
@@ -162,7 +168,7 @@ describe('Option10Layers', () => {
   it('places an order: the toast, the bell count, the position and the log all update', async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true })
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
-    render(<Option10Layers />)
+    render(<Showcase />)
     expect(screen.queryByTestId('bell-count')).not.toBeInTheDocument()
     expect(screen.getByText('40 sh')).toBeInTheDocument()
 

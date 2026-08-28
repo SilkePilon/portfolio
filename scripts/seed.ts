@@ -182,11 +182,7 @@ if (!currentHome.updatedAt) {
         resultHeading: toMarked(home.about.resultHeading),
         metrics: home.metrics.map((m) => ({ end: m.end, suffix: m.suffix, label: m.label, text: m.text })),
       },
-      showcase: {
-        reelWord1: home.reel.words[0],
-        reelWord2: home.reel.words[1],
-        video: await media({ src: '/videos/showcase.mp4', alt: 'Showcase reel' }),
-      },
+      showcase: { appName: home.showcase.appName },
       works: {
         tag: home.works.tag,
         heading: toMarked(home.works.heading),

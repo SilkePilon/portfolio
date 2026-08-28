@@ -1,6 +1,6 @@
 'use client'
 /**
- * Option 10 — "Exploded UI". A real, live trading terminal is split into five sheets that pull apart in 3D:
+ * Home page showcase — "Exploded UI". A real, live trading terminal is split into five sheets that pull apart in 3D:
  *   01 backend      the SSE route the quote stream comes from, and the order endpoint
  *   02 state        the live React state, printed as JSON
  *   03 layout       the grid skeleton traced from the real boxes
@@ -17,10 +17,11 @@
  * labels (phone: a numbered list under the stage instead).
  */
 import { useLayoutEffect, useRef, type ReactNode } from 'react'
-import { LabOption, seg, lerp, easeInOut } from '../LabOption'
-import { TradingApp } from './dashboard/Dashboard'
-import { CodeLayer, InteractionLayer, SkeletonLayer, StateLayer, useLocalRects } from './dashboard/layers'
-import { useTradingApp } from './dashboard/state'
+import { ScrollStage, seg, lerp, easeInOut } from '@/components/anim/ScrollStage'
+import { useHome } from '@/components/layout/ContentProvider'
+import { TradingApp } from './showcase/Dashboard'
+import { CodeLayer, InteractionLayer, SkeletonLayer, StateLayer, useLocalRects } from './showcase/layers'
+import { useTradingApp } from './showcase/state'
 
 const LAYERS = [
   { n: '01', name: 'backend', desc: 'Route handlers · SSE quotes, orders' },
@@ -50,7 +51,8 @@ const MARK = 6
 
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v))
 
-export function Option10Layers() {
+export function Showcase() {
+  const { appName } = useHome().showcase
   const app = useTradingApp()
   const appLayer = useRef<HTMLDivElement>(null)
   const skeleton = useLocalRects(appLayer, '[data-skel]', app.state.tab)
@@ -170,12 +172,12 @@ export function Option10Layers() {
   )
 
   return (
-    <LabOption id="layers" heightVh={250} onProgress={apply}>
+    <ScrollStage id="showcase" heightVh={250} className="z-[2] overflow-clip" onProgress={apply}>
       <style>{`
-        @keyframes lab-ix-ripple { 0% { opacity: .85; transform: scale(1) } 65%, 100% { opacity: 0; transform: scale(1.28) } }
-        @keyframes lab-ix-cursor { 0%, 100% { transform: translate(0, 0) } 50% { transform: translate(-3px, -4px) } }
-        .lab-ix-ripple { animation: lab-ix-ripple 2.4s cubic-bezier(.22,1,.36,1) infinite; }
-        .lab-ix-cursor { animation: lab-ix-cursor 2.4s ease-in-out infinite; }
+        @keyframes sc-ix-ripple { 0% { opacity: .85; transform: scale(1) } 65%, 100% { opacity: 0; transform: scale(1.28) } }
+        @keyframes sc-ix-cursor { 0%, 100% { transform: translate(0, 0) } 50% { transform: translate(-3px, -4px) } }
+        .sc-ix-ripple { animation: sc-ix-ripple 2.4s cubic-bezier(.22,1,.36,1) infinite; }
+        .sc-ix-cursor { animation: sc-ix-cursor 2.4s ease-in-out infinite; }
       `}</style>
 
       <div ref={stage} className="relative h-full w-full">
@@ -192,7 +194,7 @@ export function Option10Layers() {
             {sheet(
               3,
               <div ref={appLayer} className="absolute inset-0">
-                <TradingApp app={app} />
+                <TradingApp app={app} name={appName} />
               </div>,
             )}
             {sheet(4, <InteractionLayer rects={targets} />)}
@@ -276,6 +278,6 @@ export function Option10Layers() {
           ))}
         </div>
       </div>
-    </LabOption>
+    </ScrollStage>
   )
 }

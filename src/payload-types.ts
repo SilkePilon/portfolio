@@ -803,19 +803,14 @@ export interface Home {
         }[]
       | null;
   };
+  /**
+   * The Showcase section is an interactive demo app that explodes into its five layers as you scroll. Everything but the app’s name is built in code — the layer labels are not editable.
+   */
   showcase?: {
     /**
-     * Home page Showcase — first word of the spinning reel (e.g. "Show").
+     * Home page Showcase — the name shown in the demo app’s sidebar (e.g. "Ledger").
      */
-    reelWord1?: string | null;
-    /**
-     * Home page Showcase — second word of the spinning reel (e.g. "Case").
-     */
-    reelWord2?: string | null;
-    /**
-     * Home page Showcase — full-bleed looping video (mp4).
-     */
-    video?: (number | null) | Media;
+    appName?: string | null;
   };
   works?: {
     /**
@@ -1272,9 +1267,7 @@ export interface HomeSelect<T extends boolean = true> {
   showcase?:
     | T
     | {
-        reelWord1?: T;
-        reelWord2?: T;
-        video?: T;
+        appName?: T;
       };
   works?:
     | T
