@@ -22,7 +22,7 @@ export const labOptions = [
   { id: 'deck', name: 'Window deck', note: 'Browser, editor and terminal cards fan out with parallax.', Component: Option7Deck },
   { id: 'glyphs', name: 'Glyph field', note: 'Monospace noise resolves into SHOW / CASE.', Component: Option8Glyphs },
   { id: 'iso', name: 'Isometric build', note: 'Blocks stack into an architecture diagram.', Component: Option9Iso },
-  { id: 'layers', name: 'Exploded UI', note: 'A page splits into 3D layers, then flattens back.', Component: Option10Layers },
+  { id: 'layers', name: 'Exploded UI', note: 'A working deploy dashboard (click it) explodes into backend, state, layout, component and interaction layers.', Component: Option10Layers },
 ]
 
 /** Lab page: every showcase candidate stacked, with a fixed index to jump between them. Temporary — delete after choosing. */
