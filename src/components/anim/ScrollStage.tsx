@@ -12,12 +12,15 @@ export type ProgressFn = (p: number) => void
  */
 export function ScrollStage({
   id,
+  index,
   heightVh = 300,
   onProgress,
   className,
   children,
 }: {
   id: string
+  /** Label for the fixed section index (renders `data-index`). */
+  index?: string
   heightVh?: number
   onProgress: ProgressFn
   className?: string
@@ -55,7 +58,7 @@ export function ScrollStage({
   }, [])
 
   return (
-    <section ref={root} id={id} className={cn('relative w-full', className)}>
+    <section ref={root} id={id} data-index={index} className={cn('relative w-full', className)}>
       <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-clip">{children}</div>
       <div aria-hidden style={{ height: `${heightVh}vh` }} className="w-full" />
     </section>

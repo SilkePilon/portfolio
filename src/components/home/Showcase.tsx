@@ -172,7 +172,7 @@ export function Showcase() {
   )
 
   return (
-    <ScrollStage id="showcase" heightVh={250} className="z-[2] overflow-clip" onProgress={apply}>
+    <ScrollStage id="showcase" index="Showcase" heightVh={250} className="z-[2] overflow-clip" onProgress={apply}>
       <style>{`
         @keyframes sc-ix-ripple { 0% { opacity: .85; transform: scale(1) } 65%, 100% { opacity: 0; transform: scale(1.28) } }
         @keyframes sc-ix-cursor { 0%, 100% { transform: translate(0, 0) } 50% { transform: translate(-3px, -4px) } }
