@@ -5,9 +5,9 @@
  * opaque app layer above it (lower sheets are offset further down the screen, so content hangs to the bottom).
  */
 import { useLayoutEffect, useState, type RefObject } from 'react'
-import { deployRouteLines, deployRoutePath, eventStream } from './code'
+import { eventStream, ordersRouteLines, ordersRoutePath, quotesRouteLines, quotesRoutePath } from './code'
 import { stateJson, type AppState } from './state'
-import { ACCENT } from './ui'
+import { UP } from './ui'
 
 export type LocalRect = { x: number; y: number; w: number; h: number; key: string }
 
@@ -46,7 +46,32 @@ const FRAME = 'absolute inset-0 rounded-[8px] border border-white/15 bg-white/[0
 const PANEL = 'flex flex-col overflow-hidden rounded-[6px] border border-white/10 bg-[#080808]'
 const MICRO = 'font-mono text-[10px] leading-none tracking-[0.06em] uppercase'
 
-/** `01 backend` — the Route Handler the Deploy button posts to. Bottom-anchored: the top of the sheet is behind the app. */
+function Source({ lines, small = false }: { lines: { text: string; color: string }[][]; small?: boolean }) {
+  return (
+    <div
+      className={`mt-2 font-mono leading-[1.45] ${small ? 'text-[9px] tablet:text-[10px]' : 'text-[9px] tablet:text-[11px]'}`}
+      style={{
+        maskImage: 'linear-gradient(to bottom, transparent 0, #000 42px)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0, #000 42px)',
+      }}
+    >
+      {lines.map((tokens, i) => (
+        <div key={i} className="flex gap-3 whitespace-pre">
+          <span className="w-4 shrink-0 text-right text-[#3d3d3d]">{i + 1}</span>
+          <span>
+            {tokens.map((t, j) => (
+              <span key={j} style={{ color: t.color }}>
+                {t.text}
+              </span>
+            ))}
+          </span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+/** `01 backend` — the SSE quote stream and the order endpoint. Bottom-anchored: the top of the sheet is behind the app. */
 export function CodeLayer() {
   return (
     <div className="absolute inset-0">
@@ -55,37 +80,30 @@ export function CodeLayer() {
         className={`${PANEL} absolute top-[57%] right-[3%] bottom-[3%] left-[3%] justify-end p-3 tablet:top-[4%] tablet:right-auto tablet:bottom-[4%] tablet:w-[57%]`}
       >
         <div className="flex shrink-0 items-center gap-2 border-b border-white/10 pb-2">
-          <span className={`${MICRO} rounded-[4px] border border-white/10 px-1.5 py-1 text-gray-400`}>POST</span>
-          <span className="font-mono text-[11px] text-gray-300">{deployRoutePath}</span>
+          <span className={`${MICRO} rounded-[4px] border border-white/10 px-1.5 py-1 text-gray-400`}>GET</span>
+          <span className="font-mono text-[11px] text-gray-300">{quotesRoutePath}</span>
         </div>
-        <div
-          className="mt-2 font-mono text-[9px] leading-[1.45] tablet:text-[11px]"
-          style={{ maskImage: 'linear-gradient(to bottom, transparent 0, #000 42px)', WebkitMaskImage: 'linear-gradient(to bottom, transparent 0, #000 42px)' }}
-        >
-          {deployRouteLines.map((tokens, i) => (
-            <div key={i} className="flex gap-3 whitespace-pre">
-              <span className="w-4 shrink-0 text-right text-[#3d3d3d]">{i + 1}</span>
-              <span>
-                {tokens.map((t, j) => (
-                  <span key={j} style={{ color: t.color }}>
-                    {t.text}
-                  </span>
-                ))}
-              </span>
-            </div>
-          ))}
-        </div>
+        <Source lines={quotesRouteLines} />
       </div>
-      <div className={`${PANEL} absolute right-[3%] bottom-[4%] hidden h-[36%] w-[29%] p-3 tablet:flex`}>
+
+      <div className={`${PANEL} absolute right-[3%] bottom-[44%] hidden h-[33%] w-[29%] justify-end p-3 tablet:flex`}>
         <div className="flex shrink-0 items-center gap-2 border-b border-white/10 pb-2">
-          <span className={`${MICRO} rounded-[4px] border border-white/10 px-1.5 py-1`} style={{ color: ACCENT }}>
+          <span className={`${MICRO} rounded-[4px] border border-white/10 px-1.5 py-1 text-gray-400`}>POST</span>
+          <span className="truncate font-mono text-[11px] text-gray-300">{ordersRoutePath}</span>
+        </div>
+        <Source lines={ordersRouteLines} small />
+      </div>
+
+      <div className={`${PANEL} absolute right-[3%] bottom-[4%] hidden h-[34%] w-[29%] p-3 tablet:flex`}>
+        <div className="flex shrink-0 items-center gap-2 border-b border-white/10 pb-2">
+          <span className={`${MICRO} rounded-[4px] border border-white/10 px-1.5 py-1`} style={{ color: UP }}>
             200
           </span>
           <span className="font-mono text-[11px] text-gray-300">text/event-stream</span>
         </div>
         <div className="mt-2 font-mono text-[10px] leading-[1.7] text-gray-400">
-          {eventStream.map((l) => (
-            <div key={l} className="truncate">
+          {eventStream.map((l, i) => (
+            <div key={i} className="truncate">
               {l}
             </div>
           ))}
@@ -95,38 +113,38 @@ export function CodeLayer() {
   )
 }
 
-/** Colour one line of the JSON dump: key grey, string accent, everything else white/grey. */
+const JSON_RE = /("(?:[^"\\]|\\.)*"\s*:)|("(?:[^"\\]|\\.)*")|(-?\d+(?:\.\d+)?)|([{}[\],])|(.)/g
+
+/** Colour one line of the JSON dump: keys grey, strings accent, numbers white, punctuation dim. */
 function JsonLine({ line }: { line: string }) {
-  const m = /^(\s*)(?:"([\w]+)":\s*)?(.*)$/.exec(line)
-  if (!m) return <div>{line}</div>
-  const [, indent, key, rest] = m
-  const value = rest ?? ''
-  const isString = value.startsWith('"')
-  const isPunct = /^[{}[\],]*$/.test(value)
   return (
     <div className="whitespace-pre">
-      {indent}
-      {key && <span className="text-gray-500">&quot;{key}&quot;</span>}
-      {key && <span className="text-[#5f5f5f]">: </span>}
-      <span style={{ color: isString ? ACCENT : isPunct ? '#5f5f5f' : '#ffffff' }}>{value}</span>
+      {Array.from(line.matchAll(JSON_RE), (m, i) => (
+        <span
+          key={i}
+          style={{ color: m[1] ? '#8a8a8a' : m[2] ? UP : m[3] ? '#ffffff' : m[4] ? '#5f5f5f' : '#c8c8c8' }}
+        >
+          {m[0]}
+        </span>
+      ))}
     </div>
   )
 }
 
-/** `02 state` — the live React state, printed. Changing a switch changes this text. */
+/** `02 state` — the live React state, printed. Every tick, click and fill changes this text. */
 export function StateLayer({ state }: { state: AppState }) {
   const lines = stateJson(state).split('\n')
   return (
     <div className="absolute inset-0">
       <div className={FRAME} />
       <div
-        className={`${PANEL} absolute top-[45%] right-[3%] left-[3%] h-[30%] p-3 tablet:top-auto tablet:bottom-[4%] tablet:left-auto tablet:h-auto tablet:w-[34%]`}
+        className={`${PANEL} absolute top-[45%] right-[3%] left-[3%] h-[30%] p-3 tablet:top-auto tablet:bottom-[4%] tablet:left-auto tablet:h-auto tablet:w-[38%]`}
       >
         <div className="flex shrink-0 items-center gap-2 border-b border-white/10 pb-2">
-          <span className={`${MICRO} rounded-[4px] border border-white/10 px-1.5 py-1 text-gray-400`}>useState</span>
+          <span className={`${MICRO} rounded-[4px] border border-white/10 px-1.5 py-1 text-gray-400`}>useReducer</span>
           <span className="font-mono text-[11px] text-gray-300">app.state</span>
         </div>
-        <div className="mt-2 font-mono text-[9px] leading-[1.5] text-white tablet:text-[11px]">
+        <div className="mt-2 overflow-hidden font-mono text-[9px] leading-[1.5] text-white tablet:text-[11px]">
           {lines.map((l, i) => (
             <JsonLine key={i} line={l} />
           ))}
@@ -167,16 +185,18 @@ export function SkeletonLayer({ rects }: { rects: LocalRect[] }) {
 
 /** `05 interaction` — pointer, focus ring and hover outlines over the real controls. Never takes pointer events. */
 export function InteractionLayer({ rects }: { rects: LocalRect[] }) {
-  const target = rects.find((r) => r.key === 'deploy')
+  const target = rects.find((r) => r.key === 'order')
   const hovers = rects.filter((r) => r.key === 'row').slice(0, 2)
   return (
     <div aria-hidden className="absolute inset-0">
       <div className={`${FRAME} border-dashed`} />
       {hovers.map((r, i) => (
-        <div key={i} className="absolute rounded-[8px] border border-dashed border-white/25" style={{ left: r.x - 2, top: r.y - 2, width: r.w + 4, height: r.h + 4 }}>
-          {i === 0 && (
-            <span className={`${MICRO} absolute -top-2 left-2 bg-[#0e0e0e] px-1 text-gray-400`}>:hover</span>
-          )}
+        <div
+          key={i}
+          className="absolute rounded-[8px] border border-dashed border-white/25"
+          style={{ left: r.x - 2, top: r.y - 2, width: r.w + 4, height: r.h + 4 }}
+        >
+          {i === 0 && <span className={`${MICRO} absolute -top-2 left-2 bg-[#0e0e0e] px-1 text-gray-400`}>:hover</span>}
         </div>
       ))}
       {target && (
@@ -184,7 +204,11 @@ export function InteractionLayer({ rects }: { rects: LocalRect[] }) {
           <span className="absolute -inset-[3px] rounded-[8px] border-2 border-white/45" />
           <span className="lab-ix-ripple absolute -inset-[3px] rounded-[8px] border border-white/60" />
           <span className={`${MICRO} absolute -top-2.5 left-0 bg-[#0e0e0e] px-1 text-white`}>:focus</span>
-          <svg viewBox="0 0 12 18" className="lab-ix-cursor absolute h-[18px] w-[12px] drop-shadow-[0_1px_2px_rgba(0,0,0,.8)]" style={{ left: target.w * 0.6, top: target.h * 0.55 }}>
+          <svg
+            viewBox="0 0 12 18"
+            className="lab-ix-cursor absolute h-[18px] w-[12px] drop-shadow-[0_1px_2px_rgba(0,0,0,.8)]"
+            style={{ left: target.w * 0.6, top: target.h * 0.55 }}
+          >
             <path d="M1 1 L1 15 L4.6 11.6 L7 17 L9.4 16 L7 10.8 L11 10.6 Z" fill="#ffffff" stroke="#0e0e0e" strokeWidth="1" strokeLinejoin="round" />
           </svg>
         </div>

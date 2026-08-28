@@ -1,33 +1,41 @@
 'use client'
 /**
- * Option 10 — "Exploded UI". A real, interactive deploy dashboard is split into five sheets that pull apart in
- * 3D and come back together:
- *   01 backend      the Route Handler the Deploy button posts to
+ * Option 10 — "Exploded UI". A real, live trading terminal is split into five sheets that pull apart in 3D:
+ *   01 backend      the SSE route the quote stream comes from, and the order endpoint
  *   02 state        the live React state, printed as JSON
  *   03 layout       the grid skeleton traced from the real boxes
  *   04 components   the actual app (the only layer that takes pointer events)
  *   05 interaction  pointer, focus ring and hover outlines
  *
- * p 0.05→0.5 the group tilts and the sheets spread on Z, then it holds with a slow drift to the end of the section.
- * The stack stays exploded to the end of the section. The app is fully usable while flat at the start.
+ * p 0.05→0.5 the group tilts and the sheets spread on Z, then it holds with a slow drift to the end of the
+ * section. The app keeps ticking, filling orders and firing notifications the whole way through, and is fully
+ * usable while flat at the start.
  *
  * Labels are NOT inside the 3D sheets — they are a 2D overlay over the stage. Each sheet carries a 1px anchor
- * at its right edge; every frame we read the anchors' screen positions and draw an elbow leader from each one
- * to a single aligned column of labels (phone: a numbered list under the stage instead).
+ * on its right edge, placed at a height that stays clear of the opaque app sheet; every frame we read the
+ * anchors' screen positions, drop a `+` marker on each one and run an elbow leader to a left-aligned column of
+ * labels (phone: a numbered list under the stage instead).
  */
 import { useLayoutEffect, useRef, type ReactNode } from 'react'
 import { LabOption, seg, lerp, easeInOut } from '../LabOption'
-import { DashboardApp } from './dashboard/Dashboard'
+import { TradingApp } from './dashboard/Dashboard'
 import { CodeLayer, InteractionLayer, SkeletonLayer, StateLayer, useLocalRects } from './dashboard/layers'
-import { useDeployApp } from './dashboard/state'
+import { useTradingApp } from './dashboard/state'
 
 const LAYERS = [
-  { n: '01', name: 'backend', desc: 'Route handler · streams stages' },
-  { n: '02', name: 'state', desc: 'React state · flags, deploy, version' },
-  { n: '03', name: 'layout', desc: 'Grid skeleton · sidebar, main, cards' },
-  { n: '04', name: 'components', desc: 'The live UI · tabs, switches, deploy' },
+  { n: '01', name: 'backend', desc: 'Route handlers · SSE quotes, orders' },
+  { n: '02', name: 'state', desc: 'React state · account, positions, orders' },
+  { n: '03', name: 'layout', desc: 'Grid skeleton · sidebar, chart, ticket' },
+  { n: '04', name: 'components', desc: 'The live UI · prices tick, orders fill' },
   { n: '05', name: 'interaction', desc: 'Pointer, focus ring, hover states' },
 ]
+
+/**
+ * Where each sheet's leader leaves it, as a fraction of the sheet's own height on its right edge. Sheets 0–2
+ * sit *behind* the app and only their lower band is uncovered once the stack is exploded, so their anchors are
+ * pushed down; the app and the interaction sheet in front of it are anchored at the middle.
+ */
+const ANCHOR_TOP = [0.62, 0.72, 0.88, 0.5, 0.5]
 
 /** Explode geometry. `step` is the Z gap between sheets, `scale` how far the group shrinks to stay on screen. */
 const DESK = { rx: 52, rz: -16, step: 170, scale: 0.82, tx: -190, ty: -60 }
@@ -35,12 +43,15 @@ const PHONE = { rx: 48, rz: -14, step: 130, scale: 0.72, tx: 0, ty: -120 }
 
 const COL_W = 210
 const COL_GAP = 316 + 72
+/** Minimum vertical gap between two label rows. */
 const ROW_H = 62
+/** Half-length of the `+` marker arms. */
+const MARK = 6
 
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v))
 
 export function Option10Layers() {
-  const app = useDeployApp()
+  const app = useTradingApp()
   const appLayer = useRef<HTMLDivElement>(null)
   const skeleton = useLocalRects(appLayer, '[data-skel]', app.state.tab)
   const targets = useLocalRects(appLayer, '[data-ix]', app.state.tab)
@@ -52,7 +63,8 @@ export function Option10Layers() {
   const labels = useRef<(HTMLDivElement | null)[]>([])
   const lines = useRef<(SVGPolylineElement | null)[]>([])
   const halos = useRef<(SVGPolylineElement | null)[]>([])
-  const dots = useRef<(SVGCircleElement | null)[]>([])
+  const marks = useRef<(SVGPathElement | null)[]>([])
+  const markHalos = useRef<(SVGPathElement | null)[]>([])
   const svg = useRef<SVGSVGElement>(null)
   const list = useRef<HTMLDivElement>(null)
 
@@ -80,8 +92,8 @@ export function Option10Layers() {
       if (i !== 3) el.style.opacity = aux
     }
 
-    // Labels: hidden while the stack is flat at either end.
-    const labelA = seg(p, 0.2, 0.45)
+    // Labels: hidden until the sheets are far enough apart that a leader has somewhere clear to land.
+    const labelA = seg(p, 0.32, 0.5)
     if (list.current) list.current.style.opacity = phone ? String(labelA) : '0'
     if (svg.current) svg.current.style.opacity = phone ? '0' : String(labelA)
     for (const el of labels.current) if (el) el.style.opacity = phone ? '0' : String(labelA)
@@ -95,22 +107,42 @@ export function Option10Layers() {
     })
     const order = [0, 1, 2, 3, 4].sort((a, b) => pts[a].y - pts[b].y)
     const colX = sr.width - COL_GAP
-    const elbow = colX - 34
-    const mid = pts.reduce((sum, q) => sum + q.y, 0) / pts.length
-    const startY = clamp(mid - (ROW_H * 5) / 2, 32, Math.max(32, sr.height - ROW_H * 5 - 32))
+
+    /**
+     * Label rows follow their own anchor instead of sitting on a fixed pitch, so a leader is a short run
+     * rather than a long vertical through the other rows. One downward pass enforces the minimum gap, then
+     * the block is shifted up if it ran past the bottom of the stage.
+     */
+    const ys: number[] = []
+    let prev = -Infinity
+    for (const i of order) {
+      const y = Math.max(pts[i].y - 9, prev + ROW_H)
+      ys.push(y)
+      prev = y
+    }
+    const overflow = ys[4] + ROW_H - (sr.height - 24)
+    if (overflow > 0) {
+      const shift = Math.min(overflow, Math.max(0, ys[0] - 24))
+      for (let r = 0; r < 5; r++) ys[r] -= shift
+    }
 
     order.forEach((i, row) => {
-      const ly = startY + row * ROW_H
+      const ly = clamp(ys[row], 8, sr.height - 40)
       const el = labels.current[i]
       if (el) el.style.transform = `translate3d(${colX}px, ${ly}px, 0)`
-      const points = `${pts[i].x.toFixed(1)},${pts[i].y.toFixed(1)} ${elbow},${pts[i].y.toFixed(1)} ${elbow},${ly + 9} ${colX - 12},${ly + 9}`
+
+      // Each row gets its own elbow x, stepping outward from the column, so no two verticals ever share one.
+      const elbow = colX - 34 - row * 18
+      const ax = pts[i].x
+      const ay = pts[i].y
+      const points = `${ax.toFixed(1)},${ay.toFixed(1)} ${elbow},${ay.toFixed(1)} ${elbow},${(ly + 9).toFixed(1)} ${colX - 12},${(ly + 9).toFixed(1)}`
       lines.current[i]?.setAttribute('points', points)
       halos.current[i]?.setAttribute('points', points)
-      const dot = dots.current[i]
-      if (dot) {
-        dot.setAttribute('cx', pts[i].x.toFixed(1))
-        dot.setAttribute('cy', pts[i].y.toFixed(1))
-      }
+
+      // The site's `+` marker, drawn as a 12px cross centred on the anchor.
+      const d = `M${(ax - MARK).toFixed(1)},${ay.toFixed(1)}H${(ax + MARK).toFixed(1)}M${ax.toFixed(1)},${(ay - MARK).toFixed(1)}V${(ay + MARK).toFixed(1)}`
+      marks.current[i]?.setAttribute('d', d)
+      markHalos.current[i]?.setAttribute('d', d)
     })
   }
 
@@ -131,7 +163,8 @@ export function Option10Layers() {
         ref={(el) => {
           anchors.current[i] = el
         }}
-        className="absolute top-1/2 right-0 block h-px w-px"
+        className="absolute right-0 block h-px w-px"
+        style={{ top: `${ANCHOR_TOP[i] * 100}%` }}
       />
     </div>
   )
@@ -158,8 +191,8 @@ export function Option10Layers() {
             {sheet(2, <SkeletonLayer rects={skeleton} />)}
             {sheet(
               3,
-              <div ref={appLayer} className="absolute inset-0 shadow-[0_40px_120px_rgba(0,0,0,.6)]">
-                <DashboardApp app={app} />
+              <div ref={appLayer} className="absolute inset-0">
+                <TradingApp app={app} />
               </div>,
             )}
             {sheet(4, <InteractionLayer rects={targets} />)}
@@ -178,6 +211,15 @@ export function Option10Layers() {
                 points=""
               />
             ))}
+            {LAYERS.map((l, i) => (
+              <path
+                key={`m${l.n}`}
+                ref={(el) => {
+                  markHalos.current[i] = el
+                }}
+                d=""
+              />
+            ))}
           </g>
           <g fill="none" stroke="rgba(255,255,255,.35)" strokeWidth="1" strokeLinejoin="round" strokeLinecap="round">
             {LAYERS.map((l, i) => (
@@ -190,18 +232,17 @@ export function Option10Layers() {
               />
             ))}
           </g>
-          {LAYERS.map((l, i) => (
-            <circle
-              key={l.n}
-              ref={(el) => {
-                dots.current[i] = el
-              }}
-              r="3"
-              cx="-10"
-              cy="-10"
-              fill="#ffffff"
-            />
-          ))}
+          <g fill="none" stroke="#ffffff" strokeWidth="1" strokeLinecap="butt">
+            {LAYERS.map((l, i) => (
+              <path
+                key={l.n}
+                ref={(el) => {
+                  marks.current[i] = el
+                }}
+                d=""
+              />
+            ))}
+          </g>
         </svg>
 
         {/* Label column (desktop) — positioned per frame from the anchors */}
