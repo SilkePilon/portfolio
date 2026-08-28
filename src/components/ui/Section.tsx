@@ -22,15 +22,18 @@ export function GridLines({ className }: { className?: string }) {
 /**
  * Full-width page section with the template's gutter (10px phone / 20px tablet+).
  * `tone="light"` switches to the #ededed sections (Services, Approach) with their own rules and padding.
+ * `index` (with an `id`) lists the section in the fixed right-hand `SectionIndex` nav.
  */
 export function Section({
   id,
+  index,
   tone = 'dark',
   className,
   children,
   as: Tag = 'section',
 }: {
   id?: string
+  index?: string
   tone?: Tone
   className?: string
   children: ReactNode
@@ -39,6 +42,7 @@ export function Section({
   return (
     <Tag
       id={id}
+      data-index={index}
       className={cn(
         'relative w-full px-2.5 tablet:px-5',
         tone === 'light' ? 'theme-light bg-light py-[100px] text-black tablet:py-[150px]' : 'theme-dark text-white',

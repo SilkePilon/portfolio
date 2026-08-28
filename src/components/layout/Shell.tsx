@@ -8,6 +8,7 @@ import { LivePreviewBridge } from './LivePreviewBridge'
 import { Navbar } from './Navbar'
 import { Preloader } from './Preloader'
 import { ScrollManager } from './ScrollManager'
+import { SectionIndex } from './SectionIndex'
 import { SmoothScroll } from './SmoothScroll'
 
 /** Page shell: preloader (home, first load), navbar, ruled main column, footer. */
@@ -19,6 +20,7 @@ export function Shell({ content, children }: { content: Content; children: React
       <SmoothScroll />
       <ScrollManager />
       <Navbar />
+      <SectionIndex />
       <main className="theme-dark relative flex w-full flex-col items-center gap-[100px] overflow-x-clip bg-black pb-[100px] text-white tablet:gap-[150px] tablet:pb-[150px]">
         <GridLines />
         {children}

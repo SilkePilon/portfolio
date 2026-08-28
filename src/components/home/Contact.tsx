@@ -105,7 +105,7 @@ export function Contact() {
   const label = status === 'pending' ? submitting : status === 'success' ? sent : status === 'error' ? failed : submitLabel
 
   return (
-    <Section id="contact">
+    <Section id="contact" index="Contact">
       <div className="relative mx-auto flex w-full max-w-[1600px] flex-col gap-[30px] tablet:gap-[50px] desktop:gap-[70px]">
         <Appear preset="left" className="flex flex-col items-start gap-5 px-2.5 tablet:gap-[30px] tablet:px-5">
           <SectionTag>{tag}</SectionTag>

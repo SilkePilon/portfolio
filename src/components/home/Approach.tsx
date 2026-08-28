@@ -14,7 +14,7 @@ export function Approach() {
   const { tag, heading, text, image, steps } = useHome().approach
 
   return (
-    <Section id="approach" tone="light">
+    <Section id="approach" index="Approach" tone="light">
       <Container grid={false} className="flex flex-col gap-[30px] tablet:gap-[50px] desktop:gap-[70px]">
         <div className="flex w-full flex-col items-start gap-3.5 px-2.5 tablet:gap-5 tablet:px-5 desktop:flex-row desktop:items-end desktop:justify-between desktop:gap-0">
           <Appear preset="left" className="flex w-full flex-col items-start gap-5 tablet:gap-[30px] desktop:flex-1">

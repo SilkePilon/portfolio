@@ -37,7 +37,7 @@ function Portrait() {
 export function About() {
   const { tag, paragraphs, image2, resultTag, resultHeading } = useHome().about
   return (
-    <Section id="about">
+    <Section id="about" index="About">
       <div className="flex flex-col gap-[30px] tablet:gap-[50px] desktop:gap-[70px]">
         <Container>
           <Appear preset="up" className="col-span-2 flex flex-col gap-5 px-2.5 tablet:gap-[30px] tablet:px-5">

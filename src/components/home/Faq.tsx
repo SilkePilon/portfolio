@@ -45,7 +45,7 @@ export function Faq() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (
-    <Section id="faq">
+    <Section id="faq" index="FAQ">
       <Container className="gap-y-[30px] tablet:gap-y-[50px] desktop:gap-y-[70px]">
         <Appear preset="up" className="col-span-2 flex flex-col items-center gap-5 px-2.5 text-center tablet:gap-[30px] tablet:px-5 desktop:col-span-4">
           <div className="flex justify-center">

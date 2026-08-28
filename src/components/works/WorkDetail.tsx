@@ -29,7 +29,7 @@ export function WorkDetail({ work: propWork, next: propNext }: { work: Work; nex
   const L = pages.workLabels
   return (
     <>
-      <Section as="header" className="pt-[100px] tablet:pt-[150px]">
+      <Section as="header" id="intro" index="Intro" className="pt-[100px] tablet:pt-[150px]">
         <Container className="gap-y-[60px]">
           <Appear preset="left" trigger="mount" className="col-span-2 flex flex-col gap-[30px] px-5 desktop:col-span-3">
             <SectionTag>{pages.works.tag}</SectionTag>
@@ -45,7 +45,7 @@ export function WorkDetail({ work: propWork, next: propNext }: { work: Work; nex
         </Container>
       </Section>
 
-      <Section>
+      <Section id="overview" index="Overview">
         <Container className="gap-y-[60px]">
           <Appear preset="left" className="col-span-2 px-5 desktop:col-span-1">
             <SectionTag>{L.overview}</SectionTag>
@@ -83,7 +83,7 @@ export function WorkDetail({ work: propWork, next: propNext }: { work: Work; nex
         </Container>
       </Section>
 
-      <Section>
+      <Section id="next" index="Next">
         <Container className="gap-y-[30px]">
           <Appear preset="left" className="col-span-2 px-5 desktop:col-span-1">
             <SectionTag>{L.next}</SectionTag>

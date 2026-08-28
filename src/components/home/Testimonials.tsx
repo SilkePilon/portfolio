@@ -36,7 +36,7 @@ export function Testimonials() {
   const goNext = () => setIndex((i) => (i + 1) % count)
 
   return (
-    <Section id="testimonials">
+    <Section id="testimonials" index="Testimonials">
       <div className="flex flex-col gap-[30px] tablet:gap-[50px] desktop:gap-[70px]">
         <Container>
           <Appear

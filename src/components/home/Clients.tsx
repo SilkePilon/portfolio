@@ -23,7 +23,7 @@ export function Clients() {
   const active = hovered !== null ? list[hovered] : null
 
   return (
-    <Section id="clients">
+    <Section id="clients" index="Clients">
       <Container grid={false} className="flex flex-col gap-[30px] tablet:gap-[50px] desktop:gap-[70px]">
         <div className="flex w-full flex-col items-start gap-3.5 px-2.5 tablet:gap-5 tablet:px-5 desktop:flex-row desktop:items-end desktop:gap-0">
           <div className="flex w-full flex-col items-start gap-5 tablet:gap-[30px] desktop:flex-1">

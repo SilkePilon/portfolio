@@ -14,7 +14,7 @@ export function Awards() {
   const list = useLists().awards
 
   return (
-    <Section id="awards">
+    <Section id="awards" index="Awards">
       <Container className="gap-y-[30px] tablet:gap-y-[50px]">
         <Appear preset="left" className="col-span-2 flex flex-col items-start gap-5 px-2.5 tablet:gap-[30px] tablet:px-5">
           <SectionTag>{tag}</SectionTag>

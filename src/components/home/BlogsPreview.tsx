@@ -19,7 +19,7 @@ export function BlogsPreview() {
   const items = useHomePosts()
 
   return (
-    <Section id="blogs">
+    <Section id="blogs" index="Blogs">
       <Container grid={false} className="flex flex-col gap-[30px] tablet:gap-[50px] desktop:gap-[70px]">
         <div className="grid w-full grid-cols-1 gap-y-5 tablet:grid-cols-2 tablet:gap-y-[30px] desktop:grid-cols-4 desktop:gap-y-0">
           <div className="flex flex-col gap-5 px-2.5 tablet:gap-[30px] tablet:px-5 desktop:col-span-3">

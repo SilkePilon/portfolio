@@ -21,7 +21,7 @@ export function BlogDetail({ post: propPost, next: propNext }: { post: Blog; nex
   const [intro, ...rest] = post.body[0]?.kind === 'paragraph' ? [post.body[0], ...post.body.slice(1)] : [undefined, ...post.body]
   return (
     <>
-      <Section as="header" className="pt-[100px] tablet:pt-[150px]">
+      <Section as="header" id="article" index="Article" className="pt-[100px] tablet:pt-[150px]">
         <Container className="gap-y-[60px]">
           <Appear preset="left" trigger="mount" className="col-span-2 flex flex-col gap-[30px] px-5 desktop:col-span-3">
             <SectionTag>{post.category}</SectionTag>
@@ -41,7 +41,7 @@ export function BlogDetail({ post: propPost, next: propNext }: { post: Blog; nex
         </Container>
       </Section>
 
-      <Section>
+      <Section id="next" index="Next">
         <Container className="gap-y-[30px]">
           <Appear preset="left" className="col-span-2 px-5 desktop:col-span-1">
             <SectionTag>{pages.blogLabels.next}</SectionTag>
