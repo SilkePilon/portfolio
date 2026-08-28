@@ -8,15 +8,15 @@
  *   04 components   the actual app (the only layer that takes pointer events)
  *   05 interaction  pointer, focus ring and hover outlines
  *
- * p 0→0.35 the group tilts and the sheets spread on Z; 0.4→0.75 it holds with a slow drift; 0.8→1 it flattens
- * back to the plain dashboard while LAYER / BY LAYER slide in. The app is fully usable flat at either end.
+ * p 0.05→0.5 the group tilts and the sheets spread on Z, then it holds with a slow drift to the end of the section.
+ * The stack stays exploded to the end of the section. The app is fully usable while flat at the start.
  *
  * Labels are NOT inside the 3D sheets — they are a 2D overlay over the stage. Each sheet carries a 1px anchor
  * at its right edge; every frame we read the anchors' screen positions and draw an elbow leader from each one
  * to a single aligned column of labels (phone: a numbered list under the stage instead).
  */
 import { useLayoutEffect, useRef, type ReactNode } from 'react'
-import { LabOption, seg, lerp, easeOut, easeInOut } from '../LabOption'
+import { LabOption, seg, lerp, easeInOut } from '../LabOption'
 import { DashboardApp } from './dashboard/Dashboard'
 import { CodeLayer, InteractionLayer, SkeletonLayer, StateLayer, useLocalRects } from './dashboard/layers'
 import { useDeployApp } from './dashboard/state'
@@ -30,8 +30,8 @@ const LAYERS = [
 ]
 
 /** Explode geometry. `step` is the Z gap between sheets, `scale` how far the group shrinks to stay on screen. */
-const DESK = { rx: 52, rz: -16, step: 175, scale: 0.74, tx: -140, ty: -102 }
-const PHONE = { rx: 48, rz: -14, step: 130, scale: 0.62, tx: 0, ty: -128 }
+const DESK = { rx: 52, rz: -16, step: 170, scale: 0.82, tx: -190, ty: -60 }
+const PHONE = { rx: 48, rz: -14, step: 130, scale: 0.72, tx: 0, ty: -120 }
 
 const COL_W = 210
 const COL_GAP = 316 + 72
@@ -55,8 +55,6 @@ export function Option10Layers() {
   const dots = useRef<(SVGCircleElement | null)[]>([])
   const svg = useRef<SVGSVGElement>(null)
   const list = useRef<HTMLDivElement>(null)
-  const wordTop = useRef<HTMLSpanElement>(null)
-  const wordBottom = useRef<HTMLSpanElement>(null)
 
   const apply = (p: number) => {
     const g = group.current
@@ -65,10 +63,9 @@ export function Option10Layers() {
     const phone = window.innerWidth < 810
     const cfg = phone ? PHONE : DESK
 
-    const explode = easeInOut(seg(p, 0, 0.35))
-    const flatten = easeInOut(seg(p, 0.8, 1))
-    const amount = explode * (1 - flatten)
-    const drift = easeInOut(seg(p, 0.4, 0.75))
+    // Explode over the first half of the scroll, then hold: the section ends fully exploded.
+    const amount = easeInOut(seg(p, 0.05, 0.5))
+    const drift = easeInOut(seg(p, 0.5, 1))
 
     const k = lerp(1, cfg.scale, amount)
     const rz = lerp(cfg.rz, cfg.rz + 7, drift) * amount
@@ -83,18 +80,8 @@ export function Option10Layers() {
       if (i !== 3) el.style.opacity = aux
     }
 
-    // Display words.
-    const w = easeOut(seg(p, 0.85, 1))
-    const t = wordTop.current
-    const b = wordBottom.current
-    if (t && b) {
-      t.style.transform = `translateY(${-60 * (1 - w)}vh)`
-      b.style.transform = `translateY(${60 * (1 - w)}vh)`
-      t.style.opacity = b.style.opacity = String(w)
-    }
-
     // Labels: hidden while the stack is flat at either end.
-    const labelA = seg(p, 0.12, 0.32) * (1 - seg(p, 0.86, 0.96))
+    const labelA = seg(p, 0.2, 0.45)
     if (list.current) list.current.style.opacity = phone ? String(labelA) : '0'
     if (svg.current) svg.current.style.opacity = phone ? '0' : String(labelA)
     for (const el of labels.current) if (el) el.style.opacity = phone ? '0' : String(labelA)
@@ -150,7 +137,7 @@ export function Option10Layers() {
   )
 
   return (
-    <LabOption id="layers" heightVh={400} onProgress={apply}>
+    <LabOption id="layers" heightVh={250} onProgress={apply}>
       <style>{`
         @keyframes lab-ix-ripple { 0% { opacity: .85; transform: scale(1) } 65%, 100% { opacity: 0; transform: scale(1.28) } }
         @keyframes lab-ix-cursor { 0%, 100% { transform: translate(0, 0) } 50% { transform: translate(-3px, -4px) } }
@@ -159,27 +146,11 @@ export function Option10Layers() {
       `}</style>
 
       <div ref={stage} className="relative h-full w-full">
-        {/* Display words, behind the stack */}
-        <span
-          ref={wordTop}
-          aria-hidden
-          className="text-display pointer-events-none absolute top-[80px] left-[3vw] z-0 whitespace-nowrap opacity-0 will-change-transform tablet:left-[4vw]"
-        >
-          Layer
-        </span>
-        <span
-          ref={wordBottom}
-          aria-hidden
-          className="text-display pointer-events-none absolute right-[3vw] bottom-[5vh] z-0 whitespace-nowrap opacity-0 will-change-transform tablet:right-[4vw]"
-        >
-          By layer
-        </span>
-
         {/* 3D stage */}
         <div className="absolute inset-0 z-10 flex items-center justify-center" style={{ perspective: '2000px' }}>
           <div
             ref={group}
-            className="relative h-[66vh] w-[92vw] will-change-transform tablet:h-[min(560px,60vh)] tablet:w-[min(960px,92vw)]"
+            className="relative h-[66vh] w-[92vw] will-change-transform tablet:h-[min(640px,70vh)] tablet:w-[min(1100px,90vw)]"
             style={{ transformStyle: 'preserve-3d' }}
           >
             {sheet(0, <CodeLayer />)}
